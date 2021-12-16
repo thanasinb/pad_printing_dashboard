@@ -113,7 +113,7 @@
                             <td></td>
                         </tr>
                         <tr>
-                            <td>ตำแหน่งหน้าที่</td>
+                            <td>ตำแหน่งหน้า</td>
                             <td id="modal_role"></td>
                             <td></td>
                         </tr>
