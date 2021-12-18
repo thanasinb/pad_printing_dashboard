@@ -16,51 +16,55 @@ $(document).ready(function(){
         // alert($('#input_rfid').val() + $('#modal_staff_id').text());
         var id_staff = $('#input_staff_id').val();
         var id_rfid = $('#input_rfid').val();
-        // var prefix= $('#prefix_name').val();
+        var prefix= $('#prefix_name').val();
         var name= $('#input_name').val();
         var last= $('#input_last').val();
-        // var role= $('#role').val();
-        // var shif= $('#shift').val();
-        // alert(id_staff+id_rfid+name+last);
+        var roles= $('#role').val();
+        var shift= $('#shift').val();
+        // alert(id_staff+id_rfid);
         $.ajax({
             url: "ajax/pp-staff-change-rfid.php",
             type: "GET",
             data: {
                 id_staff: id_staff,
                 id_rfid: id_rfid,
-                name_first: name,
-                name_last: last
-                // prefix: prefix,
-                // id_role: role,
-                // id_shif: shif
+                name_first:name,
+                name_last:last,
+                prefix:prefix,
+                id_role:roles,
+                id_shif:shift,
             },
             context: this,
             cache: false,
             success: function(dataResult){
                 // alert(dataResult);
                 var dataResult = JSON.parse(dataResult);
-                // alert(dataResult.statusCode);
                 // $('#modal_staff_id').text(dataResult.id_staff);
                 // $('#input_rfid').val(dataResult.id_rfid);
                 // alert($(this).html());
                 // document.getElementById("button_save_rfid").textContent = "hello";
                 // $(this).parent().find('#button_save_rfid').hide();
                 // $(this).parent().find('#button_rfid').show();
-                // $('#input_staff_id').text(id_staff);
-                // $('#input_staff_id').prop('disabled', true);
-                // $('#input_rfid').val(id_rfid);
-                // $('#input_rfid').prop('disabled', true);
-                // $('#prefix_name').val(prefix);
-                // $('#prefix_name').prop('disabled', true);
-                // $('#input_name').text(name);
-                // $('#input_name').prop('disabled', true);
-                // $('#input_last').text(last);
-                // $('#input_last').prop('disabled', true);
-                // $('#role').val(role);
-                // $('#role').prop('disabled', true);
-                // $('#shift').val(shif);
-                // $('#shift').prop('disabled', true);
+                 $('#input_staff_id').text(id_staff);
+                 $('#input_staff_id').prop('disabled', true);
+                 $('#input_rfid').val(id_rfid);
+                 $('#input_rfid').prop('disabled', true);
+                 $('#prefix_name').val(prefix);
+                 $('#prefix_name').prop('disabled', true);
+                 $('#input_name').text(name);
+                 $('#input_name').prop('disabled', true);
+                 $('#input_last').text(last);
+                 $('#input_last').prop('disabled', true);
+                 $('#role').val(roles);
+                 $('#role').prop('disabled', true);
+                 $('#shift').val(shift);
+                 $('#shift').prop('disabled', true);
                 $('.id_staff:contains(' + id_staff + ')').next('.rfid').text(id_rfid);
+                $('.id_staff:contains(' + id_staff + ')').next('.name_first').text(name);
+                $('.id_staff:contains(' + id_staff + ')').next('.name_last').text(last);
+                $('.id_staff:contains(' + id_staff + ')').next('.prefix').text(prefix);
+                $('.id_staff:contains(' + id_staff + ')').next('.role').text(roles);
+                $('.id_staff:contains(' + id_staff + ')').next('.shift').text(shift);
                 $('#button_save_rfid').hide();
                 $('#button_rfid').show();
             }
@@ -79,13 +83,15 @@ $(document).ready(function(){
         var name_first = $(this).parent().parent().find('.name_first').html();
         var name_last = $(this).parent().parent().find('.name_last').html();
         var roles = $(this).parent().parent().find('.role').html();
-        var shift = $(this).parent().parent().find('.shift').html();
+        var shift = $(this).parent().parent().find('.shif').html();
 
         $('#input_staff_id').val(id_staff);
         $('#input_rfid').val(id_rfid);
+        //$('#prefix_name').val(prefix);
         $('#prefix_name  [value='+ prefix +']').attr('selected', true);
         $('#input_name').val(name_first);
         $('#input_last').val(name_last);
+        //$('#role').val(roles);
         $('#role  [value='+ roles +']').attr('selected', true);
         $('#shift  [value='+ shift +']').attr('selected', true);
 

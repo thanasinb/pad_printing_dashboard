@@ -85,41 +85,53 @@
                             </td>
                         </tr>
                         <tr>
-                            <td>คำนำหน้า</td>
+                            <td>Prefix</td>
                             <td > <form>
-                                    <select name="dropdown_prefix" id="dropdown_prefix">
-                                        <option value=" ">เลือกคำนำหน้า...</option>
-                                        <option value="นาย">นาย</option>
-                                        <option value="นาง">นาง</option>
-                                        <option value="นางสาว">นางสาว</option>
+                                    <select name="prefix_name" id="prefix_name"disabled>
+                                        <option value=" ">กรุณาเลือก...</option>
+                                        <option value="1">นาย</option>
+                                        <option value="2">นาง</option>
+                                        <option value="3">นางสาว</option>
                                     </select>
-                                </form>
-                            </td>
+                                </form></td>
                             <td></td>
                         </tr>
                         <tr>
-                            <td>ชื่อ</td>
+                            <td>First name</td>
                             <td id="modal_name"><input type="text" id="input_name" name="input_name" disabled></td>
                             <td></td>
                         </tr>
                         <tr>
-                            <td>นามสกุล</td>
+                            <td>Last name</td>
                             <td id="modal_last"><input type="text" id="input_last" name="input_last" disabled></td>
                             <td></td>
                         </tr>
                         <tr>
-                            <td>จุดทำงาน</td>
+                            <td>Site</td>
                             <td id="modal_site"><input type="text" id="input_staff_id" name="input_staff_id" disabled></td>
                             <td></td>
                         </tr>
                         <tr>
-                            <td>ตำแหน่งหน้าที่</td>
-                            <td id="modal_role"></td>
+                            <td>Role</td>
+                            <td > <form>
+                                    <select name="role" id="role"disabled>
+                                        <option value=" ">กรุณาเลือก...</option>
+                                        <option value="1">Operator</option>
+                                        <option value="2">Technician</option>
+                                    </select>
+                                </form></td>
                             <td></td>
                         </tr>
                         <tr>
-                            <td>กะงาน</td>
-                            <td id="modal_shif"></td>
+                            <td>Shif</td>
+                            <td > <form>
+                                    <select name="shift" id="shift"disabled>
+                                        <option value=" ">กรุณาเลือก...</option>
+                                        <option value="A">A</option>
+                                        <option value="B">B</option>
+                                        <option value="C">C</option>
+                                    </select>
+                                </form></td>
                             <td></td>
                         </tr>
                     </table>
