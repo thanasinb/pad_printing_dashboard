@@ -59,12 +59,12 @@ $(document).ready(function(){
                  $('#role').prop('disabled', true);
                  $('#shift').val(shift);
                  $('#shift').prop('disabled', true);
-                $('.id_staff:contains(' + id_staff + ')').next('.rfid').text(id_rfid);
-                $('.id_staff:contains(' + id_staff + ')').next('.name_first').text(name);
-                $('.id_staff:contains(' + id_staff + ')').next('.name_last').text(last);
-                $('.id_staff:contains(' + id_staff + ')').next('.prefix').text(prefix);
-                $('.id_staff:contains(' + id_staff + ')').next('.role').text(roles);
-                $('.id_staff:contains(' + id_staff + ')').next('.shift').text(shift);
+                // $('.id_staff:contains(' + id_staff + ')').next('.rfid').text(id_rfid);
+                // $('.id_staff:contains(' + id_staff + ')').next('.name_first').text(name);
+                // $('.id_staff:contains(' + id_staff + ')').next('.name_last').text(last);
+                // $('.id_staff:contains(' + id_staff + ')').next('.prefix').text(prefix);
+                // $('.id_staff:contains(' + id_staff + ')').next('.role').text(roles);
+                // $('.id_staff:contains(' + id_staff + ')').next('.shift').text(shift);
                 $('#button_save_rfid').hide();
                 $('#button_rfid').show();
             }
@@ -82,19 +82,32 @@ $(document).ready(function(){
         var prefix = $(this).parent().parent().find('.prefix').html();
         var name_first = $(this).parent().parent().find('.name_first').html();
         var name_last = $(this).parent().parent().find('.name_last').html();
-        var roles = $(this).parent().parent().find('.role').html();
-        var shift = $(this).parent().parent().find('.shif').html();
+        var role = $(this).parent().parent().find('.role').html();
+        var shif = $(this).parent().parent().find('.shif').html();
+
+        var prefix_val;
+        if (prefix==='นาย'){
+            prefix_val=1;
+        }else if(prefix==='นาง'){
+            prefix_val=2;
+        }else if(prefix==='นางสาว'){
+            prefix_val=3;
+        }
+        var role_val;
+        if (role==='Operator'){
+            role_val=1;
+        }else if(prefix==='Technician'){
+            role_val=2;
+        }
+        // alert(prefix + prefix_val + role + role_val+ shif);
 
         $('#input_staff_id').val(id_staff);
         $('#input_rfid').val(id_rfid);
-        //$('#prefix_name').val(prefix);
-        $('#prefix_name  [value='+ prefix +']').attr('selected', true);
+        $('#prefix_name').val(prefix_val);
         $('#input_name').val(name_first);
         $('#input_last').val(name_last);
-        //$('#role').val(roles);
-        $('#role  [value='+ roles +']').attr('selected', true);
-        $('#shift  [value='+ shift +']').attr('selected', true);
-
+        $('#role').val(role_val);
+        $('#shif').val(shif);
 
         $('#staff_modal').modal('show');
         // $('#modal_span_staff_id').text(id_staff);
@@ -140,19 +153,19 @@ $(document).ready(function(){
 
     $('#button_rfid').click(function (){
         $('#input_staff_id').prop('disabled', false);
-        $('#input_staff_id').focus();
+        // $('#input_staff_id').focus();
         $('#input_rfid').prop('disabled', false);
-        $('#input_rfid').focus();
+        // $('#input_rfid').focus();
         $('#prefix_name').prop('disabled', false);
-        $('#prefix_name').focus();
+        // $('#prefix_name').focus();
         $('#input_name').prop('disabled', false);
-        $('#input_name').focus();
+        // $('#input_name').focus();
         $('#input_last').prop('disabled', false);
-        $('#input_last').focus();
+        // $('#input_last').focus();
         $('#role').prop('disabled', false);
-        $('#role').focus();
+        // $('#role').focus();
         $('#shift').prop('disabled', false);
-        $('#shift').focus();
+        // $('#shift').focus();
         $('#button_rfid').hide();
         $('#button_save_rfid').show();
     });
