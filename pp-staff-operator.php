@@ -87,8 +87,8 @@
                         <tr>
                             <td>Prefix</td>
                             <td > <form>
-                                    <select name="prefix_name" id="prefix_name"disabled>
-                                        <option value=" ">กรุณาเลือก...</option>
+                                    <select name="prefix_name" id="prefix_name" disabled>
+                                        <option value="0">กรุณาเลือก...</option>
                                         <option value="1">นาย</option>
                                         <option value="2">นาง</option>
                                         <option value="3">นางสาว</option>
@@ -114,7 +114,7 @@
                         <tr>
                             <td>Role</td>
                             <td > <form>
-                                    <select name="role" id="role"disabled>
+                                    <select name="role" id="role" disabled>
                                         <option value=" ">กรุณาเลือก...</option>
                                         <option value="1">Operator</option>
                                         <option value="2">Technician</option>
@@ -125,7 +125,7 @@
                         <tr>
                             <td>Shif</td>
                             <td > <form>
-                                    <select name="shift" id="shift"disabled>
+                                    <select name="shif" id="shif" disabled>
                                         <option value=" ">กรุณาเลือก...</option>
                                         <option value="A">A</option>
                                         <option value="B">B</option>
