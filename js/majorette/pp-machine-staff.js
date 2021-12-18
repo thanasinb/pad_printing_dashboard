@@ -57,8 +57,8 @@ $(document).ready(function(){
                  $('#input_last').prop('disabled', true);
                  $('#role').val(roles);
                  $('#role').prop('disabled', true);
-                 $('#shift').val(shift);
-                 $('#shift').prop('disabled', true);
+                 $('#shif').val(shift);
+                 $('#shif').prop('disabled', true);
                 // $('.id_staff:contains(' + id_staff + ')').next('.rfid').text(id_rfid);
                 // $('.id_staff:contains(' + id_staff + ')').next('.name_first').text(name);
                 // $('.id_staff:contains(' + id_staff + ')').next('.name_last').text(last);
@@ -72,7 +72,8 @@ $(document).ready(function(){
 
     });
 
-    $('.staff_edit').click(function (){
+    $('body').on('click', '.staff_edit', function(event){
+        // $('.staff_edit').click(function (){
         // alert('edit');
         // alert($(this).parent().find('.id_staff').text());
         // alert($(this).parent().parent().find('.id_staff').html());
