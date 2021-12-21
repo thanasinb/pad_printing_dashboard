@@ -71,7 +71,7 @@ function loadData() {
                     rework = dataResult.rework;
 
                     // $(this).parent().find('.id_staff').text(dataResult.id_staff);
-                    $(this).parent().find('.status_work').text(dataResult.id_staff);
+                    // $(this).parent().find('.status_work').text(dataResult.id_staff);
 
                     qty_accum = qty_complete + Math.floor(qty_process*divider);
                     percent = Math.round((qty_accum/qty_order)*100);
@@ -201,9 +201,11 @@ function loadData() {
                         $(this).parent().find('.status_work').addClass('bg-blue');
                     }else if(status_work==1){
                         $(this).parent().find('.status_work').removeClass('bg-blue bg-yellow bg-red');
+                        $(this).parent().find('.status_work').text(dataResult.id_staff);
                         $(this).parent().find('.status_work').addClass('bg-green');
                     }else if(status_work==2){
                         $(this).parent().find('.status_work').removeClass('bg-blue bg-green bg-red');
+                        $(this).parent().find('.status_work').text(dataResult.id_staff);
                         $(this).parent().find('.status_work').addClass('bg-yellow');
                     }else if(status_work==4){
                         $(this).parent().find('.status_work').removeClass('bg-blue bg-yellow bg-green');
