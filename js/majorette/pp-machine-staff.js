@@ -8,6 +8,7 @@ $(document).ready(function(){
         $('#input_last').prop('disabled', true);
         $('#shift').prop('disabled', true);
         $('#role').prop('disabled', true);
+        $('#input_site').prop('disabled', true);
         $('#button_save_rfid').hide();
         $('#button_rfid').show();
     });
@@ -21,6 +22,7 @@ $(document).ready(function(){
         var last= $('#input_last').val();
         var roles= $('#role').val();
         var shift= $('#shift').val();
+        var site= $('#input_site').val();
         // alert(id_staff+id_rfid);
         $.ajax({
             url: "ajax/pp-staff-change-rfid.php",
@@ -33,6 +35,7 @@ $(document).ready(function(){
                 prefix:prefix,
                 id_role:roles,
                 id_shif:shift,
+                site:site,
             },
             context: this,
             cache: false,
@@ -45,20 +48,22 @@ $(document).ready(function(){
                 // document.getElementById("button_save_rfid").textContent = "hello";
                 // $(this).parent().find('#button_save_rfid').hide();
                 // $(this).parent().find('#button_rfid').show();
-                 $('#input_staff_id').text(id_staff);
-                 $('#input_staff_id').prop('disabled', true);
-                 $('#input_rfid').val(id_rfid);
-                 $('#input_rfid').prop('disabled', true);
-                 $('#prefix_name').val(prefix);
-                 $('#prefix_name').prop('disabled', true);
-                 $('#input_name').text(name);
-                 $('#input_name').prop('disabled', true);
-                 $('#input_last').text(last);
-                 $('#input_last').prop('disabled', true);
-                 $('#role').val(roles);
-                 $('#role').prop('disabled', true);
-                 $('#shif').val(shift);
-                 $('#shif').prop('disabled', true);
+                $('#input_staff_id').text(id_staff);
+                $('#input_staff_id').prop('disabled', true);
+                $('#input_rfid').val(id_rfid);
+                $('#input_rfid').prop('disabled', true);
+                $('#prefix_name').val(prefix);
+                $('#prefix_name').prop('disabled', true);
+                $('#input_name').text(name);
+                $('#input_name').prop('disabled', true);
+                $('#input_last').text(last);
+                $('#input_last').prop('disabled', true);
+                $('#role').val(roles);
+                $('#role').prop('disabled', true);
+                $('#shift').val(shift);
+                $('#shift').prop('disabled', true);
+                $('#input_site').val(site);
+                $('#input_site').prop('disabled', true);
                 // $('.id_staff:contains(' + id_staff + ')').next('.rfid').text(id_rfid);
                 // $('.id_staff:contains(' + id_staff + ')').next('.name_first').text(name);
                 // $('.id_staff:contains(' + id_staff + ')').next('.name_last').text(last);
@@ -108,31 +113,31 @@ $(document).ready(function(){
         $('#input_name').val(name_first);
         $('#input_last').val(name_last);
         $('#role').val(role_val);
-        $('#shif').val(shif);
+        $('#shift').val(shif);
 
         $('#staff_modal').modal('show');
         // $('#modal_span_staff_id').text(id_staff);
-        //$.ajax({
-           // url: "ajax/pp-staff-load.php",
-            //type: "GET",
-            //data: {
-               // id_staff: id_staff
-           // },
-            //context: this,
-            //cache: false,
-            //success: function(dataResult){
-                // alert(dataResult);
-               // var dataResult = JSON.parse(dataResult);
-               // $('#input_staff_id').text(dataResult.id_staff);
-                //$('#input_rfid').val(dataResult.id_rfid);
-                //$('#modal_prefix').text(dataResult.prefix);
-               // $('#input_name').text(dataResult.name_first);
-                //$('#input_last').text(dataResult.name_last);
-                //$('#modal_site').text(dataResult.site);
-               // $('#modal_role').text(dataResult.role);
-                //$('#modal_shif').text(dataResult.id_shif);
-           // }
-        //});
+        $.ajax({
+         url: "ajax/pp-staff-load.php",
+        type: "GET",
+        data: {
+         id_staff: id_staff
+         },
+        context: this,
+        cache: false,
+        success: function(dataResult){
+        // alert(dataResult);
+         var dataResult = JSON.parse(dataResult);
+        // $('#input_staff_id').text(dataResult.id_staff);
+        //$('#input_rfid').val(dataResult.id_rfid);
+        //$('#modal_prefix').text(dataResult.prefix);
+        // $('#input_name').text(dataResult.name_first);
+        //$('#input_last').text(dataResult.name_last);
+        $('#input_site').val(dataResult.site);
+        // $('#modal_role').text(dataResult.role);
+        //$('#modal_shif').text(dataResult.id_shif);
+         }
+        });
     });
 
     $('.staff_delete').click(function (){
@@ -167,6 +172,7 @@ $(document).ready(function(){
         // $('#role').focus();
         $('#shift').prop('disabled', false);
         // $('#shift').focus();
+        $('#input_site').prop('disabled', false);
         $('#button_rfid').hide();
         $('#button_save_rfid').show();
     });
