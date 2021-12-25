@@ -86,8 +86,8 @@ $(document).ready(function(){
         var id_staff = $(this).parent().parent().find('.id_staff').html();
         var id_rfid = $(this).parent().parent().find('.rfid').html();
         var prefix = $(this).parent().parent().find('.prefix').html();
-        var name_first = $(this).parent().parent().find('.name_first').html();
-        var name_last = $(this).parent().parent().find('.name_last').html();
+        //var name_first = $(this).parent().parent().find('.name_first').html();
+        //var name_last = $(this).parent().parent().find('.name_last').html();
         var role = $(this).parent().parent().find('.role').html();
         var shif = $(this).parent().parent().find('.shif').html();
 
@@ -110,8 +110,8 @@ $(document).ready(function(){
         $('#input_staff_id').val(id_staff);
         $('#input_rfid').val(id_rfid);
         $('#prefix_name').val(prefix_val);
-        $('#input_name').val(name_first);
-        $('#input_last').val(name_last);
+        //$('#input_name').val(name_first);
+        //$('#input_last').val(name_last);
         $('#role').val(role_val);
         $('#shift').val(shif);
 
@@ -131,8 +131,8 @@ $(document).ready(function(){
         // $('#input_staff_id').text(dataResult.id_staff);
         //$('#input_rfid').val(dataResult.id_rfid);
         //$('#modal_prefix').text(dataResult.prefix);
-        // $('#input_name').text(dataResult.name_first);
-        //$('#input_last').text(dataResult.name_last);
+         $('#input_name').val(dataResult.name_first);
+        $('#input_last').val(dataResult.name_last);
         $('#input_site').val(dataResult.site);
         // $('#modal_role').text(dataResult.role);
         //$('#modal_shif').text(dataResult.id_shif);
