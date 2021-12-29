@@ -53,7 +53,6 @@
                             <div class="card-body">
                                 <table id="datatablesSimple" class="table table-striped">
                                     <thead class="text-black" style="background-color: #ffea07"><?php require 'pp-staff-table-head.php' ?></thead>
-                                    <tfoot class="text-black" style="background-color: #ffea07"><?php require 'pp-staff-table-head.php' ?></tfoot>
                                     <tbody><?php require "pp-staff-list-staff-script-technician.php"; ?></tbody>
                                 </table>
                             </div>
@@ -74,42 +73,82 @@
                     <table id="modal_table" class="table table-striped">
                         <tr>
                             <td>Staff ID</td>
-                            <td id="modal_staff_id"></td>
+                            <td id="modal_staff_id"><input type="text" id="input_staff_id" name="input_staff_id" disabled></td>
                             <td></td>
                         </tr>
                         <tr>
                             <td>RFID</td>
                             <td id="modal_rfid"><input type="text" id="input_rfid" name="input_rfid" disabled></td>
                             <td>
-                                <button id="button_rfid" class="btn btn-primary btn-sm" type="button">Change</button>
-                                <button id="button_save_rfid" class="btn btn-primary btn-sm" type="button">Save</button>
+                                <!--                                <button id="button_rfid" class="btn btn-primary btn-sm" type="button">Change</button>-->
+                                <!--                                <button id="button_save_rfid" class="btn btn-primary btn-sm" type="button">Save</button>-->
                             </td>
                         </tr>
                         <tr>
-                            <td>Name</td>
-                            <td id="modal_name"></td>
+                            <td>Prefix</td>
+                            <td > <form>
+                                    <select name="prefix_name" id="prefix_name"disabled>
+                                        <option value=" ">กรุณาเลือก...</option>
+                                        <option value="1">นาย</option>
+                                        <option value="2">นาง</option>
+                                        <option value="3">นางสาว</option>
+                                    </select>
+                                </form></td>
+                            <td></td>
+                        </tr>
+                        <tr>
+                            <td>First name</td>
+                            <td id="modal_name"><input type="text" id="input_name" name="input_name" disabled></td>
+                            <td></td>
+                        </tr>
+                        <tr>
+                            <td>Last name</td>
+                            <td id="modal_last"><input type="text" id="input_last" name="input_last" disabled></td>
                             <td></td>
                         </tr>
                         <tr>
                             <td>Site</td>
-                            <td id="modal_site"></td>
+                            <td id="modal_site"><input type="text" id="input_site" name="input_site" disabled></td>
                             <td></td>
                         </tr>
                         <tr>
                             <td>Role</td>
-                            <td id="modal_role"></td>
+                            <td > <form>
+                                    <select name="role" id="role"disabled>
+                                        <option value=" ">กรุณาเลือก...</option>
+                                        <option value="1">Operator</option>
+                                        <option value="2">Technician</option>
+                                        <option value="3">Production Support</option>
+                                        <option value="4">Instructor</option>
+                                        <option value="5">Senior Instructor</option>
+                                        <option value="6">Foreman</option>
+                                        <option value="7">Leader</option>
+                                        <option value="8">Senior Technician</option>
+                                        <option value="9">Manager</option>
+                                        <option value="10">Engineering</option>
+                                    </select>
+                                </form></td>
                             <td></td>
                         </tr>
                         <tr>
                             <td>Shif</td>
-                            <td id="modal_shif"></td>
+                            <td > <form>
+                                    <select name="shift" id="shift"disabled>
+                                        <option value=" ">กรุณาเลือก...</option>
+                                        <option value="A">A</option>
+                                        <option value="B">B</option>
+                                        <option value="C">C</option>
+                                    </select>
+                                </form></td>
                             <td></td>
                         </tr>
                     </table>
                 </div>
                 <div class="modal-footer">
+                    <button id="button_rfid" class="btn btn-primary" type="button">Change</button>
+                    <button id="button_save_rfid" class="btn btn-primary" type="button">Save</button>
                     <button class="btn btn-primary" type="button" data-bs-dismiss="modal">Close</button>
-<!--                    <button class="btn btn-primary" type="button">Save changes</button>-->
+                    <!--                    <button class="btn btn-primary" type="button">Save changes</button>-->
                 </div>
             </div>
         </div>
