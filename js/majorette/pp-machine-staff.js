@@ -102,10 +102,26 @@ $(document).ready(function(){
         var role_val;
         if (role==='Operator'){
             role_val=1;
-        }else if(prefix==='Technician'){
+        }else if(role==='Technician'){
             role_val=2;
+        }else if(role==='Production Support'){
+            role_val=3;
+        }else if(role==='Instructor'){
+            role_val=4;
+        }else if(role==='Senior Instructor'){
+            role_val=5;
+        }else if(role==='Foreman'){
+            role_val=6;
+        }else if(role==='Leader'){
+            role_val=7;
+        }else if(role==='Senior Technician'){
+            role_val=8;
+        }else if(role==='Manager'){
+            role_val=9;
+        }else if(role==='Engineering'){
+            role_val=10;
         }
-        // alert(prefix + prefix_val + role + role_val+ shif);
+        //alert(prefix + prefix_val + role + role_val+ shif);
 
         $('#input_staff_id').val(id_staff);
         $('#input_rfid').val(id_rfid);
