@@ -87,8 +87,8 @@
                         <tr>
                             <td>Prefix</td>
                             <td > <form>
-                                    <select name="prefix_name" id="prefix_name" disabled>
-                                        <option value="0">กรุณาเลือก...</option>
+                                    <select name="prefix_name" id="prefix_name"disabled>
+                                        <option value=" ">กรุณาเลือก...</option>
                                         <option value="1">นาย</option>
                                         <option value="2">นาง</option>
                                         <option value="3">นางสาว</option>
@@ -108,16 +108,24 @@
                         </tr>
                         <tr>
                             <td>Site</td>
-                            <td id="modal_site"><input type="text" id="input_staff_id" name="input_staff_id" disabled></td>
+                            <td id="modal_site"><input type="text" id="input_site" name="input_site" disabled></td>
                             <td></td>
                         </tr>
                         <tr>
                             <td>Role</td>
                             <td > <form>
-                                    <select name="role" id="role" disabled>
+                                    <select name="role" id="role"disabled>
                                         <option value=" ">กรุณาเลือก...</option>
                                         <option value="1">Operator</option>
                                         <option value="2">Technician</option>
+                                        <option value="3">Production Support</option>
+                                        <option value="4">Instructor</option>
+                                        <option value="5">Senior Instructor</option>
+                                        <option value="6">Foreman</option>
+                                        <option value="7">Leader</option>
+                                        <option value="8">Senior Technician</option>
+                                        <option value="9">Manager</option>
+                                        <option value="10">Engineering</option>
                                     </select>
                                 </form></td>
                             <td></td>
@@ -125,7 +133,7 @@
                         <tr>
                             <td>Shif</td>
                             <td > <form>
-                                    <select name="shif" id="shif" disabled>
+                                    <select name="shift" id="shift"disabled>
                                         <option value=" ">กรุณาเลือก...</option>
                                         <option value="A">A</option>
                                         <option value="B">B</option>
