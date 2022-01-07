@@ -30,7 +30,7 @@
 <!--        <script type="text/javascript" src="js/majorette/pp-machine-currentTaskModal.js"></script>-->
     </head>
     <body class="nav-fixed">
-    <?php require 'pp-machine-sidenavAccordion.php'; ?>
+    <?php require 'pp-staff-sidenavAccordion.php'; ?>
         <div id="layoutSidenav">
             <?php require 'pp-layoutSidenav_nav.php'; ?>
             <div id="layoutSidenav_content">
