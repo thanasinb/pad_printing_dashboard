@@ -112,15 +112,9 @@
                             </div>
                             <div class="card-body">
                                 <table id="datatablesSimple" class="table table-striped">
-                                    <!--                                    <thead class="table-dark">-->
                                     <thead class="text-black" style="background-color: #ffea07">
-
                                     <?php require 'pp-machine-table-head.php' ?>
                                     </thead>
-                                    <!--                                    <tfoot class="table-dark">-->
-                                    <tfoot class="text-black" style="background-color: #ffea07">
-                                    <?php require 'pp-machine-table-head.php' ?>
-                                    </tfoot>
                                     <tbody>
                                     <?php
                                     require "pp-machine-list-machine-script-2.php";
