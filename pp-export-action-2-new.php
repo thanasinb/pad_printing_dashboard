@@ -266,37 +266,37 @@ while ($data_current_op_activity = $query_current_op_activity->fetch_assoc()){
     $writer->writeSheetRow(SHEET_BF_NEXT, $data_current_op_activity);
 }
 
-//$sql = "SELECT activity_downtime.id_staff, planning.id_job, time_start, id_shif, planning.site, item_no, planning.operation, prod_line, work_center, activity_downtime.id_machine,
-//       activity_downtime.total_work, code_downtime FROM activity_downtime
-//       INNER JOIN staff ON activity_downtime.id_staff=staff.id_staff
-//       INNER JOIN planning ON activity_downtime.id_task=planning.id_task
-//       INNER JOIN code_downtime ON activity_downtime.id_code_downtime=code_downtime.id_code_downtime
-//       WHERE activity_downtime.id_code_downtime <> 'D07' AND " . $sql_where_downtime . $sql_order_by_downtime;
-////echo $sql;
-//$query_activity_downtime = $conn->query($sql);
-//while ($data_activity_downtime = $query_activity_downtime->fetch_assoc()) {
-//    $data_activity_downtime['id_machine'] = make_machine_name($data_activity_downtime['id_machine']);
+$sql = "SELECT activity_downtime.id_staff, planning.id_job, time_start, shif, planning.site, item_no, planning.operation, prod_line, work_center, activity_downtime.id_machine,
+       activity_downtime.total_work, code_downtime FROM activity_downtime
+       INNER JOIN staff ON activity_downtime.id_staff=staff.id_staff
+       INNER JOIN planning ON activity_downtime.id_task=planning.id_task
+       INNER JOIN code_downtime ON activity_downtime.id_code_downtime=code_downtime.id_code_downtime
+       WHERE activity_downtime.id_code_downtime <> 'D07' AND " . $sql_where_downtime . $sql_order_by_downtime;
+//echo $sql;
+$query_activity_downtime = $conn->query($sql);
+while ($data_activity_downtime = $query_activity_downtime->fetch_assoc()) {
+    $data_activity_downtime['id_machine'] = make_machine_name($data_activity_downtime['id_machine']);
 //    $data_activity_downtime['id_shif'] = make_shif_code($data_activity_downtime['id_shif'], $data_activity_downtime['time_start']);
-//    $data_activity_downtime = make_downtime_array($data_activity_downtime);
-//    $data_activity_downtime['time_start'] = date( 'd/m/y', strtotime($data_activity_downtime['time_start']));
-//    $data_activity_downtime['total_work'] = number_format(time2float($data_activity_downtime['total_work']), 2);
-//    $writer->writeSheetRow(SHEET_DOWNTIME, $data_activity_downtime);
-//}
-//
-//$sql = "SELECT activity_downtime.id_staff, planning.id_job, time_start, id_shif, planning.site, item_no, planning.operation, prod_line, work_center, activity_downtime.id_machine,
-//       activity_downtime.total_work FROM activity_downtime
-//       INNER JOIN staff ON activity_downtime.id_staff=staff.id_staff
-//       INNER JOIN planning ON activity_downtime.id_task=planning.id_task
-//       WHERE activity_downtime.id_code_downtime = 'D07' AND " . $sql_where_downtime . $sql_order_by_downtime;
-//$query_activity_setup = $conn->query($sql);
-//while ($data_activity_setup = $query_activity_setup->fetch_assoc()) {
-//    $data_activity_setup['id_machine'] = make_machine_name($data_activity_setup['id_machine']);
+    $data_activity_downtime = make_downtime_array($data_activity_downtime);
+    $data_activity_downtime['time_start'] = date( 'd/m/y', strtotime($data_activity_downtime['time_start']));
+    $data_activity_downtime['total_work'] = number_format(time2float($data_activity_downtime['total_work']), 2);
+    $writer->writeSheetRow(SHEET_DOWNTIME, $data_activity_downtime);
+}
+
+$sql = "SELECT activity_downtime.id_staff, planning.id_job, time_start, shif, planning.site, item_no, planning.operation, prod_line, work_center, activity_downtime.id_machine,
+       activity_downtime.total_work FROM activity_downtime
+       INNER JOIN staff ON activity_downtime.id_staff=staff.id_staff
+       INNER JOIN planning ON activity_downtime.id_task=planning.id_task
+       WHERE activity_downtime.id_code_downtime = 'D07' AND " . $sql_where_downtime . $sql_order_by_downtime;
+$query_activity_setup = $conn->query($sql);
+while ($data_activity_setup = $query_activity_setup->fetch_assoc()) {
+    $data_activity_setup['id_machine'] = make_machine_name($data_activity_setup['id_machine']);
 //    $data_activity_setup['id_shif'] = make_shif_code($data_activity_setup['id_shif'], $data_activity_setup['time_start']);
-//    $data_activity_setup = make_downtime_array($data_activity_setup);
-//    $data_activity_setup['time_start'] = date( 'd/m/y', strtotime($data_activity_setup['time_start']));
-//    $data_activity_setup['total_work'] = number_format(time2float($data_activity_setup['total_work']), 2);
-//    $writer->writeSheetRow(SHEET_SETUP, $data_activity_setup);
-//}
+    $data_activity_setup = make_downtime_array($data_activity_setup);
+    $data_activity_setup['time_start'] = date( 'd/m/y', strtotime($data_activity_setup['time_start']));
+    $data_activity_setup['total_work'] = number_format(time2float($data_activity_setup['total_work']), 2);
+    $writer->writeSheetRow(SHEET_SETUP, $data_activity_setup);
+}
 
 require 'update/terminate.php';
 
