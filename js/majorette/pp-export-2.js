@@ -93,7 +93,7 @@ $(document).ready(function(){
             }
         }
 
-        var url="https://192.168.40.1/SB_Admin_Pro/";
+        var url="https://192.168.40.1/majorette_pp/";
         // var url="https://bunnam.com/projects/majorette_pp/";
 
 
