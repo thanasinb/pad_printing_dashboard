@@ -5,3 +5,18 @@
 @keyframes blinker {
     50% { opacity: 0; }
 }
+
+/*.tableFixHead { overflow-y: auto}*/
+
+thead tr:nth-child(1) th{
+    background: #ffea07;
+    position: sticky;
+    top: 0;
+    z-index: 10;
+}
+thead tr:nth-child(2) th{
+    background: #ffea07;
+    position: sticky;
+    top: 0;
+    z-index: 10;
+}

@@ -65,14 +65,14 @@
         <link rel="icon" type="image/x-icon" href="assets/img/favicon.png" />
         <script data-search-pseudo-elements defer src="js/font-awesome/5.15.3/js/all.min.js"></script>
         <script src="js/feather-icons/4.28.0/feather.min.js"></script>
-        <link rel="stylesheet" href="css/reorder-columns/dragtable.css">
-        <link rel="stylesheet" href="css/reorder-columns/bootstrap-table.min.css">
+<!--        <link rel="stylesheet" href="css/reorder-columns/dragtable.css">-->
+<!--        <link rel="stylesheet" href="css/reorder-columns/bootstrap-table.min.css">-->
         <link rel="stylesheet" href="css/majorette.css">
         <script src="js/jquery/jquery.min.js"></script>
         <script src="js/jquery/jquery-ui.min.js"></script>
-        <script src="js/reorder-columns/jquery.dragtable.js"></script>
-        <script src="js/reorder-columns/bootstrap-table.min.js"></script>
-        <script src="js/reorder-columns/bootstrap-table-reorder-columns.js"></script>
+<!--        <script src="js/reorder-columns/jquery.dragtable.js"></script>-->
+<!--        <script src="js/reorder-columns/bootstrap-table.min.js"></script>-->
+<!--        <script src="js/reorder-columns/bootstrap-table-reorder-columns.js"></script>-->
 <!--        <script src="js/majorette/pp-dragtable.js"></script>-->
 <!--        <script type="text/javascript" src="js/datetimepicker4/moment.min.js"></script>-->
 <!--        <script type="text/javascript" src="js/datetimepicker4/tempusdominus-bootstrap-4.min.js"></script>-->
@@ -111,16 +111,16 @@
                                 </div>
                             </div>
                             <div class="card-body">
-                                <table id="datatablesSimple" class="table table-striped">
-                                    <thead class="text-black" style="background-color: #ffea07">
-                                    <?php require 'pp-machine-table-head.php' ?>
-                                    </thead>
-                                    <tbody>
-                                    <?php
-                                    require "pp-machine-list-machine-script-2.php";
-                                    ?>
-                                    </tbody>
-                                </table>
+                                    <table id="datatablesSimple" class="table table-striped">
+                                        <thead class="text-black" style="background-color: #ffea07">
+                                        <?php require 'pp-machine-table-head.php' ?>
+                                        </thead>
+                                        <tbody>
+                                        <?php
+                                        require "pp-machine-list-machine-script-2.php";
+                                        ?>
+                                        </tbody>
+                                    </table>
                             </div>
                         </div>
                     </div>
