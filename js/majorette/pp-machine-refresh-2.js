@@ -198,6 +198,7 @@ function loadData() {
 
                     if(status_work==0 || status_work==3 || status_work==5 || status_work==6){
                         $(this).parent().find('.status_work').removeClass('bg-green bg-yellow bg-red');
+                        $(this).parent().find('.status_work').text("");
                         $(this).parent().find('.status_work').addClass('bg-blue');
                     }else if(status_work==1){
                         $(this).parent().find('.status_work').removeClass('bg-blue bg-yellow bg-red');
