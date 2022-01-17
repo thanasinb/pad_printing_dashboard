@@ -16,13 +16,13 @@
     <link rel="icon" type="image/x-icon" href="assets/img/favicon.png" />
     <script data-search-pseudo-elements defer src="js/font-awesome/5.15.3/js/all.min.js"></script>
     <script src="js/feather-icons/4.28.0/feather.min.js"></script>
-    <link rel="stylesheet" href="css/reorder-columns/dragtable.css">
-    <link rel="stylesheet" href="css/reorder-columns/bootstrap-table.min.css">
+<!--    <link rel="stylesheet" href="css/reorder-columns/dragtable.css">-->
+<!--    <link rel="stylesheet" href="css/reorder-columns/bootstrap-table.min.css">-->
     <script src="js/jquery/jquery.min.js"></script>
     <script src="js/jquery/jquery-ui.min.js"></script>
-    <script src="js/reorder-columns/jquery.dragtable.js"></script>
-    <script src="js/reorder-columns/bootstrap-table.min.js"></script>
-    <script src="js/reorder-columns/bootstrap-table-reorder-columns.js"></script>
+<!--    <script src="js/reorder-columns/jquery.dragtable.js"></script>-->
+<!--    <script src="js/reorder-columns/bootstrap-table.min.js"></script>-->
+<!--    <script src="js/reorder-columns/bootstrap-table-reorder-columns.js"></script>-->
     <script src="js/majorette/pp-dragtable.js"></script>
     <script src="js/majorette/pp-machine-list-task.js"></script>
 </head>
@@ -71,7 +71,7 @@ require 'pp-planning-sidenavAccordion.php';
 <script src="assets/demo/chart-area-demo.js"></script>
 <script src="assets/demo/chart-bar-demo.js"></script>
 <script src="js/simple-datatables@latest" type="text/javascript"></script>
-<script src="js/datatables/datatables-simple-demo.js"></script>
+<script src="js/datatables/datatables-machine-list-task.js"></script>
 <script src="js/litepicker/dist/bundle.js"></script>
 <script src="js/litepicker.js"></script>
 </body>
