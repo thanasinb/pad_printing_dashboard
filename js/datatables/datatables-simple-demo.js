@@ -7,8 +7,7 @@ window.addEventListener('DOMContentLoaded', event => {
         new simpleDatatables.DataTable(datatablesSimple,{
             searchable: false,
             paging: false,
-            fixedHeight: true
-        });
+            fixedHeight: false});
     }
 
     var height_first_row = $('.first-row').height()+2;
