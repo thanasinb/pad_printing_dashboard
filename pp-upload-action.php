@@ -8,6 +8,7 @@ $target_file = $target_dir . basename($_FILES["fileToUpload"]["name"]);
 $uploadOk = 1;
 $imageFileType = strtolower(pathinfo($target_file,PATHINFO_EXTENSION));
 $error_code = 0;
+$msg = "Upload success";
 
 // Check if file already exists
 if (file_exists($target_file)) {
@@ -36,6 +37,7 @@ if (strcmp($imageFileType, "xlsx")==0){
     $xlsx = new SimpleXLS($target_file);
 } else{
     $error_code = 1;
+    $msg = "Error code: 1";
 }
 
 const FIELD_ID_JOB=0;
@@ -153,6 +155,7 @@ if($error_code==0){
             $conn->query($stmt);
             if ($conn->errno){
                 $error_code = $conn->errno;
+                $msg = $stmt;
                 echo $stmt . "<br>";
                 break;
             }
@@ -169,6 +172,7 @@ if($error_code==0){
             $conn->query($sql_update);
             if ($conn->errno){
                 $error_code = $conn->errno;
+                $msg = $sql_update;
                 echo $sql_update . "<br>";
                 break;
             }
@@ -177,6 +181,7 @@ if($error_code==0){
             $conn->query($sql_update);
             if ($conn->errno){
                 $error_code = $conn->errno;
+                $msg = $sql_update;
                 echo $sql_update . "<br>";
                 break;
             }
@@ -190,6 +195,7 @@ if($error_code==0){
     $conn->query($sql_backup);
     if ($conn->errno){
         $error_code = $conn->errno;
+        $msg = $sql_update;
         echo $sql_update . "<br>";
     }
 
@@ -197,13 +203,14 @@ if($error_code==0){
     $conn->query($sql_backup);
     if ($conn->errno){
         $error_code = $conn->errno;
+        $msg = $sql_update;
         echo $sql_backup . "<br>";
     }
 
     require 'update/terminate.php';
 }
 
-header("Location: ./pp-upload.php?error_code=" . $error_code);
+header("Location: ./pp-upload.php?error_code=" . $error_code . "&message=" . $msg);
 die();
 
 ?>
