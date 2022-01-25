@@ -195,7 +195,7 @@ if($error_code==0){
     $conn->query($sql_backup);
     if ($conn->errno){
         $error_code = $conn->errno;
-        $msg = $sql_update;
+        $msg = $sql_backup;
         echo $sql_update . "<br>";
     }
 
@@ -203,7 +203,7 @@ if($error_code==0){
     $conn->query($sql_backup);
     if ($conn->errno){
         $error_code = $conn->errno;
-        $msg = $sql_update;
+        $msg = $sql_backup;
         echo $sql_backup . "<br>";
     }
 

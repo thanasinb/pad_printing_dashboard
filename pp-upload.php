@@ -60,7 +60,7 @@
 
                                     if ($_GET['error_code']!=null){
                                         if ($_GET['error_code'])
-                                            echo "Upload error! Code: " . $_GET['error_code'] . "Message: " . $_GET['message'];
+                                            echo "Upload error! Code: " . $_GET['error_code'] . " Message: " . $_GET['message'];
                                         else
                                             echo "Upload successfully! Code: " . $_GET['error_code'];
                                     }
