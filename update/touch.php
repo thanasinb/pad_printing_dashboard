@@ -18,7 +18,7 @@ if (!empty($data_staff) && !empty($data_machine_queue)){
         //echo $sql;
         $result = $conn->query($sql);
         $data_planning = $result->fetch_assoc();
-        $data_planning['item_no'] = substr($data_planning['item_no'], 3);
+        $data_planning['item_no'] = substr($data_planning['item_no'], 0, -3);
 
         // IF THE CARD IS OPERATOR CLASS
         if($data_staff["role"]==1){
