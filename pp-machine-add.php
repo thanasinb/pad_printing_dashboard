@@ -13,6 +13,7 @@
         <link rel="icon" type="image/x-icon" href="assets/img/favicon.png" />
         <script data-search-pseudo-elements defer src="js/font-awesome/5.15.3/js/all.min.js"></script>
         <script src="js/feather-icons/4.28.0/feather.min.js"></script>
+<!--        <script src="js/majorette/pp-machine-add.js"></script>-->
     </head>
     <body class="nav-fixed">
         <nav class="topnav navbar navbar-expand shadow justify-content-between justify-content-sm-start navbar-light bg-white" id="sidenavAccordion">
@@ -230,7 +231,7 @@
                                             </div>
                                         </div>
                                         <!-- Save changes button-->
-                                        <button class="btn btn-blue" type="submit">Add</button>
+                                        <button class="btn btn-blue" id="submit_machine_add" type="submit">Add</button>
                                         <a href="pp-machine.php" style="text-decoration: none"><button class="btn btn-red" type="button">Cancel</button></a>
                                     </form>
                                 </div>
