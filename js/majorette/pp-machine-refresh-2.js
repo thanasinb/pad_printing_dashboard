@@ -215,11 +215,11 @@ function loadData() {
                     }
 
                     if(rework=='y'){
-                        if($(this).parent().find('.status_work').parent().text()!='R') {
-                            $(this).parent().find('.status_work').parent().append('R');
+                        if($(this).parent().find('.status_work').text()!='  RW') {
+                            $(this).parent().find('.status_work').append('  RW');
                         }
                     }else {
-                        if($(this).parent().find('.status_work').parent().text()=='R') {
+                        if($(this).parent().find('.status_work').parent().text()=='  RW') {
                             // alert($(this).parent().find('.status_work').parent().html());
                             $(this).parent().find('.status_work').parent().html($(this).parent().find('.status_work').parent().html().slice(0, -1));
                             // $(this).parent().find('.status_work').addClass('fas fa-circle');
