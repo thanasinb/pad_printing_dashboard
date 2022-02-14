@@ -1,14 +1,16 @@
 <?php
 require 'establish.php';
+require 'find_shif.php';
 
-$sql = "SELECT id_staff FROM machine_queue WHERE id_machine='" . $_GET["id_mc"] . "' AND queue_number=1";
+$sql = "SELECT id_staff, id_task FROM machine_queue WHERE id_machine='" . $_GET["id_mc"] . "' AND queue_number=1";
 $query_queue = $conn->query($sql);
 $data_queue = $query_queue->fetch_assoc();
 
 if ($data_queue['id_staff']==null){
-    $sql = "SELECT id_staff FROM staff WHERE id_rfid='" . $_GET['id_rfid'] . "' AND id_role=2";
+    $sql = "SELECT id_staff, id_shif as team FROM staff WHERE id_rfid='" . $_GET['id_rfid'] . "' AND id_role=2";
     $query_staff = $conn->query($sql);
     $data_staff = $query_staff->fetch_assoc();
+    $shif = find_shif($conn, $data_staff['id_staff'], $data_staff['team']);
 
     if (!empty($data_staff)){
         $sql = "SELECT id_code_downtime FROM code_downtime WHERE id_code_downtime='" . $_GET["code_downtime"] . "'";
@@ -20,15 +22,17 @@ if ($data_queue['id_staff']==null){
             print_r($data_json);
 
         } else {
-            $sql = "UPDATE activity_downtime SET ";
-            $sql = $sql . "id_code_downtime='" . $_GET["code_downtime"] . "' ";
-            $sql = $sql . "WHERE status_downtime=1 AND ";
-            $sql = $sql . "id_machine='" . $_GET["id_mc"] . "' AND ";
-            $sql = $sql . "id_task=(";
-            $sql = $sql . "SELECT id_task FROM planning WHERE id_job='" . $_GET['id_job'] . "' AND operation='" . $_GET['operation'] . "'";
+            $sql = "INSERT INTO activity_downtime (id_task, id_machine, id_staff, shif, id_code_downtime, status_downtime, time_start) VALUES (";
+            $sql = $sql . $data_queue['id_task'] . ",";
+            $sql = $sql . "'" . $_GET['id_mc'] . "',";
+            $sql = $sql . "'" . $data_staff['id_staff'] . "',";
+            $sql = $sql . "'" . $shif . "',";
+            $sql = $sql . "'" . $_GET["code_downtime"] . "',";
+            $sql = $sql . "1,";
+            $sql = $sql . "CURRENT_TIMESTAMP()";
             $sql = $sql . ")";
+
             $result = $conn->query($sql);
-//    echo $sql;
 
             // UPDATE STAFF ID IN MACHINE QUEUE TABLE
             $sql = "UPDATE machine_queue SET id_staff='" . $data_staff['id_staff'] . "' WHERE id_machine='" . $_GET["id_mc"] . "' AND queue_number=1";
