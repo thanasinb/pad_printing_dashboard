@@ -3,12 +3,10 @@ require 'establish.php';
 require 'find_shif.php';
 
 $sql = "SELECT id_staff, id_task FROM machine_queue WHERE id_machine='" . $_GET["id_mc"] . "' AND queue_number=1";
-//echo $sql . "<br>";
 $query_queue = $conn->query($sql);
 $data_queue = $query_queue->fetch_assoc();
 if ($data_queue['id_staff']==null) {
     $sql = "SELECT id_staff, name_first, name_last, id_role as role, id_shif as team FROM staff WHERE id_rfid='" . $_GET['id_rfid'] . "'";
-//    echo $sql . "<br>";
     $result = $conn->query($sql);
     $data_staff = $result->fetch_assoc();
     $data_staff['role']=intval($data_staff['role']);
@@ -24,7 +22,6 @@ if ($data_queue['id_staff']==null) {
         $sql = $sql . "1,";
         $sql = $sql . "CURRENT_TIMESTAMP()";
         $sql = $sql . ")";
-//        echo $sql . "<br>";
         $result = $conn->query($sql);
 
         // UPDATE STAFF ID IN MACHINE QUEUE TABLE
@@ -40,7 +37,6 @@ if ($data_queue['id_staff']==null) {
         $sql = $sql . "1,";
         $sql = $sql . "CURRENT_TIMESTAMP()";
         $sql = $sql . ")";
-//        echo $sql . "<br>";
         $result = $conn->query($sql);
 
         // UPDATE STAFF ID IN MACHINE QUEUE TABLE
