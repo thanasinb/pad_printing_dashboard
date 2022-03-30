@@ -11,14 +11,15 @@ if ($data_queue['id_staff']==null) {
     $data_staff = $result->fetch_assoc();
     $data_staff['role']=intval($data_staff['role']);
 
-    $shif = find_shif($conn, $data_staff['id_staff'], $data_staff['team']);
+    list($shif, $date_eff) = find_shif($conn, $data_staff['id_staff'], $data_staff['team']);
 
     if($_GET['activity_type']==1){
-        $sql = "INSERT INTO activity (id_task, id_machine, id_staff, shif, status_work, time_start) VALUES (";
+        $sql = "INSERT INTO activity (id_task, id_machine, id_staff, shif, date_eff, status_work, time_start) VALUES (";
         $sql = $sql . $data_queue["id_task"] . ",";
         $sql = $sql . "'" . $_GET["id_mc"] . "',";
         $sql = $sql . "'" . $data_staff["id_staff"] . "',";
         $sql = $sql . "'" . $shif . "',";
+        $sql = $sql . "'" . $date_eff . "',";
         $sql = $sql . "1,";
         $sql = $sql . "CURRENT_TIMESTAMP()";
         $sql = $sql . ")";
@@ -29,11 +30,12 @@ if ($data_queue['id_staff']==null) {
         $result = $conn->query($sql);
         echo "OK";
     }elseif ($_GET['activity_type']==2){
-        $sql = "INSERT INTO activity_rework (id_task, id_machine, id_staff, shif, status_work, time_start) VALUES (";
+        $sql = "INSERT INTO activity_rework (id_task, id_machine, id_staff, shif, date_eff, status_work, time_start) VALUES (";
         $sql = $sql . $data_queue["id_task"] . ",";
         $sql = $sql . "'" . $_GET["id_mc"] . "',";
         $sql = $sql . "'" . $data_staff["id_staff"] . "',";
         $sql = $sql . "'" . $shif . "',";
+        $sql = $sql . "'" . $date_eff . "',";
         $sql = $sql . "1,";
         $sql = $sql . "CURRENT_TIMESTAMP()";
         $sql = $sql . ")";

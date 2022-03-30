@@ -224,7 +224,7 @@ if(mysqli_num_rows($query_tasks_in_shif)>0){
 
     while ($data_first_op_planning = $query_first_op_planning->fetch_assoc()){
         //SELECT THE FIRST ACTIVITY OF SUCH FIRST OPERATION
-        $sql = "SELECT activity.id_staff, planning.id_job, time_start, shif, planning.site, item_no, planning.operation, prod_line, work_center, activity.id_machine,
+        $sql = "SELECT activity.id_staff, planning.id_job, date_eff AS time_start, shif, planning.site, item_no, planning.operation, prod_line, work_center, activity.id_machine,
             no_pulse1, activity.total_work, time_close, divider.divider AS multiplier FROM activity
             INNER JOIN staff ON activity.id_staff=staff.id_staff
             INNER JOIN planning ON activity.id_task=planning.id_task
@@ -248,7 +248,7 @@ if(mysqli_num_rows($query_tasks_in_shif)>0){
     }
 }
 
-$sql = "SELECT activity.id_staff, planning.id_job, time_start, shif, planning.site, item_no, planning.operation, prod_line, work_center, activity.id_machine,
+$sql = "SELECT activity.id_staff, planning.id_job, date_eff AS time_start, shif, planning.site, item_no, planning.operation, prod_line, work_center, activity.id_machine,
        no_pulse1, activity.total_work, time_close, divider.divider AS multiplier FROM activity
        INNER JOIN staff ON activity.id_staff=staff.id_staff
        INNER JOIN planning ON activity.id_task=planning.id_task
@@ -266,7 +266,7 @@ while ($data_current_op_activity = $query_current_op_activity->fetch_assoc()){
     $writer->writeSheetRow(SHEET_BF_NEXT, $data_current_op_activity);
 }
 
-$sql = "SELECT activity_downtime.id_staff, planning.id_job, time_start, shif, planning.site, item_no, planning.operation, prod_line, work_center, activity_downtime.id_machine,
+$sql = "SELECT activity_downtime.id_staff, planning.id_job, date_eff AS time_start, shif, planning.site, item_no, planning.operation, prod_line, work_center, activity_downtime.id_machine,
        activity_downtime.total_work, code_downtime FROM activity_downtime
        INNER JOIN staff ON activity_downtime.id_staff=staff.id_staff
        INNER JOIN planning ON activity_downtime.id_task=planning.id_task
@@ -283,7 +283,7 @@ while ($data_activity_downtime = $query_activity_downtime->fetch_assoc()) {
     $writer->writeSheetRow(SHEET_DOWNTIME, $data_activity_downtime);
 }
 
-$sql = "SELECT activity_downtime.id_staff, planning.id_job, time_start, shif, planning.site, item_no, planning.operation, prod_line, work_center, activity_downtime.id_machine,
+$sql = "SELECT activity_downtime.id_staff, planning.id_job, date_eff AS time_start, shif, planning.site, item_no, planning.operation, prod_line, work_center, activity_downtime.id_machine,
        activity_downtime.total_work FROM activity_downtime
        INNER JOIN staff ON activity_downtime.id_staff=staff.id_staff
        INNER JOIN planning ON activity_downtime.id_task=planning.id_task

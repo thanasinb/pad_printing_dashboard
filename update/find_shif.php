@@ -10,6 +10,7 @@ function find_shif($conn, $id_staff, $team){
     }
 
     $time_current = time();
+    $date_eff = date("Y-m-d");
 
     $today_00_00 = strtotime(date("Y-m-d", $time_current));
 //    echo $today_00_00;
@@ -30,10 +31,14 @@ function find_shif($conn, $id_staff, $team){
         $result = $conn->query($sql);
         $data_activity = $result->fetch_assoc();
         if (empty($data_activity)){
+            // W/O OT, NUMBER BEFORE 'N'
             $shif = "N" . $team_no;
         }else{
+            // WITH OT, NUMBER AFTER 'N'
             $shif = $team_no . "N";
         }
+        $date_eff = date('Y-m-d',strtotime("-1 days"));
+
         //DAY SHIF BTW 07:00 AND 15:45
     }elseif ($today_07_00<$time_current AND $time_current<$today_15_45){
         $shif = "D" . $team_no;
@@ -56,5 +61,5 @@ function find_shif($conn, $id_staff, $team){
             $shif = $team_no . "N";
         }
     }
-    return $shif;
+    return array($shif, $date_eff);
 }

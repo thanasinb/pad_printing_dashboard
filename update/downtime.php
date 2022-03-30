@@ -2,12 +2,13 @@
 require 'establish.php';
 require 'find_shif.php';
 
-function add_downtime($conn, $id_task, $id_mc, $id_staff, $shif, $code_downtime){
-    $sql = "INSERT INTO activity_downtime (id_task, id_machine, id_staff, shif, id_code_downtime, status_downtime, time_start) VALUES (";
+function add_downtime($conn, $id_task, $id_mc, $id_staff, $shif, $date_eff, $code_downtime){
+    $sql = "INSERT INTO activity_downtime (id_task, id_machine, id_staff, shif, date_eff, id_code_downtime, status_downtime, time_start) VALUES (";
     $sql = $sql . $id_task . ",";
     $sql = $sql . "'" . $id_mc . "',";
     $sql = $sql . "'" . $id_staff . "',";
     $sql = $sql . "'" . $shif . "',";
+    $sql = $sql . "'" . $date_eff . "',";
     $sql = $sql . "'" . $code_downtime . "',";
     $sql = $sql . "1,";
     $sql = $sql . "CURRENT_TIMESTAMP()";
@@ -28,7 +29,7 @@ if ($data_queue['id_staff']==null){
     $sql = "SELECT id_staff, id_shif as team FROM staff WHERE id_rfid='" . $_GET['id_rfid'] . "' AND id_role=2";
     $query_staff = $conn->query($sql);
     $data_staff = $query_staff->fetch_assoc();
-    $shif = find_shif($conn, $data_staff['id_staff'], $data_staff['team']);
+    list($shif, $date_eff) = find_shif($conn, $data_staff['id_staff'], $data_staff['team']);
 
     if (!empty($data_staff)){
         $sql = "SELECT id_code_downtime FROM code_downtime WHERE id_code_downtime='" . $_GET["code_downtime"] . "'";
@@ -56,7 +57,7 @@ if ($data_queue['id_staff']==null){
 //            $sql = "UPDATE machine_queue SET id_staff='" . $data_staff['id_staff'] . "' WHERE id_machine='" . $_GET["id_mc"] . "' AND queue_number=1";
 //            $result = $conn->query($sql);
 
-            add_downtime($conn, $data_queue['id_task'], $_GET['id_mc'], $data_staff['id_staff'], $shif, $_GET["code_downtime"]);
+            add_downtime($conn, $data_queue['id_task'], $_GET['id_mc'], $data_staff['id_staff'], $shif, $date_eff, $_GET["code_downtime"]);
             echo "OK";
         }
 
@@ -79,7 +80,7 @@ if ($data_queue['id_staff']==null){
         $sql = "SELECT id_staff, id_shif as team FROM staff WHERE id_rfid='" . $_GET['id_rfid'] . "' AND id_role=2";
         $query_staff = $conn->query($sql);
         $data_staff = $query_staff->fetch_assoc();
-        $shif = find_shif($conn, $data_staff['id_staff'], $data_staff['team']);
+        list($shif, $date_eff) = find_shif($conn, $data_staff['id_staff'], $data_staff['team']);
 
         if (!empty($data_staff)) {
             $sql = "SELECT id_code_downtime FROM code_downtime WHERE id_code_downtime='" . $_GET["code_downtime"] . "'";
@@ -98,7 +99,7 @@ if ($data_queue['id_staff']==null){
                 require 'establish.php';
                 $_GET['id_rfid'] = $get_rfid;
 
-                add_downtime($conn, $data_queue['id_task'], $_GET['id_mc'], $data_staff['id_staff'], $shif, $_GET["code_downtime"]);
+                add_downtime($conn, $data_queue['id_task'], $_GET['id_mc'], $data_staff['id_staff'], $shif, $date_eff, $_GET["code_downtime"]);
 //                echo "OK";
             }
         }else{
