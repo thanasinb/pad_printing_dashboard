@@ -1,11 +1,11 @@
 <?php
 function find_shif($conn, $id_staff, $team){
 
-    if(strcmp($team, 'A' == 0)){
+    if(strcmp($team, 'A') == 0){
         $team_no = '4';
-    }elseif (strcmp($team, 'B' == 0)){
+    }elseif (strcmp($team, 'B') == 0){
         $team_no = '6';
-    }elseif (strcmp($team, 'C' == 0)) {
+    }elseif (strcmp($team, 'C') == 0) {
         $team_no = '5';
     }
 

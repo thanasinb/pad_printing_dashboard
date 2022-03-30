@@ -4,11 +4,11 @@ require 'establish.php';
 const ACTIVITY_BACKFLUSH=1;
 const ACTIVITY_REWORK=2;
 
-$sql = "SELECT id_activity, id_task, time_start, CURRENT_TIMESTAMP() AS time_current, total_food, total_toilet, no_send FROM activity WHERE status_work<3 AND id_machine = '" . $_GET["id_mc"] . "' AND id_staff=(SELECT id_staff FROM staff WHERE id_rfid = '" . $_GET["id_rfid"] . "')";
+$sql = "SELECT id_activity, id_task, shif, date_eff, time_start, CURRENT_TIMESTAMP() AS time_current, total_food, total_toilet, no_send FROM activity WHERE status_work<3 AND id_machine = '" . $_GET["id_mc"] . "' AND id_staff=(SELECT id_staff FROM staff WHERE id_rfid = '" . $_GET["id_rfid"] . "')";
 $result = $conn->query($sql);
 $data_activity = $result->fetch_assoc();
 if(empty($data_activity)) {
-    $sql = "SELECT id_activity, id_task, time_start, CURRENT_TIMESTAMP() AS time_current, total_food, total_toilet, no_send FROM activity_rework WHERE status_work<3 AND id_machine = '" . $_GET["id_mc"] . "' AND id_staff=(SELECT id_staff FROM staff WHERE id_rfid = '" . $_GET["id_rfid"] . "')";
+    $sql = "SELECT id_activity, id_task, shif, date_eff, time_start, CURRENT_TIMESTAMP() AS time_current, total_food, total_toilet, no_send FROM activity_rework WHERE status_work<3 AND id_machine = '" . $_GET["id_mc"] . "' AND id_staff=(SELECT id_staff FROM staff WHERE id_rfid = '" . $_GET["id_rfid"] . "')";
     $result = $conn->query($sql);
     $data_activity = $result->fetch_assoc();
     if(!empty($data_activity)) { $activity_type=ACTIVITY_REWORK; }
