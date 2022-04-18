@@ -93,8 +93,8 @@ $(document).ready(function(){
             }
         }
 
-        var url="https://192.168.40.21/majorette_pp/";
-        // var url="https://bunnam.com/projects/majorette_pp/";
+        // var url="https://192.168.40.21/majorette_pp/";
+        var url="https://bunnam.com/projects/majorette_pp/";
 
 
         if (shif_number==3){
