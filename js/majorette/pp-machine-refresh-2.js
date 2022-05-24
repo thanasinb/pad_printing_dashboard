@@ -27,6 +27,7 @@ function loadData() {
         var run_time_open;
         var status_work;
         var rework;
+        var qty_repeat;
         const options = {
             minimumFractionDigits: 2,
             maximumFractionDigits: 2
@@ -69,11 +70,13 @@ function loadData() {
                     status_work = parseInt(dataResult.status_work);
                     divider = parseFloat(dataResult.divider);
                     rework = dataResult.rework;
+                    qty_repeat = parseInt(dataResult.qty_repeat);
 
                     // $(this).parent().find('.id_staff').text(dataResult.id_staff);
                     // $(this).parent().find('.status_work').text(dataResult.id_staff);
 
                     qty_accum = qty_complete + Math.floor(qty_process*divider);
+                    qty_accum = qty_accum - qty_repeat;
                     percent = Math.round((qty_accum/qty_order)*100);
 
                     run_time_std = parseFloat(dataResult.run_time_std); // UNIT = SECONDS
