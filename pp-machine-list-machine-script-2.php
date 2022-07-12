@@ -31,17 +31,22 @@ while($row_machine = $result_machine->fetch_assoc()){
             $phpdate = strtotime($row_planning["date_due"]);
 
             // SELECT THE PROCESSING QUANTITY (no_pulse1, no_pulse2, no_pulse3) BY TASK_ID
-            $sql = "SELECT SUM(no_pulse1) AS sum_pulse1, SUM(no_pulse2) AS sum_pulse2, SUM(no_pulse3) AS sum_pulse3 ";
+            $sql = "SELECT SUM(no_pulse1) AS sum_pulse1, SUM(no_pulse2) AS sum_pulse2, SUM(no_pulse3) AS sum_pulse3, SUM(num_repeat) AS qty_repeat ";
             $sql = $sql . "FROM activity WHERE id_task=" . $row_machine_queue["id_task"] . " AND status_work>0 AND status_work<6";
             $result_activity = $conn->query($sql);
             $row_activity = $result_activity->fetch_assoc();
 
             // CALCULATE THE PERCENT OF THE PROGRESS BAR
             $qty_process = intval($row_activity["sum_pulse1"]);
+            $qty_repeat = intval($row_activity["qty_repeat"]);
             $qty_complete = intval($row_planning["qty_comp"]);
             $qty_order = intval($row_planning["qty_order"]);
             $qty_accum = $qty_complete + $qty_process;
             $percent = round(($qty_accum / $qty_order) * 100,0);
+
+            $run_time_std = number_format((floatval($row_planning['run_time_std'])*3600)-2, 2); // UNIT = SECONDS
+            $qty_accum = $qty_accum - $qty_repeat;
+            $run_time_open = (($qty_order-$qty_accum)*$run_time_std);
 
 //            echo "<td><i class='status_work fas fa-circle fa-sm me-1 fs-5'></i></td>";
             echo "<td class='status_work text-white'></td>";
@@ -72,7 +77,7 @@ while($row_machine = $result_machine->fetch_assoc()){
             echo "aria-valuenow=\"" . $percent . "\" aria-valuemin=\"0\" aria-valuemax=\"100\">" . $percent . "%";
             echo "</div></td>";
             echo "<td><span class='run_time'></span></td>";
-            echo "<td class='run_time_open'>" . number_format($row_planning['run_open_total'],3) . "</td>";
+            echo "<td class='run_time_open'>" . $run_time_open . "</td>";
             echo "<td class='est_date' style='width: 100px'><span></span></td>";
             echo "<td class='est_time' style='width: 80px'><span></span></td>";
 
