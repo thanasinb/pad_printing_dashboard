@@ -14,6 +14,9 @@ if(empty($data_activity)) {
 }else{ $activity_type=ACTIVITY_BACKFLUSH; }
 
 $sql = "SELECT divider.divider AS divider FROM divider INNER JOIN planning ON planning.id_task=" . $_GET["id_task"] . " AND divider.op_color=planning.op_color AND divider.op_side=planning.op_side WHERE planning.id_task=" . $_GET["id_task"];
+$result = $conn->query($sql);
+$data_divider = $result->fetch_assoc();
+$divider = floatval($data_divider['divider']);
 
 if(empty($data_activity)) {
     $data_json = json_encode(array("code"=>"007"), JSON_UNESCAPED_UNICODE);
@@ -31,7 +34,7 @@ if(empty($data_activity)) {
     if($_GET["no_pulse1"]==0){
         $run_time_actual=0.0;
     }else{
-        $run_time_actual = round($time_total_second/$_GET["no_pulse1"], 2);
+        $run_time_actual = round($time_total_second/($_GET["no_pulse1"]*$divider), 2);
     }
 
 //    echo $total_food . "<br>";
