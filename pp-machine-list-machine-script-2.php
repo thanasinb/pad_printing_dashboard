@@ -23,7 +23,7 @@ while($row_machine = $result_machine->fetch_assoc()){
         if (intval($row_machine_queue['queue_number'])==1){
 
             // FIND THE TASK CORRESPONDING TO THE FIRST QUEUE
-            $sql = "SELECT * FROM planning WHERE id_task=" . $row_machine_queue["id_task"];
+            $sql = "SELECT *, divider.divider as divider FROM planning INNER JOIN divider ON planning.op_color=divider.op_color AND planning.op_side=divider.op_side WHERE id_task=" . $row_machine_queue["id_task"];
             $result_planning = $conn->query($sql);
 
             // SHOW THE TASK THAT IS IN THE FIRST QUEUE
@@ -41,11 +41,11 @@ while($row_machine = $result_machine->fetch_assoc()){
             $qty_repeat = intval($row_activity["qty_repeat"]);
             $qty_complete = intval($row_planning["qty_comp"]);
             $qty_order = intval($row_planning["qty_order"]);
-            $qty_accum = $qty_complete + $qty_process;
+            $qty_accum = $qty_complete + round($qty_process* floatval($row_planning['divider']),0) - $qty_repeat;
             $percent = round(($qty_accum / $qty_order) * 100,0);
 
             $run_time_std = number_format((floatval($row_planning['run_time_std'])*3600)-2, 2); // UNIT = SECONDS
-            $qty_accum = $qty_accum - $qty_repeat;
+//            $qty_accum = $qty_accum - $qty_repeat;
             $run_time_open = (($qty_order-$qty_accum)*$run_time_std);
 
 //            echo "<td><i class='status_work fas fa-circle fa-sm me-1 fs-5'></i></td>";

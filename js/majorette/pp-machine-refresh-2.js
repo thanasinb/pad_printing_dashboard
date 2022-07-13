@@ -75,8 +75,8 @@ function loadData() {
                     // $(this).parent().find('.id_staff').text(dataResult.id_staff);
                     // $(this).parent().find('.status_work').text(dataResult.id_staff);
 
-                    qty_accum = qty_complete + Math.floor(qty_process*divider);
-                    qty_accum = qty_accum - qty_repeat;
+                    qty_accum = qty_complete + Math.floor(qty_process- qty_repeat*divider) - qty_repeat;
+                    // qty_accum = qty_accum - qty_repeat;
                     percent = Math.round((qty_accum/qty_order)*100);
 
                     run_time_std = parseFloat(dataResult.run_time_std); // UNIT = SECONDS
