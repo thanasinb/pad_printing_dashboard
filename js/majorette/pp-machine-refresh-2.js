@@ -12,12 +12,18 @@ $(document).ready(function(){
                 if (item_no==''){
                     $(this).parent().hide();
                 }
+                if (id_machine=='02-00'){
+                    $(this).parent().hide();
+                }
             });
         }else{
             $('.id_machine').each(function(i, obj) {
                 id_machine = $(this).html();
                 item_no = $(this).next().text();
                 if (item_no==''){
+                    $(this).parent().show();
+                }
+                if (id_machine=='02-00'){
                     $(this).parent().show();
                 }
             });
