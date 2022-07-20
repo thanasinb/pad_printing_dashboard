@@ -219,12 +219,12 @@
                                     Change operation
                                 </label>
                             </div>
-                            <div class="form-check">
-                                <input class="form-check-input radioCurrentTask" type="radio" name="radioCurrentTask" id="radioForceStop" value="2">
-                                <label class="form-check-label" for="radioForceStop">
-                                    Force stop
-                                </label>
-                            </div>
+<!--                            <div class="form-check">-->
+<!--                                <input class="form-check-input radioCurrentTask" type="radio" name="radioCurrentTask" id="radioForceStop" value="2">-->
+<!--                                <label class="form-check-label" for="radioForceStop">-->
+<!--                                    Force stop-->
+<!--                                </label>-->
+<!--                            </div>-->
                             <div class="form-check">
                                 <input class="form-check-input radioCurrentTask" type="radio" name="radioCurrentTask" id="radioComplete" value="3">
                                 <label class="form-check-label" for="radioComplete">

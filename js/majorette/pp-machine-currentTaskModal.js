@@ -26,22 +26,22 @@ $(document).ready(function(){
         if (radio_checked==1){
             $('#form_modal_current_task').attr('action', 'pp-machine-list-task.php');
         }
-        else if (radio_checked==2){
-            $.ajax({
-                url: "ajax/pp-machine-force-stop.php",
-                type: "GET",
-                data: {
-                    id_mc: id_machine
-                },
-                context: this,
-                cache: false,
-                success: function(dataResult){
-                    // var dataResult = JSON.parse(dataResult);
-                    // alert(JSON.stringify(dataResult));
-                    $('#currentTaskModal').modal('hide');
-                }
-            });
-        }
+        // else if (radio_checked==2){
+        //     $.ajax({
+        //         url: "ajax/pp-machine-force-stop.php",
+        //         type: "GET",
+        //         data: {
+        //             id_mc: id_machine
+        //         },
+        //         context: this,
+        //         cache: false,
+        //         success: function(dataResult){
+        //             // var dataResult = JSON.parse(dataResult);
+        //             // alert(JSON.stringify(dataResult));
+        //             $('#currentTaskModal').modal('hide');
+        //         }
+        //     });
+        // }
         else if (radio_checked==3){
             $('#form_modal_current_task').attr('action', 'pp-machine.php');
         }
@@ -132,7 +132,7 @@ $(document).ready(function(){
         modal_id_machine.textContent = id_machine;
         if (item_no!='') {
             $('#radioChangeOp').attr('disabled', false);
-            $('#radioForceStop').attr('disabled', false);
+            // $('#radioForceStop').attr('disabled', false);
             $('#radioComplete').attr('disabled', false);
             $('#radioRemove').attr('disabled', false);
             $('#radioNextQueue').attr('disabled', true);
@@ -153,7 +153,7 @@ $(document).ready(function(){
         else {
             // alert($('#radioChangeOp').parent().html());
             $('#radioChangeOp').attr('disabled', true);
-            $('#radioForceStop').attr('disabled', true);
+            // $('#radioForceStop').attr('disabled', true);
             $('#radioComplete').attr('disabled', true);
             $('#radioRemove').attr('disabled', true);
             $('#radioNextQueue').attr('disabled', false);
