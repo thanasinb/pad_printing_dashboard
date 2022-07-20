@@ -76,6 +76,9 @@ if(!empty($data_activity_rework)){
 $sql = "UPDATE machine_queue SET id_staff='' WHERE id_machine='" . $_GET['id_mc'] . "' AND queue_number=1";
 $result = $conn->query($sql);
 
+$sql = "DELETE FROM machine_queue WHERE queue_number<1 AND queue_number>2";
+$result = $conn->query($sql);
+
 require 'terminate.php';
 
 $data_json = json_encode(array("code"=>"OK", "message"=>"OK"), JSON_UNESCAPED_UNICODE);
