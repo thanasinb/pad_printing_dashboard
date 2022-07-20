@@ -130,7 +130,7 @@
                                 <div class="form-check">
                                     <input class="form-check-input" type="checkbox" name="checkbox_hide_unassigned_machines" id="checkbox_hide_unassigned_machines">
                                     <label class="form-check-label" for="checkbox_hide_unassigned_machines">
-                                        Hide unassigned machines
+                                        Hide unassigned machines (ซ่อนเครื่องไม่มีงาน)
                                     </label>
                                 </div>
                                 <table id="datatablesSimple" class="table table-striped">
@@ -222,7 +222,7 @@
                             <div class="form-check">
                                 <input class="form-check-input radioCurrentTask" type="radio" name="radioCurrentTask" id="radioChangeOp" value="1">
                                 <label class="form-check-label" for="radioChangeOp">
-                                    Change operation
+                                    Change operation (เปลี่ยน Operation)
                                 </label>
                             </div>
 <!--                            <div class="form-check">-->
@@ -234,31 +234,31 @@
                             <div class="form-check">
                                 <input class="form-check-input radioCurrentTask" type="radio" name="radioCurrentTask" id="radioComplete" value="3">
                                 <label class="form-check-label" for="radioComplete">
-                                    Mark as complete
+                                    Mark as complete (จบงาน)
                                 </label>
                             </div>
                             <div class="form-check">
                                 <input class="form-check-input radioCurrentTask" type="radio" name="radioCurrentTask" id="radioRemove" value="4">
                                 <label class="form-check-label" for="radioRemove">
-                                    Remove this task
+                                    Remove this task (เอางานออก)
                                 </label>
                             </div>
                             <div class="form-check">
                                 <input class="form-check-input radioCurrentTask" type="radio" name="radioCurrentTask" id="radioNextQueue" value="5">
                                 <label class="form-check-label" for="radioNextQueue">
-                                    Feed task from next queue
+                                    Feed task from next queue (ดึงงานจากคิวถัดไป)
                                 </label>
                             </div>
                             <div class="form-check">
                                 <input class="form-check-input radioCurrentTask" type="radio" name="radioCurrentTask" id="radioNewTask" value="6">
                                 <label class="form-check-label" for="radioNewTask">
-                                    Select a new task
+                                    Select a new task (เพิ่มงานใหม่)
                                 </label>
                             </div>
                             <div class="form-check">
                                 <input class="form-check-input radioCurrentTask" type="radio" name="radioCurrentTask" id="radioResetActivity" value="7">
                                 <label class="form-check-label" for="radioResetActivity">
-                                    Reset activity
+                                    Reset activity (รีเซ็ตงาน)
                                 </label>
                             </div>
                         </div>
@@ -343,19 +343,19 @@
                             <div class="form-check">
                                 <input class="form-check-input radioNextTask" type="radio" name="radioNextTask" id="radioNextChangeOp" value="1">
                                 <label class="form-check-label" for="radioNextChangeOp">
-                                    Change operation
+                                    Change operation (เปลี่ยน Operation)
                                 </label>
                             </div>
                             <div class="form-check">
                                 <input class="form-check-input radioNextTask" type="radio" name="radioNextTask" id="radioNextRemove" value="4">
                                 <label class="form-check-label" for="radioNextRemove">
-                                    Remove this task
+                                    Remove this task (เอางานออก)
                                 </label>
                             </div>
                             <div class="form-check">
                                 <input class="form-check-input radioNextTask" type="radio" name="radioNextTask" id="radioNextNewTask" value="6">
                                 <label class="form-check-label" for="radioNextNewTask">
-                                    Select a new task
+                                    Select a new task (เพิ่มงานใหม่)
                                 </label>
                             </div>
                         </div>
