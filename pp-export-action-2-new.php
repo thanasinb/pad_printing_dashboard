@@ -225,7 +225,7 @@ if(mysqli_num_rows($query_tasks_in_shif)>0){
     while ($data_first_op_planning = $query_first_op_planning->fetch_assoc()){
         //SELECT THE FIRST ACTIVITY OF SUCH FIRST OPERATION
         $sql = "SELECT activity.id_staff, planning.id_job, date_eff AS time_start, shif, planning.site, item_no, planning.operation, prod_line, work_center, activity.id_machine,
-            no_pulse1, activity.total_work, time_close, divider.divider AS multiplier FROM activity
+            no_pulse1, num_repeat, activity.total_work, time_close, divider.divider AS multiplier FROM activity
             INNER JOIN staff ON activity.id_staff=staff.id_staff
             INNER JOIN planning ON activity.id_task=planning.id_task
             INNER JOIN divider ON (planning.op_color=divider.op_color AND planning.op_side=divider.op_side)
@@ -241,7 +241,7 @@ if(mysqli_num_rows($query_tasks_in_shif)>0){
             $data_first_op_activity = make_first_operation_array($data_first_op_activity);
             $data_first_op_activity['time_start'] = date( 'd/m/y', strtotime($data_first_op_activity['time_start']));
             $data_first_op_activity['total_work'] = number_format(time2float($data_first_op_activity['total_work']), 2);
-            $data_first_op_activity['no_pulse1']= strval(floor(floatval($data_first_op_activity['no_pulse1'])*floatval($data_first_op_activity['multiplier'])));
+            $data_first_op_activity['no_pulse1']= strval(floor(floatval($data_first_op_activity['no_pulse1'])*floatval($data_first_op_activity['multiplier'])) - intval($data_first_op_activity['num_repeat']) );
             unset($data_first_op_activity['multiplier']);
             $writer->writeSheetRow(SHEET_BF_FIRST, $data_first_op_activity);
         }
@@ -249,7 +249,7 @@ if(mysqli_num_rows($query_tasks_in_shif)>0){
 }
 
 $sql = "SELECT activity.id_staff, planning.id_job, date_eff AS time_start, shif, planning.site, item_no, planning.operation, prod_line, work_center, activity.id_machine,
-       no_pulse1, activity.total_work, time_close, divider.divider AS multiplier FROM activity
+       no_pulse1, num_repeat, activity.total_work, time_close, divider.divider AS multiplier FROM activity
        INNER JOIN staff ON activity.id_staff=staff.id_staff
        INNER JOIN planning ON activity.id_task=planning.id_task
        INNER JOIN divider ON (planning.op_color=divider.op_color AND planning.op_side=divider.op_side)
@@ -261,7 +261,7 @@ while ($data_current_op_activity = $query_current_op_activity->fetch_assoc()){
     $data_current_op_activity = make_next_operation_array($data_current_op_activity);
     $data_current_op_activity['time_start'] = date( 'd/m/y', strtotime($data_current_op_activity['time_start']));
     $data_current_op_activity['total_work'] = number_format(time2float($data_current_op_activity['total_work']), 2);
-    $data_current_op_activity['no_pulse1']= strval(floor(floatval($data_current_op_activity['no_pulse1'])*floatval($data_current_op_activity['multiplier'])));
+    $data_current_op_activity['no_pulse1']= strval(floor(floatval($data_current_op_activity['no_pulse1'])*floatval($data_current_op_activity['multiplier'])) - intval($data_current_op_activity['num_repeat']) );
     unset($data_current_op_activity['multiplier']);
     $writer->writeSheetRow(SHEET_BF_NEXT, $data_current_op_activity);
 }
