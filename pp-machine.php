@@ -127,16 +127,22 @@
                                 </div>
                             </div>
                             <div class="card-body">
-                                    <table id="datatablesSimple" class="table table-striped">
-                                        <thead class="text-black" style="background-color: #ffea07">
-                                        <?php require 'pp-machine-table-head.php' ?>
-                                        </thead>
-                                        <tbody>
-                                        <?php
-                                        require "pp-machine-list-machine-script-2.php";
-                                        ?>
-                                        </tbody>
-                                    </table>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" name="checkbox_hide_unassigned_machines" id="checkbox_hide_unassigned_machines">
+                                    <label class="form-check-label" for="checkbox_hide_unassigned_machines">
+                                        Hide unassigned machines
+                                    </label>
+                                </div>
+                                <table id="datatablesSimple" class="table table-striped">
+                                    <thead class="text-black" style="background-color: #ffea07">
+                                    <?php require 'pp-machine-table-head.php' ?>
+                                    </thead>
+                                    <tbody>
+                                    <?php
+                                    require "pp-machine-list-machine-script-2.php";
+                                    ?>
+                                    </tbody>
+                                </table>
                             </div>
                         </div>
                     </div>

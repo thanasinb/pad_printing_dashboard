@@ -4,6 +4,25 @@ var interval_update = 0;
 $(document).ready(function(){
     loadData();
     startLoop();
+    $('#checkbox_hide_unassigned_machines').click(function () {
+        if ($("#checkbox_hide_unassigned_machines").is(':checked')){
+            $('.id_machine').each(function(i, obj) {
+                id_machine = $(this).html();
+                item_no = $(this).next().text();
+                if (item_no==''){
+                    $(this).parent().hide();
+                }
+            });
+        }else{
+            $('.id_machine').each(function(i, obj) {
+                id_machine = $(this).html();
+                item_no = $(this).next().text();
+                if (item_no==''){
+                    $(this).parent().show();
+                }
+            });
+        }
+    });
 });
 
 // STARTS and Resets the loop
