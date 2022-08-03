@@ -12,11 +12,13 @@
             $conn->query($sql);
             $sql = "UPDATE machine_queue SET queue_number = queue_number - 1 WHERE id_machine='" . $_POST['id_mc'] . "' AND queue_number > 0";
             $conn->query($sql);
-        }elseif ($_POST['selected_radio']==3) {
-            $sql = "UPDATE planning SET task_complete=1 WHERE id_job=" . $_POST['id_job'] . " AND ";
-            $sql = $sql . "operation=" . $_POST['operation'];
-            $conn->query($sql);
-        }elseif ($_POST['selected_radio']==4) {
+        }
+//        elseif ($_POST['selected_radio']==3) {
+//            $sql = "UPDATE planning SET task_complete=1 WHERE id_job=" . $_POST['id_job'] . " AND ";
+//            $sql = $sql . "operation=" . $_POST['operation'];
+//            $conn->query($sql);
+//        }
+        elseif ($_POST['selected_radio']==4) {
             // FOR REMOVING TASK
             $sql = "DELETE FROM machine_queue WHERE id_machine='" . $_POST['id_mc'] . "' AND queue_number=1";
             $conn->query($sql);
@@ -231,12 +233,12 @@
 <!--                                    Force stop-->
 <!--                                </label>-->
 <!--                            </div>-->
-                            <div class="form-check">
-                                <input class="form-check-input radioCurrentTask" type="radio" name="radioCurrentTask" id="radioComplete" value="3">
-                                <label class="form-check-label" for="radioComplete">
-                                    Mark as complete (จบงาน)
-                                </label>
-                            </div>
+<!--                            <div class="form-check">-->
+<!--                                <input class="form-check-input radioCurrentTask" type="radio" name="radioCurrentTask" id="radioComplete" value="3">-->
+<!--                                <label class="form-check-label" for="radioComplete">-->
+<!--                                    Mark as complete (จบงาน)-->
+<!--                                </label>-->
+<!--                            </div>-->
                             <div class="form-check">
                                 <input class="form-check-input radioCurrentTask" type="radio" name="radioCurrentTask" id="radioRemove" value="4">
                                 <label class="form-check-label" for="radioRemove">
