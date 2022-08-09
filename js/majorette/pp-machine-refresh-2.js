@@ -227,6 +227,7 @@ function loadData() {
                     if(status_work==0 || status_work==3 || status_work==5 || status_work==6){
                         $(this).parent().find('.status_work').removeClass('bg-green bg-yellow bg-red');
                         $(this).parent().find('.status_work').text("");
+                        $(this).parent().find('.status_work').append("<i class='status_work_icon fs-6'></i>");
                         $(this).parent().find('.status_work').addClass('bg-blue');
                     }else if(status_work==1){
                         $(this).parent().find('.status_work').removeClass('bg-blue bg-yellow bg-red');
@@ -256,14 +257,14 @@ function loadData() {
 
                     if (task_complete==1) {
                         if (status_backup == 1) {
-                            $(this).parent().find('.status_work').removeClass('fas fa-circle fa-check-square');
-                            $(this).parent().find('.status_work').addClass('far fa-file-archive');
+                            $(this).parent().find('.status_work_icon').removeClass('fas fa-circle fa-check-square');
+                            $(this).parent().find('.status_work_icon').addClass('far fa-file-archive');
                         }else {
-                            $(this).parent().find('.status_work').removeClass('fas fa-circle fa-file-archive');
-                            $(this).parent().find('.status_work').addClass('far fa-check-square');
+                            $(this).parent().find('.status_work .status_work_icon').removeClass('fas fa-circle fa-file-archive');
+                            $(this).parent().find('.status_work .status_work_icon').addClass('far fa-check-square');
                         }
                     }else {
-                        $(this).parent().find('.status_work').removeClass('far fa-check-square fa-file-archive');
+                        $(this).parent().find('.status_work_icon .status_work_icon').removeClass('far fa-check-square fa-file-archive');
                         // $(this).parent().find('.status_work').addClass('fas fa-circle');
                     }
 

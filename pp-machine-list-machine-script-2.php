@@ -49,7 +49,7 @@ while($row_machine = $result_machine->fetch_assoc()){
             $run_time_open = (($qty_order-$qty_accum)*$run_time_std);
 
 //            echo "<td><i class='status_work fas fa-circle fa-sm me-1 fs-5'></i></td>";
-            echo "<td class='status_work text-white'></td>";
+            echo "<td class='status_work text-white text-center'></td>";
             echo "<td class='id_machine'>" . $row_machine["id_mc"] . "</td>";
 //            echo "<td class='id_staff'></td>";
             echo "<td class='col-xl-auto'>";
