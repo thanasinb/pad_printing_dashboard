@@ -1,5 +1,6 @@
 <?php
 require 'establish.php';
+require 'find_qty_shif.php';
 
 function getPlanning($conn, $id_task) {
     $sql = "SELECT id_task, id_job, item_no, operation, planning.op_color, planning.op_side, op_des AS op_name, qty_order, qty_comp, qty_open, divider as multiplier 
@@ -19,10 +20,11 @@ $sql = "SELECT id_task, id_staff FROM machine_queue WHERE id_machine = '" . $_GE
 $result = $conn->query($sql);
 $data_machine_queue = $result->fetch_assoc();
 
-// IF THE STAFF ID DOES NOT EXIST IN THE QUEUE, REPLY THE STAFF AND TASK INFO
+// IF NO EXISTING STAFF ID IN THE QUEUE, THE NEW STAFF CAN PROCEED, REPLY THE STAFF AND TASK INFO
 if($data_machine_queue['id_staff'] == null){
     $data_planning = getPlanning($conn, $data_machine_queue['id_task']);
-    $data_json = json_encode(array_merge($data_staff, $data_planning), JSON_UNESCAPED_UNICODE);
+    $data_activity = find_qty_shif($conn, $data_staff['id_staff'], $data_machine_queue['id_task']);
+    $data_json = json_encode(array_merge($data_staff, $data_planning, $data_activity), JSON_UNESCAPED_UNICODE);
 }
 
 // OTHERWISE, CHECK IF
