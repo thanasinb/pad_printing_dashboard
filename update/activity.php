@@ -28,7 +28,7 @@ if ($data_queue['id_staff']==null) {
         // UPDATE STAFF ID IN MACHINE QUEUE TABLE
         $sql = "UPDATE machine_queue SET id_staff='" . $data_staff['id_staff'] . "' WHERE id_machine='" . $_GET["id_mc"] . "' AND queue_number=1";
         $result = $conn->query($sql);
-        echo "OK";
+//        echo "OK";
     }elseif ($_GET['activity_type']==2){
         $sql = "INSERT INTO activity_rework (id_task, id_machine, id_staff, shif, date_eff, status_work, time_start) VALUES (";
         $sql = $sql . $data_queue["id_task"] . ",";
@@ -44,12 +44,19 @@ if ($data_queue['id_staff']==null) {
         // UPDATE STAFF ID IN MACHINE QUEUE TABLE
         $sql = "UPDATE machine_queue SET id_staff='" . $data_staff['id_staff'] . "' WHERE id_machine='" . $_GET["id_mc"] . "' AND queue_number=1";
         $result = $conn->query($sql);
-        echo "OK";
+//        echo "OK";
     }
+    $sql = 'SELECT LAST_INSERT_ID() as id_activity';
+    $result = $conn->query($sql);
+    $data_activity = $result->fetch_assoc();
+    $data_json = json_encode(($data_activity), JSON_UNESCAPED_UNICODE);
+
 }else{
     $data_json = json_encode(array("code"=>"025", "message"=>"This machine is currently in occupied by staff ID: " . $data_queue['id_staff']), JSON_UNESCAPED_UNICODE);
-    print_r($data_json);
+//    print_r($data_json);
 }
+
+print_r($data_json);
 
 require "contact.php";
 require 'terminate.php';
