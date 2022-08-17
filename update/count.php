@@ -3,11 +3,11 @@ require 'establish.php';
 
 const ACTIVITY_BACKFLUSH=1;
 const ACTIVITY_REWORK=2;
-$sql = "SELECT id_activity, time_start, total_work, total_food, total_toilet, no_send, CURRENT_TIMESTAMP() AS time_current FROM activity WHERE id_task=" . $_GET["id_task"] . " AND id_machine = '" . $_GET["id_mc"] . "' AND status_work=1";
+$sql = "SELECT id_activity, time_start, total_work, total_food, total_toilet, no_send, no_pulse1, CURRENT_TIMESTAMP() AS time_current FROM activity WHERE id_task=" . $_GET["id_task"] . " AND id_machine = '" . $_GET["id_mc"] . "' AND status_work=1";
 $result = $conn->query($sql);
 $data_activity = $result->fetch_assoc();
 if(empty($data_activity)) {
-    $sql = "SELECT id_activity, time_start, total_work, total_food, total_toilet, no_send, CURRENT_TIMESTAMP() AS time_current FROM activity_rework WHERE id_task=" . $_GET["id_task"] . " AND id_machine = '" . $_GET["id_mc"] . "' AND status_work=1";
+    $sql = "SELECT id_activity, time_start, total_work, total_food, total_toilet, no_send, no_pulse1, CURRENT_TIMESTAMP() AS time_current FROM activity_rework WHERE id_task=" . $_GET["id_task"] . " AND id_machine = '" . $_GET["id_mc"] . "' AND status_work=1";
     $result = $conn->query($sql);
     $data_activity = $result->fetch_assoc();
     if(!empty($data_activity)) { $activity_type=ACTIVITY_REWORK; }
@@ -34,7 +34,7 @@ if(empty($data_activity)) {
     if($_GET["no_pulse1"]==0){
         $run_time_actual=0.0;
     }else{
-        $run_time_actual = round($time_total_second/($_GET["no_pulse1"]*$divider), 2);
+        $run_time_actual = round($time_total_second/(($_GET['no_pulse1'] + intval($data_activity['no_pulse1']))*$divider), 2);
     }
 
 //    echo $total_food . "<br>";
