@@ -3,6 +3,7 @@ require 'establish.php';
 require 'lib_get_shif.php';
 require 'lib_get_staff_by_id.php';
 require 'lib_add_activity.php';
+require 'lib_add_activity_downtime.php';
 
 if($_GET['activity_type']==1){
     $table = 'activity';
@@ -16,6 +17,9 @@ if($_GET['activity_type']==1){
     $data_json = add_activity($conn, $table, $_GET['id_task'], $_GET['id_mc'], $_GET['id_staff'], $shif, $date_eff);
 }elseif ($_GET['activity_type']==3){
     $table = 'activity_downtime';
+    $data_staff = get_staff_by_id($conn, $_GET['id_staff']);
+    list($shif, $date_eff) = get_shif($conn, $_GET['id_staff'], $data_staff['team']);
+    $data_json = add_activity_downtime($conn, $table, $_GET['id_task'], $_GET['id_mc'], $_GET['id_staff'], $shif, $date_eff, $_GET["code_downtime"]);
 }else{
     $data_json = json_encode(array('code'=>'005', 'message'=>'Invalid activity_type'), JSON_UNESCAPED_UNICODE);
 }
