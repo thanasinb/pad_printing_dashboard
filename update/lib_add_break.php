@@ -17,4 +17,6 @@ function add_break($conn, $table, $table_break, $id_activity, $id_staff, $id_mc,
     $sql = $sql . " WHERE id_machine='" . $id_mc . "'";;
     $sql = $sql . " AND id_activity=" . $id_activity;
     $result = $conn->query($sql);
+
+    return $data_break;
 }
