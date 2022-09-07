@@ -7,6 +7,7 @@ require 'lib_get_active_activity_by_activity_id_type_staff_and_machine.php';
 $data_staff_rfid = get_staff_by_rfid($conn, $_GET['id_rfid']);
 if(empty($data_staff_rfid)){
     $data_json = json_encode(array('code'=>'011', 'message'=>'Invalid RFID'), JSON_UNESCAPED_UNICODE);
+    print_r($data_json);
 }
 else {
     list($table, $str_activity, $str_status) = get_info_from_activity_type($_GET['activity_type']);
@@ -20,6 +21,7 @@ else {
         $_GET['id_mc']);
     if(empty($data_activity)) {
         $data_json = json_encode(array("code"=>"012", 'message'=>'Activity mismatches'), JSON_UNESCAPED_UNICODE);
+        print_r($data_json);
     } else {
         $total_food = strtotime("1970-01-01 " . $data_activity["total_food"] . " UTC");
         $total_toilet = strtotime("1970-01-01 " . $data_activity["total_toilet"] . " UTC");
@@ -41,12 +43,13 @@ else {
 
         $data_json = json_encode(array("time_work"=>$time_total), JSON_UNESCAPED_UNICODE);
 
-        $sql = "UPDATE machine_queue SET id_staff='' WHERE id_machine='" . $_GET["id_mc"] . "' AND queue_number=1";
-        $result = $conn->query($sql);
+        if(empty($_GET['code_downtime'])) {
+            $sql = "UPDATE machine_queue SET id_staff='' WHERE id_machine='" . $_GET["id_mc"] . "' AND queue_number=1";
+            $result = $conn->query($sql);
+            print_r($data_json);
+        }
     }
 }
-
-print_r($data_json);
 
 require "contact.php";
 require 'terminate.php';

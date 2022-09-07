@@ -12,12 +12,10 @@ $data_activity = $result->fetch_assoc();
 
 if(empty($data_breakcard)) {
     $data_json = json_encode(array("code"=>"003"), JSON_UNESCAPED_UNICODE);
-    print_r($data_json);
 } else {
 // if this is a break-card, update 'status_work=2' in 'activity' table.
     if ($data_activity["status_work"]==2){
         $data_json = json_encode(array("code"=>"009"), JSON_UNESCAPED_UNICODE);
-        print_r($data_json);
     }
     else{
         $sql = "UPDATE activity SET ";
@@ -31,8 +29,10 @@ if(empty($data_breakcard)) {
         $sql = $sql . "time_contact=CURRENT_TIMESTAMP()";
         $sql = $sql . " WHERE id_mc='" . $_GET["id_mc"] . "'";
         $result = $conn->query($sql);
-        echo "OK";
+        $data_json = json_encode(array("code" => "200", "message" => "OK"), JSON_UNESCAPED_UNICODE);
     }
 }
+print_r($data_json);
+
 require 'terminate.php';
 
