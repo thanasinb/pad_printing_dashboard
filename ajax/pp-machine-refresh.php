@@ -12,14 +12,14 @@ $id_task = intval($data_machine_queue['id_task']);
 //echo $id_task;
 
 // ACCUMULATE THE PROCESSED QTY WHICH HAS NOT BEEN RE-IMPORTED
-$sql = "SELECT SUM(no_pulse1) AS qty_process, SUM(num_repeat) AS qty_repeat FROM activity WHERE status_work<6 AND id_task=" . $id_task;
+$sql = "SELECT SUM(no_pulse2) AS qty_process, SUM(no_pulse3) AS qty_manual FROM activity WHERE status_work<6 AND id_task=" . $id_task;
 $query_activity_sum = $conn->query($sql);
 $data_activity_sum = $query_activity_sum->fetch_assoc();
 if ($data_activity_sum['qty_process']==null){
     $data_activity_sum['qty_process']='0';
 }
-if ($data_activity_sum['qty_repeat']==null){
-    $data_activity_sum['qty_repeat']='0';
+if ($data_activity_sum['qty_manual']==null){
+    $data_activity_sum['qty_manual']='0';
 }
 
 // SELECT THE ACTIVE BACKFLUSH ACTIVITY

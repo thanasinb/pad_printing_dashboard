@@ -9,10 +9,20 @@ function update_count($conn, $table, $id_activity, $no_send, $no_pulse1, $no_pul
         $status_work_text = 'status_work=1,';
     }
 
-    $sql = "SELECT time_start, total_work, total_food, total_toilet, no_pulse1, no_pulse2, no_pulse3, 
+    $sql = "SELECT id_task, time_start, total_work, total_food, total_toilet, no_pulse1, no_pulse2, no_pulse3, 
        CURRENT_TIMESTAMP() AS time_current FROM " . $table . " WHERE " . $id_activity_text . "=" . $id_activity;
     $result = $conn->query($sql);
     $data_activity = $result->fetch_assoc();
+
+    $sql = "SELECT op_color, op_side, qty_per_pulse2 FROM planning WHERE id_task=" . $data_activity['id_task'];
+    $result = $conn->query($sql);
+    $data_planning = $result->fetch_assoc();
+
+    $sql = "SELECT divider AS multiplier FROM divider WHERE
+                                              op_color=" . $data_planning['op_color'] . " AND
+                                              op_side='" . $data_planning['op_side'] . "'";
+    $result = $conn->query($sql);
+    $data_multiplier = $result->fetch_assoc();
 
     $total_food = strtotime("1970-01-01 " . $data_activity["total_food"] . " UTC");
     $total_toilet = strtotime("1970-01-01 " . $data_activity["total_toilet"] . " UTC");
@@ -22,9 +32,10 @@ function update_count($conn, $table, $id_activity, $no_send, $no_pulse1, $no_pul
     $time_total_second = $time_current - $time_start - $total_break;
     $time_total =  gmdate('H:i:s', $time_total_second);
 
-//    $no_pulse1 = $no_pulse1 + intval($data_activity['no_pulse1']) ;
-//    $no_pulse2 = $no_pulse2 + intval($data_activity['no_pulse2']) ;
-//    $no_pulse3 = $no_pulse3 + intval($data_activity['no_pulse3']) ;
+    $no_pulse1 = floatval($data_activity['no_pulse1']) + ($no_pulse1 * floatval($data_multiplier['multiplier']));
+    $no_pulse2 = intval($data_activity['no_pulse2']) + ($no_pulse2 * intval($data_planning['qty_per_pulse2']));
+    $no_pulse3 = $no_pulse3 + intval($data_activity['no_pulse3']) ;
+
     $count_accum = $no_pulse2 + $no_pulse3;
 
     if($count_accum==0){
@@ -47,7 +58,13 @@ function update_count($conn, $table, $id_activity, $no_send, $no_pulse1, $no_pul
     $result = $conn->query($sql);
 //    echo $sql;
 
-    $data_json = json_encode(array('code'=>'200', 'message'=>'OK'), JSON_UNESCAPED_UNICODE);
+    $data_json = json_encode(array(
+        'code'=>'200',
+        'message'=>'OK',
+        'no_pulse1' => $no_pulse1,
+        'no_pulse2' => $no_pulse2,
+        'no_pulse3' => $no_pulse3
+    ), JSON_UNESCAPED_UNICODE);
 
     return $data_json;
 }
