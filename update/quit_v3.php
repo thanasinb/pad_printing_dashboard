@@ -55,14 +55,14 @@ else {
         }
 
         $sql = "UPDATE " . $table . " SET ";
-        $sql = $sql . "status_work=3,";
+        $sql = $sql . $str_status . "=3,";
         $sql = $sql . "total_work='" . $time_total . "',";
         $sql = $sql . "time_close='" . $data_activity["time_current"] . "',";
         $sql = $sql . "no_send=" . $_GET["no_send"] . ",";
         $sql = $sql . "no_pulse1=" . $no_pulse1 . ",";
         $sql = $sql . "no_pulse2=" . $no_pulse2 . ",";
         $sql = $sql . "no_pulse3=" . $no_pulse3;
-        $sql = $sql . " WHERE id_activity=" . $data_activity["id_activity"];
+        $sql = $sql . " WHERE " . $str_activity . "=" . $_GET['id_activity'];
         $result = $conn->query($sql);
 
         $data_json = json_encode(array(
