@@ -11,7 +11,7 @@ $data_activity_downtime = get_active_activity_by_machine($conn, $table_downtime,
 
 // INSERT INTO THE TABLE ONLY IF THERE IS NO SUCH ACTIVITY_DOWNTIME (NEW)
 if(empty($data_activity_downtime)) {
-    $data_json = add_activity_downtime(
+    $data_json_downtime = add_activity_downtime(
         $conn,
         $table_downtime,
         $data_activity['id_task'],
@@ -20,6 +20,7 @@ if(empty($data_activity_downtime)) {
         $data_activity['shif'],
         $data_activity['date_eff'],
         $_GET["code_downtime"]);
+    json_encode(array_merge(json_decode($data_json, true), json_decode($data_json_downtime, true)));
 }else{
     $data_json = json_encode(array("code" => "021", "message" => "Downtime is already registered by staff ID: " . $data_activity_downtime['id_staff']), JSON_UNESCAPED_UNICODE);
 }
