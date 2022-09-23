@@ -10,7 +10,7 @@ function get_qty_shif($conn, $table, $id_staff, $id_task){
 
     //NIGHT SHIF (W AND W/O OT) BTW 19:00 YESTERDAY AND 07:00 TODAY
     if ($yesterday_19_00<=$time_current AND $time_current<$today_07_00){
-        $sql = "SELECT SUM(no_pulse1) AS qty_pad, SUM(no_pulse2) AS qty_shif FROM " . $table . " WHERE status_work<6 AND " .
+        $sql = "SELECT SUM(no_pulse1) AS qty_shif_pulse1, SUM(no_pulse2) AS qty_shif_pulse2, SUM(no_pulse3) AS qty_shif_pulse3 FROM " . $table . " WHERE status_work<6 AND " .
             "id_task=" . $id_task . " AND " .
             "id_staff='" . $id_staff . "' AND " .
             "(time_start BETWEEN '" . date("Y-m-d H:i:s", $yesterday_19_00) . "' AND '" . date("Y-m-d H:i:s", $today_07_00) . "')";
@@ -19,18 +19,21 @@ function get_qty_shif($conn, $table, $id_staff, $id_task){
 
         //DAY SHIF BTW 07:00 AND 19:00
     }elseif ($today_07_00<=$time_current AND $time_current<$today_19_00){
-        $sql = "SELECT SUM(no_pulse1) AS qty_pad, SUM(no_pulse2) AS qty_shif FROM " . $table . " WHERE status_work<6 AND " .
+        $sql = "SELECT SUM(no_pulse1) AS qty_shif_pulse1, SUM(no_pulse2) AS qty_shif_pulse2, SUM(no_pulse3) AS qty_shif_pulse3 FROM " . $table . " WHERE status_work<6 AND " .
             "id_task=" . $id_task . " AND " .
             "id_staff='" . $id_staff . "' AND " .
             "(time_start BETWEEN '" . date("Y-m-d H:i:s", $today_07_00) . "' AND '" . date("Y-m-d H:i:s", $today_19_00) . "')";
         $result = $conn->query($sql);
         $data_activity = $result->fetch_assoc();
     }
-    if ($data_activity['qty_pad'] == null){
-        $data_activity['qty_pad'] = 0;
+    if ($data_activity['qty_shif_pulse1'] == null){
+        $data_activity['qty_shif_pulse1'] = 0;
     }
-    if ($data_activity['qty_shif'] == null){
-        $data_activity['qty_shif'] = 0;
+    if ($data_activity['qty_shif_pulse2'] == null){
+        $data_activity['qty_shif_pulse2'] = 0;
+    }
+    if ($data_activity['qty_shif_pulse3'] == null){
+        $data_activity['qty_shif_pulse3'] = 0;
     }
     return $data_activity;
 }

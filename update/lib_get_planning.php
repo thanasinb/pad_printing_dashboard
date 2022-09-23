@@ -11,7 +11,8 @@ function get_planning($conn, $id_task) {
     qty_order, 
     qty_comp, 
     qty_open, 
-    divider as multiplier 
+    divider AS multiplier, 
+    qty_per_pulse2 AS qty_per_tray
     FROM planning INNER JOIN divider ON (
     planning.op_color=divider.op_color AND 
     planning.op_side=divider.op_side) 
