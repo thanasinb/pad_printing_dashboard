@@ -14,7 +14,7 @@ while($row_machine = $result_machine->fetch_assoc()){
     // IF THERE IS NO QUEUING INFORMATION OF SUCH MACHINE, SHOW EMPTY CELLS
     if (empty($result_machine_queue))
     {
-        echo "<td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td>";
+        echo "<td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td>";
     }
     else
     {

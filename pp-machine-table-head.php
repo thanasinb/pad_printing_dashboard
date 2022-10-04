@@ -8,6 +8,7 @@
     <th rowspan="2" class="text-center" scope="col">Color</th>
     <th rowspan="2" class="text-center" scope="col">Side</th>
     <th rowspan="2" class="text-center" scope="col">Due Date</th>
+    <th rowspan="2" class="text-center" scope="col">Qty/Tray</th>
     <th rowspan="2" class="text-center" scope="col">Qty accum/<br>Qty order</th>
     <th rowspan="2" class="text-center" scope="col">Progress (%)</th>
     <th rowspan="2" class="text-center" scope="col">Run time<br>Actual/Std<br>(Second)</th>
