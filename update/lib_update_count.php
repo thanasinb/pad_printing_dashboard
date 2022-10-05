@@ -63,7 +63,8 @@ function update_count($conn, $table, $id_activity, $no_send, $no_pulse1, $no_pul
         'message'=>'OK',
         'no_pulse1' => $no_pulse1,
         'no_pulse2' => $no_pulse2,
-        'no_pulse3' => $no_pulse3
+        'no_pulse3' => $no_pulse3,
+        'sql' => $sql
     ), JSON_UNESCAPED_UNICODE);
 
     return $data_json;

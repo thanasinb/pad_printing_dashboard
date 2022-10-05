@@ -307,6 +307,11 @@
                             <td></td>
                         </tr>
                         <tr>
+                            <td>Qty per tray: </td>
+                            <td id="modal_next_qty_per_tray"></td>
+                            <td></td>
+                        </tr>
+                        <tr>
                             <td>Qty accum: </td>
                             <td id="modal_next_qty_accum"></td>
                             <td></td>
