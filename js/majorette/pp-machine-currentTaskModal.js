@@ -1,6 +1,6 @@
 $(document).ready(function(){
 
-    var id_machine, item_no, operation, date_due, qty_accum, qty_order, qty_percent, id_task, id_job, last_update;
+    var id_machine, item_no, operation, date_due, qty_per_tray, qty_accum, qty_order, qty_percent, id_task, id_job, last_update;
 
     $('.radioCurrentTask').click(function (){
         $('#modal_button_go').attr('disabled', false);
@@ -105,6 +105,7 @@ $(document).ready(function(){
         item_no = button.getAttribute('data-bs-item_no');
         operation = button.getAttribute('data-bs-operation');
         date_due = button.getAttribute('data-bs-date_due');
+        qty_per_tray = button.getAttribute('data-bs-qty_per_tray');
         qty_accum = button.getAttribute('data-bs-qty_accum');
         qty_order = button.getAttribute('data-bs-qty_order');
         qty_percent = button.getAttribute('data-bs-qty_percent');
@@ -121,6 +122,7 @@ $(document).ready(function(){
         var modal_item_no = currentTaskModal.querySelector('#modal_item_no');
         var modal_operation = currentTaskModal.querySelector('#modal_operation');
         var modal_date_due = currentTaskModal.querySelector('#modal_date_due');
+        var modal_qty_per_tray = currentTaskModal.querySelector('#modal_qty_per_tray');
         var modal_qty_accum = currentTaskModal.querySelector('#modal_qty_accum');
         var modal_qty_order = currentTaskModal.querySelector('#modal_qty_order');
         var modal_qty_percent = currentTaskModal.querySelector('#modal_qty_percent');
@@ -142,6 +144,7 @@ $(document).ready(function(){
             modal_item_no.textContent = item_no;
             modal_operation.textContent = operation;
             modal_date_due.textContent = date_due;
+            modal_qty_per_tray.textContent = qty_per_tray;
             modal_qty_accum.textContent = qty_accum;
             modal_qty_order.textContent = qty_order;
             modal_qty_percent.textContent = qty_percent;
@@ -163,6 +166,7 @@ $(document).ready(function(){
             modal_item_no.textContent = '';
             modal_operation.textContent = '';
             modal_date_due.textContent = '';
+            modal_qty_per_tray.textContent = '';
             modal_qty_accum.textContent = '';
             modal_qty_order.textContent = '';
             modal_qty_percent.textContent = '';
@@ -188,6 +192,7 @@ $(document).ready(function(){
         item_no = button.getAttribute('data-bs-item_no');
         operation = button.getAttribute('data-bs-operation');
         date_due = button.getAttribute('data-bs-date_due');
+        qty_per_tray = button.getAttribute('data-bs-qty_per_tray');
         qty_accum = button.getAttribute('data-bs-qty_accum');
         qty_order = button.getAttribute('data-bs-qty_order');
         qty_percent = button.getAttribute('data-bs-qty_percent');
@@ -204,6 +209,7 @@ $(document).ready(function(){
         var modal_item_no = nextTaskModal.querySelector('#modal_next_item_no');
         var modal_operation = nextTaskModal.querySelector('#modal_next_operation');
         var modal_date_due = nextTaskModal.querySelector('#modal_next_date_due');
+        var modal_qty_per_tray = nextTaskModal.querySelector('#modal_next_qty_per_tray');
         var modal_qty_accum = nextTaskModal.querySelector('#modal_next_qty_accum');
         var modal_qty_order = nextTaskModal.querySelector('#modal_next_qty_order');
         var modal_qty_percent = nextTaskModal.querySelector('#modal_next_qty_percent');
@@ -224,6 +230,7 @@ $(document).ready(function(){
             modal_item_no.textContent = item_no;
             modal_operation.textContent = operation;
             modal_date_due.textContent = date_due;
+            modal_qty_per_tray.textContent = qty_per_tray;
             modal_qty_accum.textContent = qty_accum;
             modal_qty_order.textContent = qty_order;
             modal_qty_percent.textContent = qty_percent;
@@ -240,6 +247,7 @@ $(document).ready(function(){
             modal_item_no.textContent = '';
             modal_operation.textContent = '';
             modal_date_due.textContent = '';
+            modal_qty_per_tray.textContent = '';
             modal_qty_accum.textContent = '';
             modal_qty_order.textContent = '';
             modal_qty_percent.textContent = '';

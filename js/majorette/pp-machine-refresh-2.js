@@ -44,6 +44,7 @@ function loadData() {
         var qty_accum;
         var qty_complete;
         var qty_order;
+        var qty_per_tray;
         var divider;
         var percent;
         var item_no;
@@ -90,6 +91,7 @@ function loadData() {
                     qty_process = parseInt(dataResult.qty_process);
                     qty_order = parseInt(dataResult.qty_order);
                     qty_complete = parseInt(dataResult.qty_complete);
+                    qty_per_tray = parseInt(dataResult.qty_per_tray);
                     task_complete = parseInt(dataResult.task_complete);
                     status_backup = parseInt(dataResult.status_backup);
                     status_work = parseInt(dataResult.status_work);
@@ -128,6 +130,7 @@ function loadData() {
                     }
 
                     $(this).parent().find('.qty_accum_order').html(qty_accum.toLocaleString('en-US') + ' / ' + qty_order.toLocaleString('en-US'));
+                    $(this).parent().find('.qty_per_tray').text(qty_per_tray);
                     $(this).parent().find('.run_time').html("<i class=\"fas fa-flag\"></i> " + run_time_actual.toLocaleString('en-US', options) + ' / ' + run_time_std.toLocaleString('en-US', options));
                     // $(this).parent().find('.run_time_open').text(new Date(run_time_open*1000).toISOString().substr(11, 8)); // https://stackoverflow.com/questions/1322732/convert-seconds-to-hh-mm-ss-with-javascript
                     // $(this).parent().find('.run_time_open').text(new Date(run_time_open*1000).toISOString());

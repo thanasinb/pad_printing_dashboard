@@ -57,6 +57,7 @@ while($row_machine = $result_machine->fetch_assoc()){
             echo "data-bs-item_no='" . $row_planning["item_no"] . "' ";
             echo "data-bs-operation='" . $row_planning["operation"] . "' ";
             echo "data-bs-date_due='" . $phpdate . "' ";
+            echo "data-bs-qty_per_tray='" . $row_planning["qty_per_pulse2"] . "' ";
             echo "data-bs-qty_accum='" . $qty_accum . "' ";
             echo "data-bs-qty_order='" . $qty_order . "' ";
             echo "data-bs-qty_percent='" . $percent . "' ";
@@ -69,6 +70,7 @@ while($row_machine = $result_machine->fetch_assoc()){
             echo "<td>" . $row_planning['op_color'] . "</td>";
             echo "<td>" . $row_planning['op_side'] . "</td>";
             echo "<td>" . date( 'd-m-Y', $phpdate ) . "</td>";
+            echo "<td class='qty_per_tray'></td>";
             echo "<td class='qty_accum_order'></td>";
             echo "<td><div class=\"progress\">";
             echo "<div id=\"progress-bar\" class=\"progress-bar\" role=\"progressbar\" style=\"width: " . $percent . "%\" ";
@@ -91,6 +93,7 @@ while($row_machine = $result_machine->fetch_assoc()){
                 echo "data-bs-item_no='" . "' ";
                 echo "data-bs-operation='" . "' ";
                 echo "data-bs-date_due='" . "' ";
+                echo "data-bs-qty_per_tray='" . "' ";
                 echo "data-bs-qty_accum='" . "' ";
                 echo "data-bs-qty_order='" . "' ";
                 echo "data-bs-qty_percent='" . "' ";
@@ -114,6 +117,7 @@ while($row_machine = $result_machine->fetch_assoc()){
                 echo "data-bs-item_no='" . $row_planning["item_no"] . "' ";
                 echo "data-bs-operation='" . $row_planning["operation"] . "' ";
                 echo "data-bs-date_due='" . $phpdate . "' ";
+                echo "data-bs-qty_per_tray='" . $row_planning["qty_per_pulse2"] . "' ";
                 echo "data-bs-qty_accum='" . $qty_accum . "' ";
                 echo "data-bs-qty_order='" . $qty_order . "' ";
                 echo "data-bs-qty_percent='" . $percent . "' ";
@@ -140,6 +144,7 @@ while($row_machine = $result_machine->fetch_assoc()){
             echo "data-bs-item_no='" . "' ";
             echo "data-bs-operation='" . "' ";
             echo "data-bs-date_due='" . "' ";
+            echo "data-bs-qty_per_tray='" . "' ";
             echo "data-bs-qty_accum='" . "' ";
             echo "data-bs-qty_order='" . "' ";
             echo "data-bs-qty_percent='" . "' ";
@@ -149,7 +154,7 @@ while($row_machine = $result_machine->fetch_assoc()){
             echo "class='btn btn-datatable btn-icon text-black me-2 btn-current-task'>";
             echo "<i class='far fa-edit fs-6'></i></button>";
             echo "</td>";
-            echo "<td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td>";
+            echo "<td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td>";
 
             $sql = "SELECT * FROM planning WHERE id_task=" . $row_machine_queue["id_task"];
             $result_planning = $conn->query($sql);
@@ -161,6 +166,7 @@ while($row_machine = $result_machine->fetch_assoc()){
             echo "data-bs-item_no='" . $row_planning["item_no"] . "' ";
             echo "data-bs-operation='" . $row_planning["operation"] . "' ";
             echo "data-bs-date_due='" . $phpdate . "' ";
+            echo "data-bs-qty_per_tray='" . $row_planning["qty_per_pulse2"] . "' ";
             echo "data-bs-qty_accum='" . $qty_accum . "' ";
             echo "data-bs-qty_order='" . $qty_order . "' ";
             echo "data-bs-qty_percent='" . $percent . "' ";
@@ -186,6 +192,7 @@ while($row_machine = $result_machine->fetch_assoc()){
             echo "data-bs-item_no='" . "' ";
             echo "data-bs-operation='" . "' ";
             echo "data-bs-date_due='" . "' ";
+            echo "data-bs-qty_per_tray='" . "' ";
             echo "data-bs-qty_accum='" . "' ";
             echo "data-bs-qty_order='" . "' ";
             echo "data-bs-qty_percent='" . "' ";
@@ -195,7 +202,7 @@ while($row_machine = $result_machine->fetch_assoc()){
             echo "class='btn btn-datatable btn-icon text-black me-2 btn-current-task'>";
             echo "<i class='far fa-edit fs-6'></i></button>";
             echo "</td>";
-            echo "<td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td>";
+            echo "<td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td>";
             echo "<td class='col-xl-auto'>";
             echo "<button name='id_mc' type='submit' value='" . $row_machine["id_mc"] . "' ";
             echo "data-bs-toggle='modal' data-bs-target='#nextTaskModal' ";
@@ -203,6 +210,7 @@ while($row_machine = $result_machine->fetch_assoc()){
             echo "data-bs-item_no='" . "' ";
             echo "data-bs-operation='" . "' ";
             echo "data-bs-date_due='" . "' ";
+            echo "data-bs-qty_per_tray='" . "' ";
             echo "data-bs-qty_accum='" . "' ";
             echo "data-bs-qty_order='" . "' ";
             echo "data-bs-qty_percent='" . "' ";

@@ -71,7 +71,7 @@ if ($active_work>1){
     if ($data_activity_time['run_time_actual']==null) {
         $data_activity_time['run_time_actual'] = '0';
     }
-    $sql = "SELECT task_complete, status_backup, qty_order, qty_comp AS qty_complete, qty_open, run_time_std, divider.divider as divider FROM planning INNER JOIN divider ON planning.op_color=divider.op_color AND planning.op_side=divider.op_side WHERE id_task=" . $id_task;
+    $sql = "SELECT task_complete, status_backup, qty_order, qty_comp AS qty_complete, qty_open, run_time_std, qty_per_pulse2 AS qty_per_tray, divider.divider as divider FROM planning INNER JOIN divider ON planning.op_color=divider.op_color AND planning.op_side=divider.op_side WHERE id_task=" . $id_task;
     $query_planning = $conn->query($sql);
     $data_planning = $query_planning->fetch_assoc();
     $data_planning['run_time_std'] = number_format((floatval($data_planning['run_time_std'])*3600)-2, 2); // UNIT = SECONDS
