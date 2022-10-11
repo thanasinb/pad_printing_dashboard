@@ -1,7 +1,7 @@
 $(document).ready(function(){
 
     var id_machine, item_no, operation, date_due, qty_per_tray, qty_accum, qty_order, qty_percent, id_task, id_job, last_update;
-
+    $('#modal_button_save').hide();
     $('.radioCurrentTask').click(function (){
         $('#modal_button_go').attr('disabled', false);
     });
@@ -89,6 +89,7 @@ $(document).ready(function(){
 
     currentTaskModal.addEventListener('hide.bs.modal', function (event) {
         $('input[name=radioCurrentTask]:checked').prop('checked', false);
+        $('#modal_button_save').hide();
     });
 
     // currentTaskModal.addEventListener('hidden.bs.modal', function (event) {
@@ -144,7 +145,7 @@ $(document).ready(function(){
             modal_item_no.textContent = item_no;
             modal_operation.textContent = operation;
             modal_date_due.textContent = date_due;
-            modal_qty_per_tray.textContent = qty_per_tray;
+            $('#modal_qty_per_tray').val(qty_per_tray);
             modal_qty_accum.textContent = qty_accum;
             modal_qty_order.textContent = qty_order;
             modal_qty_percent.textContent = qty_percent;
@@ -257,4 +258,15 @@ $(document).ready(function(){
         }
     });
 
+    $('#modal_button_change').click(function (){
+        $('#modal_qty_per_tray').prop('disabled', false);
+        $('#modal_button_change').hide();
+        $('#modal_button_save').show();
+    });
+
+    $('#modal_button_save').click(function (){
+        $('#modal_qty_per_tray').prop('disabled', true);
+        $('#modal_button_save').hide();
+        $('#modal_button_change').show();
+    });
 });

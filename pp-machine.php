@@ -182,7 +182,7 @@
                         </tr>
                         <tr>
                             <td>Qty/Tray: </td>
-                            <td id="modal_qty_per_tray"></td>
+                            <td><input type="number" id="modal_qty_per_tray" name="modal_qty_per_tray" disabled></td>
                             <td></td>
                         </tr>
                         <tr>
@@ -272,7 +272,10 @@
                     </form>
                 </div>
                 <div class="modal-footer">
+                    <button type="button" id="modal_button_change" class="btn btn-primary">Change</button>
+                    <button type="button" id="modal_button_save" class="btn btn-primary">Save</button>
                     <button type="button" id="modal_button_go" type='submit' class="btn btn-primary" disabled>Go!</button>
+<!--                    <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Close</button>-->
                 </div>
             </div>
         </div>
@@ -374,9 +377,7 @@
                     </form>
                 </div>
                 <div class="modal-footer">
-                    <!--                <form action='pp-machine-list-task.php' method='post'>-->
                     <button type="button" id="modal_next_button_go" type='submit' class="btn btn-primary" disabled>Go!</button>
-                    <!--                </form>-->
                 </div>
             </div>
         </div>
