@@ -182,7 +182,7 @@
                         </tr>
                         <tr>
                             <td>Qty/Tray: </td>
-                            <td id="modal_per_tray"></td>
+                            <td id="modal_qty_per_tray"></td>
                             <td></td>
                         </tr>
                         <tr>
