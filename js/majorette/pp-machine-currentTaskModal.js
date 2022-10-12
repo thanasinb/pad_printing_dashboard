@@ -167,7 +167,7 @@ $(document).ready(function(){
             modal_item_no.textContent = '';
             modal_operation.textContent = '';
             modal_date_due.textContent = '';
-            modal_qty_per_tray.textContent = '';
+            $('#modal_qty_per_tray').val(0);
             modal_qty_accum.textContent = '';
             modal_qty_order.textContent = '';
             modal_qty_percent.textContent = '';
@@ -268,5 +268,50 @@ $(document).ready(function(){
         $('#modal_qty_per_tray').prop('disabled', true);
         $('#modal_button_save').hide();
         $('#modal_button_change').show();
+
+        $.ajax({
+            url: "ajax/pp-machine-change-tray.php",
+            type: "GET",
+            data: {
+                qty_per_tray: qty_per_tray,
+                id_task: id_task
+            },
+            context: this,
+            cache: false,
+            success: function(dataResult){
+                // alert(dataResult);
+                var dataResult = JSON.parse(dataResult);
+                // $('#modal_staff_id').text(dataResult.id_staff);
+                // $('#input_rfid').val(dataResult.id_rfid);
+                // alert($(this).html());
+                // document.getElementById("button_save_rfid").textContent = "hello";
+                // $(this).parent().find('#button_save_rfid').hide();
+                // $(this).parent().find('#button_rfid').show();
+                $('#input_staff_id').text(id_staff);
+                $('#input_staff_id').prop('disabled', true);
+                $('#input_rfid').val(id_rfid);
+                $('#input_rfid').prop('disabled', true);
+                $('#prefix_name').val(prefix);
+                $('#prefix_name').prop('disabled', true);
+                $('#input_name').text(name);
+                $('#input_name').prop('disabled', true);
+                $('#input_last').text(last);
+                $('#input_last').prop('disabled', true);
+                $('#role').val(roles);
+                $('#role').prop('disabled', true);
+                $('#shift').val(shift);
+                $('#shift').prop('disabled', true);
+                $('#input_site').val(site);
+                $('#input_site').prop('disabled', true);
+                // $('.id_staff:contains(' + id_staff + ')').next('.rfid').text(id_rfid);
+                // $('.id_staff:contains(' + id_staff + ')').next('.name_first').text(name);
+                // $('.id_staff:contains(' + id_staff + ')').next('.name_last').text(last);
+                // $('.id_staff:contains(' + id_staff + ')').next('.prefix').text(prefix);
+                // $('.id_staff:contains(' + id_staff + ')').next('.role').text(roles);
+                // $('.id_staff:contains(' + id_staff + ')').next('.shift').text(shift);
+                $('#button_save_rfid').hide();
+                $('#button_rfid').show();
+            }
+        });
     });
 });
