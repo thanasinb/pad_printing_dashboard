@@ -50,7 +50,7 @@ while($row_machine = $result_machine->fetch_assoc()){
             echo "<td class='status_work text-white text-center'></td>";
             echo "<td class='id_machine'>" . $row_machine["id_mc"] . "</td>";
 //            echo "<td class='id_staff'></td>";
-            echo "<td class='col-xl-auto'>";
+            echo "<td class='col-xl-auto item_no'>";
             echo "<button name='id_mc' type='submit' value='" . $row_machine["id_mc"] . "' ";
             echo "data-bs-toggle='modal' data-bs-target='#currentTaskModal' ";
             echo "data-bs-id_machine='" . $row_machine["id_mc"] . "' ";
@@ -66,10 +66,10 @@ while($row_machine = $result_machine->fetch_assoc()){
             echo "data-bs-last_update='" . $row_planning["datetime_update"] . "' ";
             echo "class='btn btn-datatable btn-icon text-black me-2 btn-current-task'>";
             echo "<i class='far fa-edit fs-6'></i></button>" . $row_planning["item_no"] . "</td>";
-            echo "<td>" . $row_planning['operation'] . "</td>";
-            echo "<td>" . $row_planning['op_color'] . "</td>";
-            echo "<td>" . $row_planning['op_side'] . "</td>";
-            echo "<td>" . date( 'd-m-Y', $phpdate ) . "</td>";
+            echo "<td class='operation'>" . $row_planning['operation'] . "</td>";
+            echo "<td class='op_color'>" . $row_planning['op_color'] . "</td>";
+            echo "<td class='op_side'>" . $row_planning['op_side'] . "</td>";
+            echo "<td class='date_due'>" . date( 'd-m-Y', $phpdate ) . "</td>";
             echo "<td class='qty_per_tray'></td>";
             echo "<td class='qty_accum_order'></td>";
             echo "<td><div class=\"progress\">";

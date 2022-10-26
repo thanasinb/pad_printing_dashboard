@@ -102,11 +102,16 @@ $(document).ready(function(){
         // Extract info from data-bs-* attributes
         // var id_machine = button.getAttribute('data-bs-id_machine');
 
-        id_machine = button.getAttribute('data-bs-id_machine');
-        item_no = button.getAttribute('data-bs-item_no');
-        operation = button.getAttribute('data-bs-operation');
-        date_due = button.getAttribute('data-bs-date_due');
+        // id_machine = button.getAttribute('data-bs-id_machine');
+        // item_no = button.getAttribute('data-bs-item_no');
+        // operation = button.getAttribute('data-bs-operation');
+        // date_due = button.getAttribute('data-bs-date_due');
         // alert($(event.relatedTarget).parent().parent().find('.qty_per_tray').html());
+
+        id_machine = $(event.relatedTarget).parent().parent().find('.id_machine').text();
+        item_no = $(event.relatedTarget).parent().parent().find('.item_no').text();
+        operation = $(event.relatedTarget).parent().parent().find('.operation').text();
+        date_due = $(event.relatedTarget).parent().parent().find('.date_due').text();
         qty_per_tray = $(event.relatedTarget).parent().parent().find('.qty_per_tray').text();
         qty_accum = button.getAttribute('data-bs-qty_accum');
         qty_order = button.getAttribute('data-bs-qty_order');
