@@ -52,7 +52,7 @@ if($error_code==0){
     require 'update/establish.php';
     $sql = "INSERT INTO planning (";
     $sql = $sql . "id_job, work_order, sales_job, prod_line, item_no, item_des, mold, site, type, ";
-    $sql = $sql . "work_center, machine, operation, first_op, op_des, op_side, op_color, run_time_std, run_open_total, qty_order, qty_comp, qty_open, date_due, wo_status, datetime_update";
+    $sql = $sql . "work_center, machine, operation, first_op, op_des, op_side, op_color, run_time_std, run_open_total, qty_order, qty_comp, qty_open, date_due, wo_status, datetime_update, qty_per_pulse2";
     $sql = $sql . ") ";
     $sql = $sql . "VALUES (";
 
@@ -138,7 +138,9 @@ if($error_code==0){
             $stmt = $stmt . $fields[$item] . ",";
         }
         $stmt = $stmt . "'" . substr($fields[$item++],0,-9) . "',";
-        $stmt = $stmt . "'" . $fields[$item] . "', '" . date('Y-m-d H:i:s') . "')";
+        $stmt = $stmt . "'" . $fields[$item] . "', '" . date('Y-m-d H:i:s') . "',";
+
+        $stmt = $stmt . "80" . ")";
 
         $list_planning = $list_planning . "(" . $id_job . "," . $operation . "),";
 
