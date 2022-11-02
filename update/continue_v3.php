@@ -12,7 +12,7 @@ if(empty($data_break)){
     $data_json = json_encode(array('code'=>'009', 'message'=>'Invalid break ID'), JSON_UNESCAPED_UNICODE);
 }
 else{
-    $data_activity = get_break_activity_and_time_by_id_and_machine($conn, $table, $_GET['id_activity'], $_GET['id_mc']);
+    $data_activity = get_break_activity_and_time_by_id_and_machine($conn, $table, $str_activity, $str_status, $_GET['id_activity'], $_GET['id_mc']);
     if(empty($data_activity)){
         $data_json = json_encode(array('code'=>'010', 'message'=>'No break activity found'), JSON_UNESCAPED_UNICODE);
     }
@@ -33,7 +33,7 @@ else{
         $break_duration_text = gmdate('H:i:s', $break_duration);
         $total_break_text =  gmdate('H:i:s', $break_duration + $total_break);
 
-        update_break($conn, $table, $table_break, $_GET['id_activity'], $_GET['id_break'],
+        update_break($conn, $table, $table_break, $str_activity, $str_status, $_GET['id_activity'], $_GET['id_break'],
             $data_activity["time_current"], $break_duration_text, $str_break, $total_break_text);
 
         $data_json = json_encode(array("total_break"=>$total_break_text), JSON_UNESCAPED_UNICODE);

@@ -1,7 +1,8 @@
 <?php
-function update_break($conn, $table, $table_break, $id_activity, $id_break, $time_current, $break_duration, $str_break, $total_break){
+function update_break($conn, $table, $table_break, $str_activity, $str_status, $id_activity, $id_break, $time_current, $break_duration, $str_break, $total_break){
 
-    $sql = "UPDATE " . $table . " SET status_work=1, " . $str_break . "='" . $total_break . "' WHERE id_activity=" . $id_activity;
+    $sql = "UPDATE " . $table . " SET " . $str_status . "=1, " . $str_break . "='" .
+        $total_break . "' WHERE " . $str_activity . "=" . $id_activity;
     $result = $conn->query($sql);
 
     $sql = "UPDATE " . $table_break . " SET " .
