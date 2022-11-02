@@ -1,5 +1,5 @@
 <?php
-function add_break($conn, $table, $table_break, $id_activity, $id_staff, $id_mc, $break_code){
+function add_break($conn, $table, $table_break, $str_activity, $str_status, $id_activity, $id_staff, $id_mc, $break_code){
     $sql = "INSERT INTO " . $table_break . " (id_activity, id_staff, break_code, break_start) VALUES (";
     $sql = $sql . $id_activity . ",";
     $sql = $sql . "'" . $id_staff . "',";
@@ -13,9 +13,9 @@ function add_break($conn, $table, $table_break, $id_activity, $id_staff, $id_mc,
 
     $sql = "UPDATE " . $table . " SET ";
     $sql = $sql . "id_break=" . $data_break['id_break'] . ",";
-    $sql = $sql . "status_work=2";
+    $sql = $sql . $str_status . "=2";
     $sql = $sql . " WHERE id_machine='" . $id_mc . "'";;
-    $sql = $sql . " AND id_activity=" . $id_activity;
+    $sql = $sql . " AND " . $str_activity . "=" . $id_activity;
     $result = $conn->query($sql);
 
     return $data_break;

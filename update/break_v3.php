@@ -25,7 +25,7 @@ else{
     }
     else{
         list($table, $table_break, $str_activity, $str_status) = get_break_info_from_activity_type(intval($_GET['activity_type']));
-        $data_break = add_break($conn, $table, $table_break, $_GET['id_activity'], $data_staff_rfid['id_staff'], $_GET['id_mc'], $_GET["break_code"]);
+        $data_break = add_break($conn, $table, $table_break, $str_activity, $str_status, $_GET['id_activity'], $data_staff_rfid['id_staff'], $_GET['id_mc'], $_GET["break_code"]);
         $data_json = json_encode($data_break, JSON_UNESCAPED_UNICODE);
     }
 }
