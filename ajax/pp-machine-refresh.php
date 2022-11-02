@@ -57,8 +57,8 @@ if ($active_work>1){
     echo json_encode(array("code" => "020", "message" => "The activity exists in both activity and activity_downtime tables"), JSON_UNESCAPED_UNICODE);
 } else {
     if ($data_activity_downtime['status_downtime']!=null) {
-        if (intval($data_activity_downtime['status_downtime']) == 2){
-            $data_activity_time['status_work'] = 41;
+        if (strcmp($data_activity_downtime['status_downtime'], '2') == 0){
+            $data_activity_time['status_work'] = 42;
         }else{
             $data_activity_time['status_work'] = 4;
         }

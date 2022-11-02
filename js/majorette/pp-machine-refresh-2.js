@@ -235,7 +235,7 @@ function loadData() {
                         $(this).parent().find('.status_work').removeClass('bg-blue bg-yellow bg-red');
                         $(this).parent().find('.status_work').text(dataResult.id_staff);
                         $(this).parent().find('.status_work').addClass('bg-green');
-                    }else if(status_work==2){
+                    }else if(status_work==2 || status_work==42){
                         $(this).parent().find('.status_work').removeClass('bg-blue bg-green bg-red');
                         $(this).parent().find('.status_work').text(dataResult.id_staff);
                         $(this).parent().find('.status_work').addClass('bg-yellow');
