@@ -9,12 +9,13 @@ $sql = "SELECT id_task FROM machine_queue WHERE queue_number=1 AND id_machine='"
 $query_machine_queue = $conn->query($sql);
 $data_machine_queue = $query_machine_queue->fetch_assoc();
 $id_task = intval($data_machine_queue['id_task']);
-//echo $id_task;
+echo $sql . "<br>";
 
 // ACCUMULATE THE PROCESSED QTY WHICH HAS NOT BEEN RE-IMPORTED
 $sql = "SELECT SUM(no_pulse2) AS qty_process, SUM(no_pulse3) AS qty_manual FROM activity WHERE status_work<6 AND id_task=" . $id_task;
 $query_activity_sum = $conn->query($sql);
 $data_activity_sum = $query_activity_sum->fetch_assoc();
+echo $sql . "<br>";
 if ($data_activity_sum['qty_process']==null){
     $data_activity_sum['qty_process']='0';
 }
