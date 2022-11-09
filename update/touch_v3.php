@@ -18,16 +18,17 @@ else{
     }else{
         if($data_machine_queue['id_staff'] == null){
             $data_planning = get_planning($conn, $data_machine_queue['id_task']);
-            $data_activity = get_qty_shif($conn, 'activity', $data_staff_rfid['id_staff'], $data_machine_queue['id_task']);
+            $data_activity = get_qty_shif($conn, 'activity', 'status_work', $data_staff_rfid['id_staff'], $data_machine_queue['id_task']);
             $data_json = json_encode(array_merge($data_staff_rfid, $data_planning, $data_activity), JSON_UNESCAPED_UNICODE);
-        }else{
+        }
+        else{
             if($data_staff_rfid['role']==2){
                 $data_staff_queue = get_staff_by_id($conn, $data_machine_queue['id_staff']);
                 if($data_staff_queue['role']==1){
                     $data_activity = get_active_activity_by_id_and_machine($conn, 'activity_downtime', $data_staff_queue['id_staff'], $_GET['id_mc']);
                     if(!empty($data_activity)){
                         $data_planning = get_planning($conn, $data_machine_queue['id_task']);
-                        $data_activity = get_qty_shif($conn, 'activity_downtime', $data_staff_rfid['id_staff'], $data_machine_queue['id_task']);
+                        $data_activity = get_qty_shif($conn, 'activity_downtime', 'status_downtime', $data_staff_rfid['id_staff'], $data_machine_queue['id_task']);
                         $data_json = json_encode(array_merge($data_staff_rfid, $data_planning, $data_activity), JSON_UNESCAPED_UNICODE);
                     }else{
                         $data_json = json_encode(array('code'=>'028', 'message'=>'Operator ID - DT table mismatch'), JSON_UNESCAPED_UNICODE);
