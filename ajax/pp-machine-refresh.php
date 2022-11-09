@@ -27,12 +27,14 @@ $sql = "SELECT id_staff, status_work, total_work, no_pulse1, run_time_actual FRO
 $query_activity_time = $conn->query($sql);
 $data_activity_time = $query_activity_time->fetch_assoc();
 echo $sql . "<br>";
+print_r($data_activity_time);
 
 // SELECT THE ACTIVE REWORK ACTIVITY
 $sql = "SELECT id_staff, status_work, total_work, no_pulse1, run_time_actual FROM activity_rework WHERE status_work<3 AND id_task=" . $id_task . " AND id_machine='" . $_GET["id_mc"] . "'";
 $query_rework_time = $conn->query($sql);
 $data_rework_time = $query_rework_time->fetch_assoc();
 echo $sql . "<br>";
+print_r($data_rework_time);
 
 // SELECT THE DOWNTIME ACTIVITY OF SUCH TASK
 $sql = "SELECT id_staff, status_downtime, code_downtime FROM activity_downtime 
