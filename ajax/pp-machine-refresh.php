@@ -26,11 +26,13 @@ if ($data_activity_sum['qty_manual']==null){
 $sql = "SELECT id_staff, status_work, total_work, no_pulse1, run_time_actual FROM activity WHERE status_work<3 AND id_task=" . $id_task . " AND id_machine='" . $_GET["id_mc"] . "'";
 $query_activity_time = $conn->query($sql);
 $data_activity_time = $query_activity_time->fetch_assoc();
+echo $sql . "<br>";
 
 // SELECT THE ACTIVE REWORK ACTIVITY
 $sql = "SELECT id_staff, status_work, total_work, no_pulse1, run_time_actual FROM activity_rework WHERE status_work<3 AND id_task=" . $id_task . " AND id_machine='" . $_GET["id_mc"] . "'";
 $query_rework_time = $conn->query($sql);
 $data_rework_time = $query_rework_time->fetch_assoc();
+echo $sql . "<br>";
 
 // SELECT THE DOWNTIME ACTIVITY OF SUCH TASK
 $sql = "SELECT id_staff, status_downtime, code_downtime FROM activity_downtime 
@@ -71,6 +73,7 @@ if ($active_work>1){
     }
     if ($data_activity_time['status_work']==null) {
         $data_activity_time['status_work'] = '0';
+        echo "hello<br>";
     }
     if ($data_activity_time['run_time_actual']==null) {
         $data_activity_time['run_time_actual'] = '0';
