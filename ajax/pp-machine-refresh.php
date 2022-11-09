@@ -9,13 +9,13 @@ $sql = "SELECT id_task FROM machine_queue WHERE queue_number=1 AND id_machine='"
 $query_machine_queue = $conn->query($sql);
 $data_machine_queue = $query_machine_queue->fetch_assoc();
 $id_task = intval($data_machine_queue['id_task']);
-echo $sql . "<br>";
+//echo $sql . "<br>";
 
 // ACCUMULATE THE PROCESSED QTY WHICH HAS NOT BEEN RE-IMPORTED
 $sql = "SELECT SUM(no_pulse2) AS qty_process, SUM(no_pulse3) AS qty_manual FROM activity WHERE status_work<6 AND id_task=" . $id_task;
 $query_activity_sum = $conn->query($sql);
 $data_activity_sum = $query_activity_sum->fetch_assoc();
-echo $sql . "<br>";
+//echo $sql . "<br>";
 if ($data_activity_sum['qty_process']==null){
     $data_activity_sum['qty_process']='0';
 }
@@ -27,15 +27,15 @@ if ($data_activity_sum['qty_manual']==null){
 $sql = "SELECT id_staff, status_work, total_work, no_pulse1, run_time_actual FROM activity WHERE status_work<3 AND id_task=" . $id_task . " AND id_machine='" . $_GET["id_mc"] . "'";
 $query_activity_time = $conn->query($sql);
 $data_activity_time = $query_activity_time->fetch_assoc();
-echo $sql . "<br>";
-print_r($data_activity_time);
+//echo $sql . "<br>";
+//print_r($data_activity_time);
 
 // SELECT THE ACTIVE REWORK ACTIVITY
 $sql = "SELECT id_staff, status_work, total_work, no_pulse1, run_time_actual FROM activity_rework WHERE status_work<3 AND id_task=" . $id_task . " AND id_machine='" . $_GET["id_mc"] . "'";
 $query_rework_time = $conn->query($sql);
 $data_rework_time = $query_rework_time->fetch_assoc();
-echo $sql . "<br>";
-print_r($data_rework_time);
+//echo $sql . "<br>";
+//print_r($data_rework_time);
 
 // SELECT THE DOWNTIME ACTIVITY OF SUCH TASK
 $sql = "SELECT id_staff, status_downtime, code_downtime FROM activity_downtime 
@@ -74,10 +74,10 @@ if ($active_work>1){
         $rework='y';
 //        $data_activity_time['status_work'] = 7;
     }
-    echo "status_work" . $data_activity_time['status_work'] . "<br>";
+//    echo "status_work" . $data_activity_time['status_work'] . "<br>";
     if ($data_activity_time['status_work']==null) {
         $data_activity_time['status_work'] = '0';
-        echo "hello<br>";
+//        echo "hello<br>";
     }
     if ($data_activity_time['run_time_actual']==null) {
         $data_activity_time['run_time_actual'] = '0';
