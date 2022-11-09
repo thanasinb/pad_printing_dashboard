@@ -71,6 +71,7 @@ if ($active_work>1){
         $rework='y';
 //        $data_activity_time['status_work'] = 7;
     }
+    echo "status_work" . $data_activity_time['status_work'] . "<br>";
     if ($data_activity_time['status_work']==null) {
         $data_activity_time['status_work'] = '0';
         echo "hello<br>";
