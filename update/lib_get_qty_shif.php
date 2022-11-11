@@ -14,9 +14,9 @@ function get_qty_shif($conn, $table, $str_status, $id_staff, $id_task){
             "id_task=" . $id_task . " AND " .
             "id_staff='" . $id_staff . "' AND " .
             "(time_start BETWEEN '" . date("Y-m-d H:i:s", $yesterday_19_00) . "' AND '" . date("Y-m-d H:i:s", $today_07_00) . "')";
+        echo $sql . " Night <br>";
         $result = $conn->query($sql);
         $data_activity = $result->fetch_assoc();
-        echo $sql . " Night <br>";
 
         //DAY SHIF BTW 07:00 AND 19:00
     }elseif ($today_07_00<=$time_current AND $time_current<$today_19_00){
@@ -24,9 +24,9 @@ function get_qty_shif($conn, $table, $str_status, $id_staff, $id_task){
             "id_task=" . $id_task . " AND " .
             "id_staff='" . $id_staff . "' AND " .
             "(time_start BETWEEN '" . date("Y-m-d H:i:s", $today_07_00) . "' AND '" . date("Y-m-d H:i:s", $today_19_00) . "')";
+        echo $sql . " Day <br>";
         $result = $conn->query($sql);
         $data_activity = $result->fetch_assoc();
-        echo $sql . " Day <br>";
     }
     if ($data_activity['qty_shif_pulse1'] == null){
         $data_activity['qty_shif_pulse1'] = 0;
