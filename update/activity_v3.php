@@ -6,6 +6,9 @@ require 'lib_add_activity.php';
 require 'lib_add_activity_downtime.php';
 require 'lib_get_staff_from_machine_queue.php';
 require 'lib_get_active_activity_by_id_and_machine.php';
+require 'lib_add_log.php';
+
+add_log($conn, basename($_SERVER['REQUEST_URI']));
 
 if($_GET['activity_type']==1){
     $table = 'activity';

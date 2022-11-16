@@ -6,6 +6,9 @@ require 'lib_get_staff_from_machine_queue.php';
 require 'lib_get_planning.php';
 require 'lib_get_qty_shif.php';
 require 'lib_get_active_activity_by_id_and_machine.php';
+require 'lib_add_log.php';
+
+add_log($conn, basename($_SERVER['REQUEST_URI']));
 
 $data_staff_rfid = get_staff_by_rfid($conn, $_GET['id_rfid']);
 if(empty($data_staff_rfid)){
