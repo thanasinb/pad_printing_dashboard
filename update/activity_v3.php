@@ -25,10 +25,21 @@ if($_GET['activity_type']==1){
     $data_machine_queue = get_staff_from_machine_queue($conn, $_GET['id_mc']);
 //    if(!empty($data_machine_queue)){
 //        $data_existing_staff = get_staff_by_id($conn, $data_machine_queue['id_staff']);
-//        if(intval($data_existing_staff['role']) == 2){
+//        if(intval($data_existing_staff['role']) == 1){
 //            $data_existing_activity = get_active_activity_by_id_and_machine($conn, $table, $data_existing_staff['id_staff'], $_GET['id_mc']);
 //            $_GET['id_rfid'] = $data_existing_staff['id_rfid'];
 //            $_GET['id_activity'] = $data_existing_activity['id_activity'];
+//            $_GET['no_send'] = 9999;
+//            $_GET['no_pulse1'] = 0;
+//            $_GET['no_pulse2'] = 0;
+//            $_GET['no_pulse3'] = 0;
+
+//              PARAMS FOR QUIT:
+//              ID_ACTIVITY: Y,
+//              ACTIVITY_TYPE: Y,
+//              ID_RFID: Y,
+//              ID_MC: Y,
+//              NO_SEND:
 //            require 'quit_v3.php';
 //        }
 //    }
