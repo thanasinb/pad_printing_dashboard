@@ -7,9 +7,9 @@ function get_active_activity_by_activity_id_type_staff_and_machine($conn, $table
         id_machine = '" . $id_mc . "' AND " .
         $str_status . "=1";
 
-    echo $sql;
+//    echo $sql;
 
-    //    $result = $conn->query($sql);
-//    $data = $result->fetch_assoc();
-//    return $data;
+        $result = $conn->query($sql);
+        $data = $result->fetch_assoc();
+        return $data;
 }
