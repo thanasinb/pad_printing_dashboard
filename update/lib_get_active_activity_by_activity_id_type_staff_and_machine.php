@@ -3,7 +3,7 @@ function get_active_activity_by_activity_id_type_staff_and_machine($conn, $table
 {
     $sql = "SELECT *, CURRENT_TIMESTAMP() AS time_current FROM " . $table . " WHERE " .
         $str_activity . "=" . $id_activity . " AND 
-        id_staff = " . $id_staff . " AND 
+        id_staff = '" . $id_staff . "' AND 
         id_machine = '" . $id_mc . "' AND " .
         $str_status . "=1";
 
