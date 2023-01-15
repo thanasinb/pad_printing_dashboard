@@ -17,7 +17,7 @@ if(empty($data_staff_rfid)){
 else{
     $data_machine_queue = get_staff_from_machine_queue($conn, $_GET['id_mc']);
     if($data_machine_queue['id_task'] == null){
-        $data_json = json_encode(array('code'=>'003', 'message'=>'Machine has no task'), JSON_UNESCAPED_UNICODE);
+        $data_json = json_encode(array('code'=>'003', 'message'=>'Machine has no task or Machine ID is invalid'), JSON_UNESCAPED_UNICODE);
     }else{
         if($data_machine_queue['id_staff'] == null){
             $data_planning = get_planning($conn, $data_machine_queue['id_task']);
