@@ -209,7 +209,7 @@ if($error_code==0){
     require 'update/terminate.php';
 }
 
-header("Location: ./pp-upload.php?error_code=" . $error_code . "&message=" . $msg);
+header("Location: ./pp-upload.php?error_code=" . $error_code);
 die();
 
 ?>
