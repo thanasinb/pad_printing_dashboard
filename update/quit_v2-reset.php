@@ -3,21 +3,54 @@ require 'establish.php';
 
 const ACTIVITY_BACKFLUSH=1;
 const ACTIVITY_REWORK=2;
+const ACTIVITY_DOWNTIME=3;
 
-$sql = "SELECT id_activity, id_task, shif, date_eff, time_start, CURRENT_TIMESTAMP() AS time_current, total_food, total_toilet, no_send FROM activity WHERE status_work<3 AND id_machine = '" . $_GET["id_mc"] . "' AND id_staff=(SELECT id_staff FROM staff WHERE id_rfid = '" . $_GET["id_rfid"] . "')";
+
+$sql = "SELECT id_activity, id_task, shif, date_eff, time_start, CURRENT_TIMESTAMP() 
+                    AS time_current, total_food, total_toilet, no_send 
+                    FROM activity WHERE status_work<3 
+                    AND id_machine = '" . $_GET["id_mc"] . "' 
+                    AND id_staff=(SELECT id_staff FROM staff WHERE id_rfid = '" . $_GET["id_rfid"] . "')";
 $result = $conn->query($sql);
 $data_activity = $result->fetch_assoc();
 if(empty($data_activity)) {
-    $sql = "SELECT id_activity, id_task, shif, date_eff, time_start, CURRENT_TIMESTAMP() AS time_current, total_food, total_toilet, no_send FROM activity_rework WHERE status_work<3 AND id_machine = '" . $_GET["id_mc"] . "' AND id_staff=(SELECT id_staff FROM staff WHERE id_rfid = '" . $_GET["id_rfid"] . "')";
+    $sql = "SELECT id_activity, id_task, shif, date_eff, time_start, CURRENT_TIMESTAMP() 
+                        AS time_current, total_food, total_toilet, no_send 
+                        FROM activity_rework WHERE status_work<3 
+                        AND id_machine = '" . $_GET["id_mc"] . "' 
+                        AND id_staff=(SELECT id_staff FROM staff WHERE id_rfid = '" . $_GET["id_rfid"] . "')";
     $result = $conn->query($sql);
     $data_activity = $result->fetch_assoc();
-    if(!empty($data_activity)) { $activity_type=ACTIVITY_REWORK; }
-}else{ $activity_type=ACTIVITY_BACKFLUSH; }
+    if(empty($data_activity)) {
+        $sql = "SELECT id_activity_downtime AS id_activity, id_task, shif, date_eff, time_start, CURRENT_TIMESTAMP() 
+                        AS time_current, total_food, total_toilet, no_send 
+                        FROM activity_downtime WHERE status_downtime<3 
+                        AND id_machine = '" . $_GET["id_mc"] . "' 
+                        AND id_staff=(SELECT id_staff FROM staff WHERE id_rfid = '" . $_GET["id_rfid"] . "')";
+        $result = $conn->query($sql);
+        $data_activity = $result->fetch_assoc();
+        if(!empty($data_activity)){
+            $activity_type=ACTIVITY_DOWNTIME;
+        }
+    }else{
+        $activity_type=ACTIVITY_REWORK;
+    }
+}else{
+    $activity_type=ACTIVITY_BACKFLUSH;
+}
 
 if($activity_type==ACTIVITY_BACKFLUSH){
     $table_activity='activity';
+    $str_status='status_work';
+    $str_activity='id_activity';
 }elseif ($activity_type==ACTIVITY_REWORK) {
     $table_activity='activity_rework';
+    $str_status='status_work';
+    $str_activity='id_activity';
+}elseif ($activity_type==ACTIVITY_DOWNTIME){
+    $table_activity='activity_downtime';
+    $str_status='status_downtime';
+    $str_activity='id_activity_downtime';
 }
 
 if(empty($data_activity)) {
@@ -32,14 +65,14 @@ if(empty($data_activity)) {
     $time_total =  gmdate('H:i:s', $time_current-$time_start-$total_break);
 
     $sql = "UPDATE " . $table_activity . " SET ";
-    $sql = $sql . "status_work=3,";
+    $sql = $sql . $str_status . "=3,";
     $sql = $sql . "total_work='" . $time_total . "',";
     $sql = $sql . "time_close='" . $data_activity["time_current"] . "',";
     $sql = $sql . "no_send=" . $_GET["no_send"] . ",";
     $sql = $sql . "no_pulse1=" . $_GET["no_pulse1"] . ",";
     $sql = $sql . "no_pulse2=" . $_GET["no_pulse2"] . ",";
     $sql = $sql . "no_pulse3=" . $_GET["no_pulse3"];
-    $sql = $sql . " WHERE id_activity=" . $data_activity["id_activity"];
+    $sql = $sql . " WHERE " . $str_activity . "=" . $data_activity["id_activity"];
     $result = $conn->query($sql);
 
     $sql = "UPDATE machine_queue SET id_staff='' WHERE id_machine='" . $_GET["id_mc"] . "' AND queue_number=1";
