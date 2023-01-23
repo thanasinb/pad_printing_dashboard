@@ -192,7 +192,8 @@ if($error_code==0){
     $list_planning = rtrim($list_planning, ",");
     $list_planning = $list_planning . ")";
 
-    $sql_backup = "UPDATE activity SET status_work=6 WHERE status_work=5 AND (id_job, operation) NOT IN " . $list_planning;
+    $sql_backup = "UPDATE activity INNER JOIN planning ON activity.id_task=planning.id_task SET activity.status_work=6 WHERE activity.status_work=5 AND (planning.id_job, planning.operation) NOT IN " . $list_planning;
+//    echo $sql_backup . "<br>";
     $conn->query($sql_backup);
     if ($conn->errno){
         $error_code = $conn->errno;
