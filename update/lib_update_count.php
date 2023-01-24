@@ -1,5 +1,5 @@
 <?php
-function update_count($conn, $table, $status_work, $id_activity, $no_send, $no_pulse1, $no_pulse2, $no_pulse3, $multiplier){
+function update_count($conn, $is_quit, $table, $status_work, $id_activity, $no_send, $no_pulse1, $no_pulse2, $no_pulse3, $multiplier){
 
     if(strcmp('activity_downtime', $table) == 0){
         $status_work_text = 'status_downtime=';
@@ -41,6 +41,9 @@ function update_count($conn, $table, $status_work, $id_activity, $no_send, $no_p
 
     $sql = "UPDATE " . $table . " SET ";
     $sql = $sql . $status_work_text . $status_work . ",";
+    if ($is_quit){
+        $sql = $sql . "time_close='" . $data_activity["time_current"] . "',";
+    }
     $sql = $sql . "total_work='" . $time_total . "',";
     $sql = $sql . "run_time_actual=" . $run_time_actual . ",";
     $sql = $sql . "no_send=" . $no_send . ",";

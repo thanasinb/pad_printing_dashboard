@@ -24,8 +24,9 @@ else{
         $data_json = json_encode(array('code'=>'025', 'message'=>'No active activity found for specified staff and machine'), JSON_UNESCAPED_UNICODE);
     }
     else{
+        $is_quit = false;
         $status_work = 1;
-        $data_json = update_count($conn, $table, $status_work,
+        $data_json = update_count($conn, $is_quit, $table, $status_work,
             $_GET['id_activity'],
             $_GET['no_send'],
             $_GET['no_pulse1'],

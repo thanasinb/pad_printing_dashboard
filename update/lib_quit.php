@@ -34,8 +34,9 @@ function quit($conn,
             $data_json = json_encode(array("code"=>"012", 'message'=>'Activity mismatches'), JSON_UNESCAPED_UNICODE);
             print_r($data_json);
         } else {
+            $is_quit = true;
             $status_work = 3;
-            $data_json = update_count($conn, $table, $status_work,
+            $data_json = update_count($conn, $is_quit, $table, $status_work,
                 $id_activity,
                 $no_send,
                 $no_pulse1,
