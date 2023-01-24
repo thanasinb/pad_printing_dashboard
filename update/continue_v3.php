@@ -12,7 +12,13 @@ if(empty($data_break)){
     $data_json = json_encode(array('code'=>'009', 'message'=>'Invalid break ID'), JSON_UNESCAPED_UNICODE);
 }
 else{
-    $data_activity = get_break_activity_and_time_by_id_and_machine($conn, $table, $str_activity, $str_status, $_GET['id_activity'], $_GET['id_mc']);
+    $data_activity = get_break_activity_and_time_by_id_and_machine(
+        $conn,
+        $table,
+        $str_activity,
+        $str_status,
+        $_GET['id_activity'],
+        $_GET['id_mc']);
     if(empty($data_activity)){
         $data_json = json_encode(array('code'=>'010', 'message'=>'No break activity found'), JSON_UNESCAPED_UNICODE);
     }
