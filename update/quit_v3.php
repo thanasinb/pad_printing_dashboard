@@ -1,9 +1,12 @@
 <?php
+require 'lib_get_staff_by_rfid.php';
+require 'lib_get_info_from_activity_type.php';
+require 'lib_get_active_activity_by_activity_id_type_staff_and_machine.php';
+require 'lib_update_count.php';
 require 'lib_quit.php';
-
 require 'establish.php';
 
-quit($conn,
+$data_json = quit($conn,
     $_GET['id_mc'],
     $_GET['id_rfid'],
     $_GET['id_activity'],
@@ -18,3 +21,4 @@ quit($conn,
 require "contact.php";
 require 'terminate.php';
 
+print_r($data_json);

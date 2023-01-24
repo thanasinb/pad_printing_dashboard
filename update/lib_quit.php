@@ -1,9 +1,4 @@
 <?php
-require 'lib_get_staff_by_rfid.php';
-require 'lib_get_info_from_activity_type.php';
-require 'lib_get_active_activity_by_activity_id_type_staff_and_machine.php';
-require 'lib_update_count.php';
-
 function quit($conn,
               $id_mc,
               $id_rfid,
@@ -18,7 +13,7 @@ function quit($conn,
     $data_staff_rfid = get_staff_by_rfid($conn, $id_rfid);
     if(empty($data_staff_rfid)){
         $data_json = json_encode(array('code'=>'011', 'message'=>'Invalid RFID'), JSON_UNESCAPED_UNICODE);
-        print_r($data_json);
+//        print_r($data_json);
     }
     else {
         list($table, $str_activity, $str_status) = get_info_from_activity_type($activity_type);
@@ -32,7 +27,7 @@ function quit($conn,
             $id_mc);
         if(empty($data_activity)) {
             $data_json = json_encode(array("code"=>"012", 'message'=>'Activity mismatches'), JSON_UNESCAPED_UNICODE);
-            print_r($data_json);
+//            print_r($data_json);
         } else {
             $is_quit = true;
             $status_work = 3;
@@ -47,8 +42,9 @@ function quit($conn,
             if(empty($code_downtime)) {
                 $sql = "UPDATE machine_queue SET id_staff='' WHERE id_machine='" . $id_mc . "' AND queue_number=1";
                 $result = $conn->query($sql);
-                print_r($data_json);
+//                print_r($data_json);
             }
         }
     }
+    return $data_json;
 }
