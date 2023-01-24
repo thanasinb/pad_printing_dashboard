@@ -1,12 +1,12 @@
 <?php
-function update_count($conn, $table, $id_activity, $no_send, $no_pulse1, $no_pulse2, $no_pulse3, $multiplier){
+function update_count($conn, $table, $status_work, $id_activity, $no_send, $no_pulse1, $no_pulse2, $no_pulse3, $multiplier){
 
     if(strcmp('activity_downtime', $table) == 0){
-        $status_work_text = 'status_downtime=1,';
+        $status_work_text = 'status_downtime=';
         $id_activity_text = 'id_activity_downtime';
     }else{
         $id_activity_text = 'id_activity';
-        $status_work_text = 'status_work=1,';
+        $status_work_text = 'status_work=';
     }
 
     $sql = "SELECT id_task, time_start, total_work, total_food, total_toilet, no_pulse1, no_pulse2, no_pulse3, 
@@ -18,12 +18,6 @@ function update_count($conn, $table, $id_activity, $no_send, $no_pulse1, $no_pul
     $result = $conn->query($sql);
     $data_planning = $result->fetch_assoc();
 
-    $sql = "SELECT divider AS multiplier FROM divider WHERE
-                                              op_color=" . $data_planning['op_color'] . " AND
-                                              op_side='" . $data_planning['op_side'] . "'";
-    $result = $conn->query($sql);
-    $data_multiplier = $result->fetch_assoc();
-
     $total_food = strtotime("1970-01-01 " . $data_activity["total_food"] . " UTC");
     $total_toilet = strtotime("1970-01-01 " . $data_activity["total_toilet"] . " UTC");
     $total_break = $total_food + $total_toilet;
@@ -32,7 +26,7 @@ function update_count($conn, $table, $id_activity, $no_send, $no_pulse1, $no_pul
     $time_total_second = $time_current - $time_start - $total_break;
     $time_total =  gmdate('H:i:s', $time_total_second);
 
-    $no_pulse1 = floatval($data_activity['no_pulse1']) + ($no_pulse1 * floatval($data_multiplier['multiplier']));
+    $no_pulse1 = floatval($data_activity['no_pulse1']) + ($no_pulse1 * floatval($multiplier));
     $no_pulse2 = intval($data_activity['no_pulse2']) + ($no_pulse2 * intval($data_planning['qty_per_pulse2']));
     $no_pulse3 = $no_pulse3 + intval($data_activity['no_pulse3']) ;
 
@@ -46,7 +40,7 @@ function update_count($conn, $table, $id_activity, $no_send, $no_pulse1, $no_pul
     }
 
     $sql = "UPDATE " . $table . " SET ";
-    $sql = $sql . $status_work_text;
+    $sql = $sql . $status_work_text . $status_work . ",";
     $sql = $sql . "total_work='" . $time_total . "',";
     $sql = $sql . "run_time_actual=" . $run_time_actual . ",";
     $sql = $sql . "no_send=" . $no_send . ",";
@@ -56,15 +50,21 @@ function update_count($conn, $table, $id_activity, $no_send, $no_pulse1, $no_pul
     $sql = $sql . "multiplier=" . $multiplier;
     $sql = $sql . " WHERE " . $id_activity_text . "=" . $id_activity;
     $result = $conn->query($sql);
-//    echo $sql;
 
     $data_json = json_encode(array(
         'code'=>'200',
         'message'=>'OK',
         'qty_pulse1' => $no_pulse1,
         'qty_pulse2' => $no_pulse2,
-        'qty_pulse3' => $no_pulse3
-//        'sql' => $sql
+        'qty_pulse3' => $no_pulse3,
+        'count_accum' => $count_accum,
+        'time_start' => $data_activity["time_start"],
+        'time_current' => $data_activity["time_current"],
+        'total_food' => $data_activity["total_food"],
+        'total_toilet' => $data_activity["total_toilet"],
+        'time_total_second' => $time_total_second,
+        'time_work' => $time_total,
+        'run_time_actual' => $run_time_actual
     ), JSON_UNESCAPED_UNICODE);
 
     return $data_json;
