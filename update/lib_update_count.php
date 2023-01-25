@@ -14,9 +14,13 @@ function update_count($conn, $is_quit, $table, $status_work, $id_activity, $no_s
     $result = $conn->query($sql);
     $data_activity = $result->fetch_assoc();
 
-    $sql = "SELECT op_color, op_side, qty_per_pulse2 FROM planning WHERE id_task=" . $data_activity['id_task'];
+    $sql = "SELECT planning.op_color, planning.op_side, planning.qty_per_pulse2, divider.divider AS multiplier 
+FROM planning INNER JOIN divider ON planning.op_color=divider.op_color AND planning.op_side=divider.op_side 
+WHERE planning.id_task=" . $data_activity['id_task'];
     $result = $conn->query($sql);
     $data_planning = $result->fetch_assoc();
+
+    $multiplier = $data_planning['multiplier'];
 
     $total_food = strtotime("1970-01-01 " . $data_activity["total_food"] . " UTC");
     $total_toilet = strtotime("1970-01-01 " . $data_activity["total_toilet"] . " UTC");
