@@ -8,8 +8,7 @@ function quit($conn,
               $no_pulse1,
               $no_pulse2,
               $no_pulse3,
-              $multiplier,
-              $code_downtime){
+              $multiplier){
     $data_staff_rfid = get_staff_by_rfid($conn, $id_rfid);
     if(empty($data_staff_rfid)){
         $data_json = json_encode(array('code'=>'011', 'message'=>'Invalid RFID'), JSON_UNESCAPED_UNICODE);
@@ -39,11 +38,8 @@ function quit($conn,
                 $no_pulse3,
                 $multiplier);
 
-            if(empty($code_downtime)) {
-                $sql = "UPDATE machine_queue SET id_staff='' WHERE id_machine='" . $id_mc . "' AND queue_number=1";
-                $result = $conn->query($sql);
-//                print_r($data_json);
-            }
+            $sql = "UPDATE machine_queue SET id_staff='' WHERE id_machine='" . $id_mc . "' AND queue_number=1";
+            $result = $conn->query($sql);
         }
     }
     return $data_json;

@@ -21,8 +21,7 @@ $data_json = quit($conn,
     $_GET['no_pulse1'],
     $_GET['no_pulse2'],
     $_GET['no_pulse3'],
-    1,
-    $_GET['code_downtime)']);
+    1);
 
 require "contact.php";
 require 'terminate.php';
