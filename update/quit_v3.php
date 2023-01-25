@@ -6,6 +6,7 @@ require 'lib_get_active_activity_by_activity_id_type_staff_and_machine.php';
 require 'lib_update_count.php';
 require 'lib_quit.php';
 require 'lib_add_log.php';
+require 'lib_add_activity_idle.php';
 
 
 add_log($conn, basename($_SERVER['REQUEST_URI']));
@@ -22,6 +23,11 @@ $data_json = quit($conn,
     $_GET['no_pulse2'],
     $_GET['no_pulse3'],
     1);
+
+$data = json_decode($data_json, true);
+if($data['quit_complete']){
+    add_activity_idle($conn, $_GET['id_mc'], $data['time_current']);
+}
 
 require "contact.php";
 require 'terminate.php';
