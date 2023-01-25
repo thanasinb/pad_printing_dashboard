@@ -10,6 +10,8 @@ require 'lib_add_log.php';
 
 add_log($conn, basename($_SERVER['REQUEST_URI']));
 
+// Replace $_GET['multiplier'] by 1 (dummy) until the box is ready
+
 $data_json = quit($conn,
     $_GET['id_mc'],
     $_GET['id_rfid'],
@@ -19,7 +21,7 @@ $data_json = quit($conn,
     $_GET['no_pulse1'],
     $_GET['no_pulse2'],
     $_GET['no_pulse3'],
-    $_GET['multiplier'],
+    1,
     $_GET['code_downtime)']);
 
 require "contact.php";
