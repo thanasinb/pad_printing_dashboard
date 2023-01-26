@@ -8,6 +8,7 @@ require 'lib_get_staff_from_machine_queue.php';
 require 'lib_get_active_activity_by_id_and_machine.php';
 require 'lib_add_log.php';
 require 'lib_get_planning.php';
+require 'lib_end_activity_idle.php';
 
 
 add_log($conn, basename($_SERVER['REQUEST_URI']));
@@ -28,6 +29,9 @@ if(empty($data_machine_queue['id_staff'])){
             $shif,
             $date_eff,
             $data_planning['multiplier']);
+
+        end_activity_idle($conn, $_GET['id_mc']);
+
     }elseif ($_GET['activity_type']==2){
         $table = 'activity_rework';
         $data_staff = get_staff_by_id($conn, $_GET['id_staff']);
@@ -42,6 +46,9 @@ if(empty($data_machine_queue['id_staff'])){
             $shif,
             $date_eff,
             $data_planning['multiplier']);
+
+        end_activity_idle($conn, $_GET['id_mc']);
+
     }elseif ($_GET['activity_type']==3){
         $table = 'activity_downtime';
         $data_staff = get_staff_by_id($conn, $_GET['id_staff']);
@@ -57,6 +64,9 @@ if(empty($data_machine_queue['id_staff'])){
             $date_eff,
             $_GET['code_downtime'],
             $data_planning['multiplier']);
+
+        end_activity_idle($conn, $_GET['id_mc']);
+
     }else{
         $data_json = json_encode(array('code'=>'005', 'message'=>'Invalid activity_type'), JSON_UNESCAPED_UNICODE);
     }
