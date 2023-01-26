@@ -1,4 +1,5 @@
 <?php
+require 'establish.php';
 require 'lib_get_staff_from_machine_queue.php';
 require 'lib_get_staff_by_id.php';
 require 'lib_get_shif.php';
@@ -10,7 +11,9 @@ require 'lib_get_staff_by_rfid.php';
 require 'lib_get_active_activity_by_activity_id_type_staff_and_machine.php';
 require 'lib_update_count.php';
 require 'lib_quit.php';
-require 'establish.php';
+require 'lib_add_log.php';
+
+add_log($conn, basename($_SERVER['REQUEST_URI']));
 $data_machine_queue = get_staff_from_machine_queue($conn, $_GET['id_mc']);
 
 $data_json_1 = quit($conn,

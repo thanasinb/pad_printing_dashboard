@@ -5,7 +5,9 @@ require 'lib_get_info_from_activity_type.php';
 require 'lib_get_break_info_from_activity_type.php';
 require 'lib_get_active_activity_by_activity_id_type_staff_and_machine.php';
 require 'lib_add_break.php';
+require 'lib_add_log.php';
 
+add_log($conn, basename($_SERVER['REQUEST_URI']));
 $data_staff_rfid = get_staff_by_rfid($conn, $_GET['id_rfid']);
 if(empty($data_staff_rfid)){
     $data_json = json_encode(array('code'=>'013', 'message'=>'Invalid RFID'), JSON_UNESCAPED_UNICODE);
