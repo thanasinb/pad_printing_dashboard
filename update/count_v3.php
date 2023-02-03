@@ -4,7 +4,9 @@ require 'lib_update_count.php';
 require 'lib_get_staff_from_machine_queue.php';
 require 'lib_get_active_activity_by_activity_id_type_staff_and_machine.php';
 require 'lib_get_info_from_activity_type.php';
+require 'lib_add_log.php';
 
+add_log($conn, basename($_SERVER['REQUEST_URI']));
 $data_machine_queue = get_staff_from_machine_queue($conn, $_GET['id_mc']);
 
 if($data_machine_queue['id_staff'] == null) {

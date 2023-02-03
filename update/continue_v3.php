@@ -4,7 +4,9 @@ require 'lib_get_break_info_from_activity_type.php';
 require 'lib_get_break_by_id.php';
 require 'lib_get_break_activity_and_time_by_id_and_machine.php';
 require 'lib_update_break.php';
+require 'lib_add_log.php';
 
+add_log($conn, basename($_SERVER['REQUEST_URI']));
 list($table, $table_break, $str_activity, $str_status) = get_break_info_from_activity_type($_GET['activity_type']);
 $data_break = get_break_by_id($conn, $table_break, $_GET['id_break']);
 
