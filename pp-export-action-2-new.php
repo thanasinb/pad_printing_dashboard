@@ -207,7 +207,7 @@ $sql_order_by_downtime = " ORDER BY planning.id_job, planning.operation, activit
 $sql = "SELECT planning.id_task, planning.id_job, planning.operation FROM activity 
     INNER JOIN planning ON activity.id_task=planning.id_task WHERE " . $sql_where . " GROUP BY activity.id_task ORDER BY planning.id_job, planning.operation";
 $query_tasks_in_shif = $conn->query($sql);
-echo $sql . "<br><br>";
+//echo $sql . "<br><br>";
 
 if(mysqli_num_rows($query_tasks_in_shif)>0){
     // SELECT THE FIRST OPERATION (id_task) OF SUCH TASKS
@@ -302,12 +302,12 @@ while ($data_activity_setup = $query_activity_setup->fetch_assoc()) {
 
 require 'update/terminate.php';
 
-//$filename='export';
-//header("Content-Type: application/xls");
-//header("Content-Disposition: attachment; filename=$filename.xlsx");
-//header("Pragma: no-cache");
-//header("Expires: 0");
-//
-//$writer->writeToStdOut();
+$filename='export';
+header("Content-Type: application/xls");
+header("Content-Disposition: attachment; filename=$filename.xlsx");
+header("Pragma: no-cache");
+header("Expires: 0");
+
+$writer->writeToStdOut();
 
 ?>
