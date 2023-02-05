@@ -1,4 +1,4 @@
-var frequency = 10000; // 10 seconds in miliseconds
+var frequency = 5000; // 5 seconds in miliseconds
 var interval_update = 0;
 
 $(document).ready(function(){

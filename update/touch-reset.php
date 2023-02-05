@@ -39,11 +39,15 @@ if(!empty($data_downtime)){
     $result_planning = $conn->query($sql);
     $data_planning = $result_planning->fetch_assoc();
 
-    header("Location: ./quit_dt-reset.php?" .
+    header("Location: ./quit_v2-reset.php?" .
         "id_rfid=" . $data_staff['id_rfid'] .
         "&id_job=" . $data_planning['id_job'] .
         "&operation=" . $data_planning['operation'] .
-        "&id_mc=" . $data_downtime['id_machine']);
+        "&id_mc=" . $data_downtime['id_machine'] .
+        "&no_send=" . $data_downtime['no_send'] .
+        "&no_pulse1=" . $data_downtime['no_pulse1'] .
+        "&no_pulse2=" . $data_downtime['no_pulse2'] .
+        "&no_pulse3=" . $data_downtime['no_pulse3']);
     die();
 //    https://bunnam.com/projects/majorette_pp/update/quit_dt.php?id_rfid=0014084240&id_job=6174159&operation=540&id_mc=02-02
 }

@@ -50,6 +50,8 @@ const FIELD_QTY_OPEN=18;
 
 if($error_code==0){
     require 'update/establish.php';
+    require 'update/lib_add_log.php';
+
     $sql = "INSERT INTO planning (";
     $sql = $sql . "id_job, work_order, sales_job, prod_line, item_no, item_des, mold, site, type, ";
     $sql = $sql . "work_center, machine, operation, first_op, op_des, op_side, op_color, run_time_std, run_open_total, qty_order, qty_comp, qty_open, date_due, wo_status, datetime_update, qty_per_pulse2";
@@ -157,8 +159,7 @@ if($error_code==0){
             $conn->query($stmt);
             if ($conn->errno){
                 $error_code = $conn->errno;
-                $msg = $stmt;
-                echo $stmt . "<br>";
+                add_log($conn, $stmt);
                 break;
             }
         }
@@ -174,8 +175,7 @@ if($error_code==0){
             $conn->query($sql_update);
             if ($conn->errno){
                 $error_code = $conn->errno;
-                $msg = $sql_update;
-                echo $sql_update . "<br>";
+                add_log($conn, $sql_update);
                 break;
             }
 
@@ -183,8 +183,7 @@ if($error_code==0){
             $conn->query($sql_update);
             if ($conn->errno){
                 $error_code = $conn->errno;
-                $msg = $sql_update;
-                echo $sql_update . "<br>";
+                add_log($conn, $sql_update);
                 break;
             }
         }
@@ -193,26 +192,25 @@ if($error_code==0){
     $list_planning = rtrim($list_planning, ",");
     $list_planning = $list_planning . ")";
 
-    $sql_backup = "UPDATE activity SET status_work=6 WHERE status_work=5 AND (id_job, operation) NOT IN " . $list_planning;
+    $sql_backup = "UPDATE activity INNER JOIN planning ON activity.id_task=planning.id_task SET activity.status_work=6 WHERE activity.status_work=5 AND (planning.id_job, planning.operation) NOT IN " . $list_planning;
+//    echo $sql_backup . "<br>";
     $conn->query($sql_backup);
     if ($conn->errno){
         $error_code = $conn->errno;
-        $msg = $sql_backup;
-        echo $sql_update . "<br>";
+        add_log($conn, $sql_backup);
     }
 
     $sql_backup = "UPDATE planning SET status_backup=1 WHERE (id_job, operation) NOT IN " . $list_planning;
     $conn->query($sql_backup);
     if ($conn->errno){
         $error_code = $conn->errno;
-        $msg = $sql_backup;
-        echo $sql_backup . "<br>";
+        add_log($conn, $sql_backup);
     }
 
     require 'update/terminate.php';
 }
 
-header("Location: ./pp-upload.php?error_code=" . $error_code . "&message=" . $msg);
+header("Location: ./pp-upload.php?error_code=" . $error_code);
 die();
 
 ?>
