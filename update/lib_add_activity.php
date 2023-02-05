@@ -1,13 +1,22 @@
 <?php
-function add_activity($conn, $table, $id_task, $id_machine, $id_staff, $shif, $date_eff){
-    $sql = "INSERT INTO " . $table . " (id_task, id_machine, id_staff, shif, date_eff, status_work, time_start) VALUES (";
+function add_activity($conn, $table, $id_task, $id_machine, $id_staff, $shif, $date_eff, $multiplier){
+    $sql = "INSERT INTO " . $table . " (
+    id_task, 
+    id_machine, 
+    id_staff, 
+    shif, 
+    date_eff, 
+    status_work, 
+    time_start, 
+    multiplier) VALUES (";
     $sql = $sql . $id_task . ",";
     $sql = $sql . "'" . $id_machine . "',";
     $sql = $sql . "'" . $id_staff . "',";
     $sql = $sql . "'" . $shif . "',";
     $sql = $sql . "'" . $date_eff . "',";
     $sql = $sql . "1,";
-    $sql = $sql . "CURRENT_TIMESTAMP()";
+    $sql = $sql . "CURRENT_TIMESTAMP(),";
+    $sql = $sql . $multiplier;
     $sql = $sql . ")";
     $result = $conn->query($sql);
 

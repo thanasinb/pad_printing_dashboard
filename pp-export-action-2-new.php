@@ -205,7 +205,7 @@ $sql_order_by_downtime = " ORDER BY planning.id_job, planning.operation, activit
 
 // SELECT TASKS WHICH OPERATE DURING THE SHIF
 $sql = "SELECT planning.id_task, planning.id_job, planning.operation FROM activity 
-    INNER JOIN planning ON activity.id_task=planning.id_task WHERE " . $sql_where . " GROUP BY activity.id_task ORDER BY activity.id_job, activity.operation";
+    INNER JOIN planning ON activity.id_task=planning.id_task WHERE " . $sql_where . " GROUP BY activity.id_task ORDER BY planning.id_job, planning.operation";
 $query_tasks_in_shif = $conn->query($sql);
 //echo $sql . "<br><br>";
 
@@ -222,6 +222,8 @@ if(mysqli_num_rows($query_tasks_in_shif)>0){
     $array_space=array('');
     $array_tail=array('','','','','','0','','','','','y','','','','','{space}','y','{f4}');
 
+
+$list_first_op_activity = array();
     while ($data_first_op_planning = $query_first_op_planning->fetch_assoc()){
         //SELECT THE FIRST ACTIVITY OF SUCH FIRST OPERATION
         $sql = "SELECT activity.id_staff, planning.id_job, date_eff AS time_start, shif, planning.site, item_no, planning.operation, prod_line, work_center, activity.id_machine,
@@ -244,18 +246,63 @@ if(mysqli_num_rows($query_tasks_in_shif)>0){
 //            $data_first_op_activity['no_pulse1']= strval(floor(floatval($data_first_op_activity['no_pulse1'])*floatval($data_first_op_activity['multiplier'])) - intval($data_first_op_activity['num_repeat']) );
             $data_first_op_activity['no_pulse2']= strval(intval($data_first_op_activity['no_pulse2']) + intval($data_first_op_activity['no_pulse3']));
             unset($data_first_op_activity['multiplier']);
-            $writer->writeSheetRow(SHEET_BF_FIRST, $data_first_op_activity);
+            array_push($list_first_op_activity,$data_first_op_activity);
         }
+    }
+    
+    $qty_sumary_list = array();
+    $temp_first_op_activity = $list_first_op_activity;
+    $main_list=0;
+
+    foreach($list_first_op_activity as $data){
+        $count = 0;
+        $reach = 0;
+        $qty_sumary = 0;
+        $qty_time_work = 0.00;
+        foreach($list_first_op_activity as $data_in){
+
+            if($data['id_staff'] == $data_in['id_staff'] 
+            and $data['id_job'] == $data_in['id_job']
+            and $data['shif'] == $data_in['shif']
+            and $data['item_no'] == $data_in['item_no']
+            and $data['operation'] == $data_in['operation']
+            and $data['time_start'] == $data_in['time_start']
+            and $data['id_machine'] == $data_in['id_machine']
+            and $data['date_eff'] == $data_in['date_eff']){
+                if($reach == 0){
+                    $main_list = $count;
+                }
+                $qty_sumary += $data_in['no_pulse2'];
+                $qty_time_work += $data_in['total_work'];
+                if($reach >= 1){
+                    unset($temp_first_op_activity[$count]);
+                        $temp_first_op_activity[$main_list]['no_pulse2'] = strval($qty_sumary);
+                        $temp_first_op_activity[$main_list]['total_work'] = strval($qty_time_work);
+                }
+                $reach++;
+            }
+            $count++;
+        }
+    }
+    $temp_first_op_activity = array_values($temp_first_op_activity);
+    for($x = 0;$x < count($temp_first_op_activity);$x++){
+        if($temp_first_op_activity[$x]['no_pulse2'] == 0){
+            continue;
+        }
+        $writer->writeSheetRow(SHEET_BF_FIRST, $temp_first_op_activity[$x]);
     }
 }
 
 $sql = "SELECT activity.id_staff, planning.id_job, date_eff AS time_start, shif, planning.site, item_no, planning.operation, prod_line, work_center, activity.id_machine,
-       no_pulse2, no_pulse3, activity.total_work, time_close, divider.divider AS multiplier FROM activity
-       INNER JOIN staff ON activity.id_staff=staff.id_staff
-       INNER JOIN planning ON activity.id_task=planning.id_task
-       INNER JOIN divider ON (planning.op_color=divider.op_color AND planning.op_side=divider.op_side)
-       WHERE " . $sql_where . $sql_order_by;
+        no_pulse2, no_pulse3, activity.total_work, time_close, divider.divider AS multiplier FROM activity
+        INNER JOIN staff ON activity.id_staff=staff.id_staff
+        INNER JOIN planning ON activity.id_task=planning.id_task
+        INNER JOIN divider ON (planning.op_color=divider.op_color AND planning.op_side=divider.op_side)
+        WHERE " . $sql_where . $sql_order_by;
 $query_current_op_activity = $conn->query($sql);
+
+$list_current_op_activity = array();
+
 while ($data_current_op_activity = $query_current_op_activity->fetch_assoc()){
 
     $data_current_op_activity['id_machine'] = make_machine_name($data_current_op_activity['id_machine']);
@@ -265,15 +312,57 @@ while ($data_current_op_activity = $query_current_op_activity->fetch_assoc()){
 //    $data_current_op_activity['no_pulse1']= strval(floor(floatval($data_current_op_activity['no_pulse1'])*floatval($data_current_op_activity['multiplier'])) - intval($data_current_op_activity['num_repeat']) );
     $data_current_op_activity['no_pulse2']= strval(intval($data_current_op_activity['no_pulse2']) + intval($data_current_op_activity['no_pulse3']));
     unset($data_current_op_activity['multiplier']);
-    $writer->writeSheetRow(SHEET_BF_NEXT, $data_current_op_activity);
+    array_push($list_current_op_activity,$data_current_op_activity);
+}
+// print_r($list_first_op_activity.'--test123--'.$list_current_op_activity);
+$qty_sumary_list = array();
+$temp_current_op_activity = $list_current_op_activity;
+$main_list=0;
+
+foreach($list_current_op_activity as $data){
+    $count = 0;
+    $reach = 0;
+    $qty_sumary = 0;
+    $qty_time_work = 0.00;
+    foreach($list_current_op_activity as $data_in){
+
+        if($data['id_staff'] == $data_in['id_staff'] 
+        and $data['id_job'] == $data_in['id_job']
+        and $data['shif'] == $data_in['shif']
+        and $data['item_no'] == $data_in['item_no']
+        and $data['operation'] == $data_in['operation']
+        and $data['time_start'] == $data_in['time_start']
+        and $data['id_machine'] == $data_in['id_machine']
+        and $data['date_eff'] == $data_in['date_eff']){
+            if($reach == 0){
+                $main_list = $count;
+            }
+            $qty_sumary += $data_in['no_pulse2'];
+            $qty_time_work += $data_in['total_work'];
+            if($reach >= 1){
+                unset($temp_current_op_activity[$count]);
+                    $temp_current_op_activity[$main_list]['no_pulse2'] = strval($qty_sumary);
+                    $temp_current_op_activity[$main_list]['total_work'] = strval($qty_time_work);
+            }
+            $reach++;
+        }
+        $count++;
+    }
+}
+$temp_current_op_activity = array_values($temp_current_op_activity);
+for($x = 0;$x < count($temp_current_op_activity);$x++){
+    if($temp_current_op_activity[$x]['no_pulse2'] == 0){
+        continue;
+    }
+    $writer->writeSheetRow(SHEET_BF_NEXT, $temp_current_op_activity[$x]);
 }
 
 $sql = "SELECT activity_downtime.id_staff, planning.id_job, date_eff AS time_start, shif, planning.site, item_no, planning.operation, prod_line, work_center, activity_downtime.id_machine,
-       activity_downtime.total_work, code_downtime FROM activity_downtime
-       INNER JOIN staff ON activity_downtime.id_staff=staff.id_staff
-       INNER JOIN planning ON activity_downtime.id_task=planning.id_task
-       INNER JOIN code_downtime ON activity_downtime.id_code_downtime=code_downtime.id_code_downtime
-       WHERE activity_downtime.id_code_downtime <> 'D07' AND " . $sql_where_downtime . $sql_order_by_downtime;
+        activity_downtime.total_work, code_downtime FROM activity_downtime
+        INNER JOIN staff ON activity_downtime.id_staff=staff.id_staff
+        INNER JOIN planning ON activity_downtime.id_task=planning.id_task
+        INNER JOIN code_downtime ON activity_downtime.id_code_downtime=code_downtime.id_code_downtime
+        WHERE activity_downtime.id_code_downtime <> 'D07' AND " . $sql_where_downtime . $sql_order_by_downtime;
 //echo $sql;
 $query_activity_downtime = $conn->query($sql);
 while ($data_activity_downtime = $query_activity_downtime->fetch_assoc()) {
@@ -286,10 +375,10 @@ while ($data_activity_downtime = $query_activity_downtime->fetch_assoc()) {
 }
 
 $sql = "SELECT activity_downtime.id_staff, planning.id_job, date_eff AS time_start, shif, planning.site, item_no, planning.operation, prod_line, work_center, activity_downtime.id_machine,
-       activity_downtime.total_work FROM activity_downtime
-       INNER JOIN staff ON activity_downtime.id_staff=staff.id_staff
-       INNER JOIN planning ON activity_downtime.id_task=planning.id_task
-       WHERE activity_downtime.id_code_downtime = 'D07' AND " . $sql_where_downtime . $sql_order_by_downtime;
+        activity_downtime.total_work FROM activity_downtime
+        INNER JOIN staff ON activity_downtime.id_staff=staff.id_staff
+        INNER JOIN planning ON activity_downtime.id_task=planning.id_task
+        WHERE activity_downtime.id_code_downtime = 'D07' AND " . $sql_where_downtime . $sql_order_by_downtime;
 $query_activity_setup = $conn->query($sql);
 while ($data_activity_setup = $query_activity_setup->fetch_assoc()) {
     $data_activity_setup['id_machine'] = make_machine_name($data_activity_setup['id_machine']);
