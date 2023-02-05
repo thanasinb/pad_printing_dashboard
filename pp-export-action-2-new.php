@@ -205,7 +205,7 @@ $sql_order_by_downtime = " ORDER BY planning.id_job, planning.operation, activit
 
 // SELECT TASKS WHICH OPERATE DURING THE SHIF
 $sql = "SELECT planning.id_task, planning.id_job, planning.operation FROM activity 
-    INNER JOIN planning ON activity.id_task=planning.id_task WHERE " . $sql_where . " GROUP BY activity.id_task ORDER BY activity.id_job, activity.operation";
+    INNER JOIN planning ON activity.id_task=planning.id_task WHERE " . $sql_where . " GROUP BY activity.id_task ORDER BY planning.id_job, planning.operation";
 $query_tasks_in_shif = $conn->query($sql);
 //echo $sql . "<br><br>";
 
@@ -249,6 +249,7 @@ $list_first_op_activity = array();
             array_push($list_first_op_activity,$data_first_op_activity);
         }
     }
+    
     $qty_sumary_list = array();
     $temp_first_op_activity = $list_first_op_activity;
     $main_list=0;
@@ -313,7 +314,7 @@ while ($data_current_op_activity = $query_current_op_activity->fetch_assoc()){
     unset($data_current_op_activity['multiplier']);
     array_push($list_current_op_activity,$data_current_op_activity);
 }
-
+// print_r($list_first_op_activity.'--test123--'.$list_current_op_activity);
 $qty_sumary_list = array();
 $temp_current_op_activity = $list_current_op_activity;
 $main_list=0;
