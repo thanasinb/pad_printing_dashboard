@@ -228,6 +228,8 @@ $query_first_op_planning = $conn->query($sql);
 $array_space=array('');
 $array_tail=array('','','','','','0','','','','','y','','','','','{space}','y','{f4}');
 
+$temp_data = ""; #temp data for check duplicate data
+
 while ($data_first_op_planning = $query_first_op_planning->fetch_assoc()){
     //SELECT THE FIRST ACTIVITY OF THE FIRST OPERATION
     $sql = "SELECT activity.id_staff, planning.id_job, time_start, id_shif, planning.site, item_no, planning.operation, prod_line, work_center, activity.id_machine,
@@ -250,10 +252,12 @@ while ($data_first_op_planning = $query_first_op_planning->fetch_assoc()){
         $data_first_op_activity['total_work'] = number_format(time2float($data_first_op_activity['total_work']), 2);
         $data_first_op_activity['no_pulse1']= strval(floor(floatval($data_first_op_activity['no_pulse1'])*floatval($data_first_op_activity['multiplier'])));
         unset($data_first_op_activity['multiplier']);
+
         $writer->writeSheetRow(SHEET_BF_FIRST, $data_first_op_activity);
 //        echo $data_first_op_activity['id_shif'] . "<br><br>";
     }
 }
+$temp_data = "";
 
 $sql = "SELECT activity.id_staff, planning.id_job, time_start, id_shif, planning.site, item_no, planning.operation, prod_line, work_center, activity.id_machine,
        no_pulse1, activity.total_work, divider.divider AS multiplier FROM activity
@@ -262,6 +266,7 @@ $sql = "SELECT activity.id_staff, planning.id_job, time_start, id_shif, planning
        INNER JOIN divider ON (planning.op_color=divider.op_color AND planning.op_side=divider.op_side)
        WHERE " . $sql_where . $sql_order_by;
 $query_current_op_activity = $conn->query($sql);
+$check = 0;
 while ($data_current_op_activity = $query_current_op_activity->fetch_assoc()){
     $data_current_op_activity['id_machine'] = make_machine_name($data_current_op_activity['id_machine']);
     $data_current_op_activity['id_shif'] = make_shif_code($data_current_op_activity['id_shif'], $data_current_op_activity['time_start']);
@@ -271,8 +276,27 @@ while ($data_current_op_activity = $query_current_op_activity->fetch_assoc()){
     $data_current_op_activity['total_work'] = number_format(time2float($data_current_op_activity['total_work']), 2);
     $data_current_op_activity['no_pulse1']= strval(floor(floatval($data_current_op_activity['no_pulse1'])*floatval($data_current_op_activity['multiplier'])));
     unset($data_current_op_activity['multiplier']);
+    if($temp_data['id_staff'] == $data_current_op_activity['id_staff'] 
+        and $temp_data['id_machine'] == $data_current_op_activity['id_machine']
+        and $temp_data['id_shif'] == $data_current_op_activity['id_shif']
+        and $temp_data['item_no'] == $data_current_op_activity['item_no']
+        and $temp_data['operation'] == $data_current_op_activity['operation']
+        and $temp_data['date_eff'] == $data_current_op_activity['date_eff']){
+            $temp_data['no_pulse1']= $data_current_op_activity['no_pulse1']+$temp_data['no_pulse1'];
+            $check = 1;
+            continue;   
+    }
+    else{
+        if($check == 1){
+            $writer->writeSheetRow(SHEET_BF_NEXT, $temp_data);
+            $temp_data ="";
+            $check = 0;
+        }
+    }
     $writer->writeSheetRow(SHEET_BF_NEXT, $data_current_op_activity);
+    // $temp_data = $data_current_op_activity;
 }
+$temp_data = "";
 
 $sql = "SELECT activity_downtime.id_staff, planning.id_job, time_start, id_shif, planning.site, item_no, planning.operation, prod_line, work_center, activity_downtime.id_machine,
        activity_downtime.total_work, code_downtime FROM activity_downtime
@@ -288,8 +312,10 @@ while ($data_activity_downtime = $query_activity_downtime->fetch_assoc()) {
     $data_activity_downtime = make_downtime_array($data_activity_downtime);
     $data_activity_downtime['time_start'] = date( 'd/m/y', strtotime($data_activity_downtime['time_start']));
     $data_activity_downtime['total_work'] = number_format(time2float($data_activity_downtime['total_work']), 2);
+
     $writer->writeSheetRow(SHEET_DOWNTIME, $data_activity_downtime);
 }
+$temp_data = "";
 
 $sql = "SELECT activity_downtime.id_staff, planning.id_job, time_start, id_shif, planning.site, item_no, planning.operation, prod_line, work_center, activity_downtime.id_machine,
        activity_downtime.total_work FROM activity_downtime
@@ -303,8 +329,10 @@ while ($data_activity_setup = $query_activity_setup->fetch_assoc()) {
     $data_activity_setup = make_downtime_array($data_activity_setup);
     $data_activity_setup['time_start'] = date( 'd/m/y', strtotime($data_activity_setup['time_start']));
     $data_activity_setup['total_work'] = number_format(time2float($data_activity_setup['total_work']), 2);
+
     $writer->writeSheetRow(SHEET_SETUP, $data_activity_setup);
 }
+$temp_data = "";
 
 require 'update/terminate.php';
 

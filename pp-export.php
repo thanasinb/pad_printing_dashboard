@@ -5,7 +5,7 @@
     <head>
         <meta charset="utf-8" />
         <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+        <meta name="viewport" content="width=device-width, initial-scale=1export, shrink-to-fit=no" />
         <meta name="description" content="" />
         <meta name="author" content="" />
         <title>Job overview by Machine</title>
@@ -128,7 +128,7 @@
                                     </div>
                                     <br>
                                 </form>
-                                <input class="btn btn-primary" type="submit" value="List" id="button_list">
+                                <input class="btn btn-primary" type="submit" value="Lists" id="button_list">
                             </div>
                         </div>
                         <div class="card mb-4 w-100" id="card_table_export" hidden>
