@@ -193,12 +193,12 @@ $writer->writeSheetHeader(SHEET_REWORK, $header);
 require 'update/establish.php';
 
 //if(strcmp($_GET['shif'], 'day_2')==0){
-    $sql_where = "(status_work=3 OR status_work=5) AND (time_start BETWEEN '" .
-        $_GET['shif_start'] . ' ' . $_GET['time_start'] . "' AND '" .
-        $_GET['shif_end'] . ' ' . $_GET['time_close'] . "')";
-    $sql_where_downtime = "status_downtime=3 AND (time_start BETWEEN '" .
-        $_GET['shif_start'] . ' ' . $_GET['time_start'] . "' AND '" .
-        $_GET['shif_end'] . ' ' . $_GET['time_close'] . "')";
+$sql_where = "(status_work=3 OR status_work=5) AND (time_start BETWEEN '" .
+    $_GET['shif_start'] . ' ' . $_GET['time_start'] . "' AND '" .
+    $_GET['shif_end'] . ' ' . $_GET['time_close'] . "')";
+$sql_where_downtime = "status_downtime=3 AND (time_start BETWEEN '" .
+    $_GET['shif_start'] . ' ' . $_GET['time_start'] . "' AND '" .
+    $_GET['shif_end'] . ' ' . $_GET['time_close'] . "')";
 //}
 $sql_order_by = " ORDER BY planning.id_job, planning.operation, activity.id_machine, activity.time_start";
 $sql_order_by_downtime = " ORDER BY planning.id_job, planning.operation, activity_downtime.id_machine, activity_downtime.time_start";
@@ -223,7 +223,7 @@ if(mysqli_num_rows($query_tasks_in_shif)>0){
     $array_tail=array('','','','','','0','','','','','y','','','','','{space}','y','{f4}');
 
 
-$list_first_op_activity = array();
+    $list_first_op_activity = array();
     while ($data_first_op_planning = $query_first_op_planning->fetch_assoc()){
         //SELECT THE FIRST ACTIVITY OF SUCH FIRST OPERATION
         $sql = "SELECT activity.id_staff, planning.id_job, date_eff AS time_start, shif, planning.site, item_no, planning.operation, prod_line, work_center, activity.id_machine,
@@ -249,7 +249,7 @@ $list_first_op_activity = array();
             array_push($list_first_op_activity,$data_first_op_activity);
         }
     }
-    
+
     $qty_sumary_list = array();
     $temp_first_op_activity = $list_first_op_activity;
     $main_list=0;
@@ -261,14 +261,14 @@ $list_first_op_activity = array();
         $qty_time_work = 0.00;
         foreach($list_first_op_activity as $data_in){
 
-            if($data['id_staff'] == $data_in['id_staff'] 
-            and $data['id_job'] == $data_in['id_job']
-            and $data['shif'] == $data_in['shif']
-            and $data['item_no'] == $data_in['item_no']
-            and $data['operation'] == $data_in['operation']
-            and $data['time_start'] == $data_in['time_start']
-            and $data['id_machine'] == $data_in['id_machine']
-            and $data['date_eff'] == $data_in['date_eff']){
+            if($data['id_staff'] == $data_in['id_staff']
+                and $data['id_job'] == $data_in['id_job']
+                and $data['shif'] == $data_in['shif']
+                and $data['item_no'] == $data_in['item_no']
+                and $data['operation'] == $data_in['operation']
+                and $data['time_start'] == $data_in['time_start']
+                and $data['id_machine'] == $data_in['id_machine']
+                and $data['date_eff'] == $data_in['date_eff']){
                 if($reach == 0){
                     $main_list = $count;
                 }
@@ -276,8 +276,8 @@ $list_first_op_activity = array();
                 $qty_time_work += $data_in['total_work'];
                 if($reach >= 1){
                     unset($temp_first_op_activity[$count]);
-                        $temp_first_op_activity[$main_list]['no_pulse2'] = strval($qty_sumary);
-                        $temp_first_op_activity[$main_list]['total_work'] = strval($qty_time_work);
+                    $temp_first_op_activity[$main_list]['no_pulse2'] = strval($qty_sumary);
+                    $temp_first_op_activity[$main_list]['total_work'] = strval($qty_time_work);
                 }
                 $reach++;
             }
@@ -326,14 +326,14 @@ foreach($list_current_op_activity as $data){
     $qty_time_work = 0.00;
     foreach($list_current_op_activity as $data_in){
 
-        if($data['id_staff'] == $data_in['id_staff'] 
-        and $data['id_job'] == $data_in['id_job']
-        and $data['shif'] == $data_in['shif']
-        and $data['item_no'] == $data_in['item_no']
-        and $data['operation'] == $data_in['operation']
-        and $data['time_start'] == $data_in['time_start']
-        and $data['id_machine'] == $data_in['id_machine']
-        and $data['date_eff'] == $data_in['date_eff']){
+        if($data['id_staff'] == $data_in['id_staff']
+            and $data['id_job'] == $data_in['id_job']
+            and $data['shif'] == $data_in['shif']
+            and $data['item_no'] == $data_in['item_no']
+            and $data['operation'] == $data_in['operation']
+            and $data['time_start'] == $data_in['time_start']
+            and $data['id_machine'] == $data_in['id_machine']
+            and $data['date_eff'] == $data_in['date_eff']){
             if($reach == 0){
                 $main_list = $count;
             }
@@ -341,8 +341,8 @@ foreach($list_current_op_activity as $data){
             $qty_time_work += $data_in['total_work'];
             if($reach >= 1){
                 unset($temp_current_op_activity[$count]);
-                    $temp_current_op_activity[$main_list]['no_pulse2'] = strval($qty_sumary);
-                    $temp_current_op_activity[$main_list]['total_work'] = strval($qty_time_work);
+                $temp_current_op_activity[$main_list]['no_pulse2'] = strval($qty_sumary);
+                $temp_current_op_activity[$main_list]['total_work'] = strval($qty_time_work);
             }
             $reach++;
         }
