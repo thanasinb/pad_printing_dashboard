@@ -28,28 +28,28 @@ function make_machine_name($id_machine){
 function make_first_operation_array($ar){
     $array_space=array('');
     $array_filler1=array('','','','','0','','','','','y');
-    $array_filler2=array('{space}','y','{f4}');
+    $array_filler2=array('','','','{space}','y','{f4}');
     array_splice( $ar, 8, 0, $array_space);
     array_splice( $ar, 8, 0, $array_space);
     array_splice( $ar, 12, 0, $array_space);
     array_splice( $ar, 14, 0, $array_space);
     array_splice( $ar, 15, 0, $array_filler1);
-    array_splice( $ar, 26, 0, $array_space);
-    array_splice( $ar, 27, 0, $ar['time_start']);
+//    array_splice( $ar, 26, 0, $array_space);
+//    array_splice( $ar, 27, 0, $ar['time_start']);
     array_splice( $ar, 29, 0, $array_filler2);
     return $ar;
 }
 function make_next_operation_array($ar){
     $array_space=array('');
     $array_filler1=array('','','','','0','','','','','y');
-    $array_filler2=array('{space}','{space}','y','{f4}');
+    $array_filler2=array('','','','{space}','{space}','y','{f4}');
     array_splice( $ar, 8, 0, $array_space);
     array_splice( $ar, 8, 0, $array_space);
     array_splice( $ar, 12, 0, $array_space);
     array_splice( $ar, 14, 0, $array_space);
     array_splice( $ar, 15, 0, $array_filler1);
-    array_splice( $ar, 26, 0, $array_space);
-    array_splice( $ar, 27, 0, $ar['time_start']);
+//    array_splice( $ar, 26, 0, $array_space);
+//    array_splice( $ar, 27, 0, $ar['time_start']);
     array_splice( $ar, 29, 0, $array_filler2);
     return $ar;
 }
@@ -246,6 +246,8 @@ if(mysqli_num_rows($query_tasks_in_shif)>0){
 //            $data_first_op_activity['no_pulse1']= strval(floor(floatval($data_first_op_activity['no_pulse1'])*floatval($data_first_op_activity['multiplier'])) - intval($data_first_op_activity['num_repeat']) );
             $data_first_op_activity['no_pulse2']= strval(intval($data_first_op_activity['no_pulse2']) + intval($data_first_op_activity['no_pulse3']));
             unset($data_first_op_activity['multiplier']);
+            unset($data_first_op_activity['no_pulse3']);
+            unset($data_first_op_activity['time_close']);
             array_push($list_first_op_activity,$data_first_op_activity);
         }
     }
@@ -312,6 +314,8 @@ while ($data_current_op_activity = $query_current_op_activity->fetch_assoc()){
 //    $data_current_op_activity['no_pulse1']= strval(floor(floatval($data_current_op_activity['no_pulse1'])*floatval($data_current_op_activity['multiplier'])) - intval($data_current_op_activity['num_repeat']) );
     $data_current_op_activity['no_pulse2']= strval(intval($data_current_op_activity['no_pulse2']) + intval($data_current_op_activity['no_pulse3']));
     unset($data_current_op_activity['multiplier']);
+    unset($data_current_op_activity['no_pulse3']);
+    unset($data_current_op_activity['time_close']);
     array_push($list_current_op_activity,$data_current_op_activity);
 }
 // print_r($list_first_op_activity.'--test123--'.$list_current_op_activity);
@@ -350,6 +354,7 @@ foreach($list_current_op_activity as $data){
     }
 }
 $temp_current_op_activity = array_values($temp_current_op_activity);
+//print_r(json_encode($temp_current_op_activity));
 for($x = 0;$x < count($temp_current_op_activity);$x++){
     if($temp_current_op_activity[$x]['no_pulse2'] == 0){
         continue;
