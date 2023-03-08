@@ -41,12 +41,13 @@ if (strcmp($imageFileType, "xlsx")==0){
 }
 
 const FIELD_ID_JOB=0;
-const FIELD_OPERATION=11;
-const FIELD_FIRST_OP=12;
-const FIELD_OP_DESCRIPTION=13;
-const FIELD_QTY_ORDER=16;
-const FIELD_QTY_COMP=17;
-const FIELD_QTY_OPEN=18;
+const FIELD_PCS_PER_TRAY=7;
+const FIELD_OPERATION=12;
+const FIELD_FIRST_OP=13;
+const FIELD_OP_DESCRIPTION=14;
+const FIELD_QTY_ORDER=17;
+const FIELD_QTY_COMP=18;
+const FIELD_QTY_OPEN=19;
 
 if($error_code==0){
     require 'update/establish.php';
@@ -54,7 +55,8 @@ if($error_code==0){
 
     $sql = "INSERT INTO planning (";
     $sql = $sql . "id_job, work_order, sales_job, prod_line, item_no, item_des, mold, site, type, ";
-    $sql = $sql . "work_center, machine, operation, first_op, op_des, op_side, op_color, run_time_std, run_open_total, qty_order, qty_comp, qty_open, date_due, wo_status, datetime_update, qty_per_pulse2";
+    $sql = $sql . "work_center, machine, operation, first_op, op_des, op_side, op_color, run_time_std, run_open_total, ";
+    $sql = $sql . "qty_order, qty_comp, qty_open, date_due, wo_status, datetime_update, qty_per_pulse2";
     $sql = $sql . ") ";
     $sql = $sql . "VALUES (";
 
@@ -63,6 +65,7 @@ if($error_code==0){
     foreach ($xlsx->rows() as $p => $fields)
     {
         $id_job = $fields[FIELD_ID_JOB];
+        $pcs_per_tray = $fields[FIELD_PCS_PER_TRAY];
         $operation = $fields[FIELD_OPERATION];
         $first_op = $fields[FIELD_FIRST_OP];
         $op_description = $fields[FIELD_OP_DESCRIPTION];
@@ -125,7 +128,10 @@ if($error_code==0){
 
         $stmt = $sql;
         if ($p == 0) continue;
-        for ($item=0; $item<12; $item++){
+        for ($item=0; $item<7; $item++){
+            $stmt = $stmt . "'" . mysqli_real_escape_string($conn ,$fields[$item]) . "', ";
+        }
+        for ($item=8; $item<13; $item++){
             $stmt = $stmt . "'" . mysqli_real_escape_string($conn ,$fields[$item]) . "', ";
         }
         if (strcmp($first_op, 'Yes')==0){
@@ -136,13 +142,13 @@ if($error_code==0){
         $stmt = $stmt . "'" . mysqli_real_escape_string($conn ,$op_description) . "', ";
         $stmt = $stmt . "'" . $op_side . "', ";
         $stmt = $stmt . "'" . $op_color . "', ";
-        for ($item=14; $item<19; $item++){
+        for ($item=15; $item<20; $item++){
             $stmt = $stmt . $fields[$item] . ",";
         }
         $stmt = $stmt . "'" . substr($fields[$item++],0,-9) . "',";
         $stmt = $stmt . "'" . $fields[$item] . "', '" . date('Y-m-d H:i:s') . "',";
 
-        $stmt = $stmt . "80" . ")";
+        $stmt = $stmt . $pcs_per_tray . ")";
 
         $list_planning = $list_planning . "(" . $id_job . "," . $operation . "),";
 
