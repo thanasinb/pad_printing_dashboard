@@ -252,14 +252,14 @@ if(mysqli_num_rows($query_tasks_in_shif)>0){
         }
     }
 
-    $qty_sumary_list = array();
+    $qty_summary_list = array();
     $temp_first_op_activity = $list_first_op_activity;
     $main_list=0;
 
     foreach($list_first_op_activity as $data){
         $count = 0;
         $reach = 0;
-        $qty_sumary = 0;
+        $qty_summary = 0;
         $qty_time_work = 0.00;
         foreach($list_first_op_activity as $data_in){
 
@@ -274,11 +274,11 @@ if(mysqli_num_rows($query_tasks_in_shif)>0){
                 if($reach == 0){
                     $main_list = $count;
                 }
-                $qty_sumary += $data_in['no_pulse2'];
+                $qty_summary += $data_in['no_pulse2'];
                 $qty_time_work += $data_in['total_work'];
                 if($reach >= 1){
                     unset($temp_first_op_activity[$count]);
-                    $temp_first_op_activity[$main_list]['no_pulse2'] = strval($qty_sumary);
+                    $temp_first_op_activity[$main_list]['no_pulse2'] = strval($qty_summary);
                     $temp_first_op_activity[$main_list]['total_work'] = strval($qty_time_work);
                 }
                 $reach++;
@@ -319,14 +319,14 @@ while ($data_current_op_activity = $query_current_op_activity->fetch_assoc()){
     array_push($list_current_op_activity,$data_current_op_activity);
 }
 // print_r($list_first_op_activity.'--test123--'.$list_current_op_activity);
-$qty_sumary_list = array();
+$qty_summary_list = array();
 $temp_current_op_activity = $list_current_op_activity;
 $main_list=0;
 
 foreach($list_current_op_activity as $data){
     $count = 0;
     $reach = 0;
-    $qty_sumary = 0;
+    $qty_summary = 0;
     $qty_time_work = 0.00;
     foreach($list_current_op_activity as $data_in){
 
@@ -341,11 +341,11 @@ foreach($list_current_op_activity as $data){
             if($reach == 0){
                 $main_list = $count;
             }
-            $qty_sumary += $data_in['no_pulse2'];
+            $qty_summary += $data_in['no_pulse2'];
             $qty_time_work += $data_in['total_work'];
             if($reach >= 1){
                 unset($temp_current_op_activity[$count]);
-                $temp_current_op_activity[$main_list]['no_pulse2'] = strval($qty_sumary);
+                $temp_current_op_activity[$main_list]['no_pulse2'] = strval($qty_summary);
                 $temp_current_op_activity[$main_list]['total_work'] = strval($qty_time_work);
             }
             $reach++;
