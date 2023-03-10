@@ -9,6 +9,11 @@ function get_shif($conn, $id_staff, $team){
         $team_no = '5';
     }
 
+    $sql = "SELECT value AS shif_offset_minute FROM settings WHERE name='shif_offset_minute'";
+    $result = $conn->query($sql);
+    $data_settings = $result->fetch_assoc();
+    $shif_offset_second = intval($data_settings['shif_offset_minute']) * 60;
+
     $time_current = time();
     $date_eff = date("Y-m-d");
 
@@ -26,8 +31,9 @@ function get_shif($conn, $id_staff, $team){
 
     //NIGHT SHIF BTW 00:00 AND 07:00, NEED TO CHECK YESTERDAY 19:00-23:00 FOR OT
     if ($today_00_00<$time_current AND $time_current<$today_07_00){
-        $sql = "SELECT id_activity FROM activity WHERE id_staff='" . $id_staff . "'" .
-            " AND (time_start BETWEEN '" . date("Y-m-d H:i:s", $yesterday_19_00) . "' AND '" . date("Y-m-d H:i:s", $yesterday_23_00) . "')";
+        $sql = "SELECT id_activity FROM activity WHERE id_staff='" . $id_staff . "' " .
+            "AND (time_start BETWEEN '" . date("Y-m-d H:i:s", $yesterday_19_00 - $shif_offset_second) . "' " .
+            "AND '" . date("Y-m-d H:i:s", $yesterday_23_00) . "')";
         $result = $conn->query($sql);
         $data_activity = $result->fetch_assoc();
         if (empty($data_activity)){
@@ -45,14 +51,14 @@ function get_shif($conn, $id_staff, $team){
     }elseif ($today_15_45<$time_current AND $time_current<$today_19_00){
         $shif = $team_no . "D";
         $sql = "UPDATE activity SET shif='" . $shif . "' WHERE id_staff='" . $id_staff . "'" .
-            " AND (time_start BETWEEN '" . date("Y-m-d H:i:s", $today_07_00) . "' AND '" . date("Y-m-d H:i:s", $today_15_45) . "')";
+            " AND (time_start BETWEEN '" . date("Y-m-d H:i:s", $today_07_00 - $shif_offset_second) . "' AND '" . date("Y-m-d H:i:s", $today_15_45) . "')";
         $conn->query($sql);
 //        echo $sql;
     }elseif ($today_19_00<$time_current AND $time_current<$today_23_00){
         $shif = $team_no . "N";
     }elseif ($today_23_00<$time_current AND $time_current<$tomorrow_00_00){
         $sql = "SELECT id_activity FROM activity WHERE id_staff='" . $id_staff . "'" .
-            " AND (time_start BETWEEN '" . date("Y-m-d H:i:s", $today_19_00) . "' AND '" . date("Y-m-d H:i:s", $today_23_00) . "')";
+            " AND (time_start BETWEEN '" . date("Y-m-d H:i:s", $today_19_00 - $shif_offset_second) . "' AND '" . date("Y-m-d H:i:s", $today_23_00) . "')";
         $result = $conn->query($sql);
         $data_activity = $result->fetch_assoc();
         if (empty($data_activity)){
