@@ -196,7 +196,7 @@ require 'update/establish.php';
 $sql_where = "(status_work=3 OR status_work=5) AND (time_start BETWEEN '" .
     $_GET['shif_start'] . ' ' . $_GET['time_start'] . "' AND '" .
     $_GET['shif_end'] . ' ' . $_GET['time_close'] . "')";
-$sql_where_downtime = "status_downtime=3 AND (time_start BETWEEN '" .
+$sql_where_downtime = "(status_downtime=3 OR status_downtime=5) AND (time_start BETWEEN '" .
     $_GET['shif_start'] . ' ' . $_GET['time_start'] . "' AND '" .
     $_GET['shif_end'] . ' ' . $_GET['time_close'] . "')";
 //}
@@ -320,16 +320,19 @@ while ($data_current_op_activity = $query_current_op_activity->fetch_assoc()){
     unset($data_current_op_activity['multiplier']);
     unset($data_current_op_activity['no_pulse3']);
     unset($data_current_op_activity['time_close']);
-    array_push($list_current_op_activity,$data_current_op_activity);
 
     array_push($list_current_op_activity_id,$data_current_op_activity['id_activity']);
     unset($data_current_op_activity['id_activity']);
+    unset($data_current_op_activity['status_work']);
+
+    array_push($list_current_op_activity,$data_current_op_activity);
 }
 //echo implode(',', array_map('intval', $list_current_op_activity_id));
 
 $sql = "UPDATE activity SET status_work=5 WHERE status_work=3 AND id_activity IN 
         (" . implode(',', array_map('intval', $list_current_op_activity_id)) . ")";
-echo $sql;
+echo $sql . "<br><br>";
+$query_update_status = $conn->query($sql);
 
 $qty_summary_list = array();
 $temp_current_op_activity = $list_current_op_activity;
@@ -374,22 +377,36 @@ for($x = 0;$x < count($temp_current_op_activity);$x++){
     $writer->writeSheetRow(SHEET_BF_NEXT, $temp_current_op_activity[$x]);
 }
 
-$sql = "SELECT activity_downtime.id_staff, planning.id_job, date_eff AS time_start, shif, planning.site, item_no, planning.operation, prod_line, work_center, activity_downtime.id_machine,
-        activity_downtime.total_work, code_downtime FROM activity_downtime
+$sql = "SELECT activity_downtime.id_staff, planning.id_job, date_eff AS time_start, shif, planning.site, item_no, 
+        planning.operation, prod_line, work_center, activity_downtime.id_machine, activity_downtime.total_work, code_downtime, 
+        id_activity_downtime AS id_activity, status_downtime AS status_work FROM activity_downtime
         INNER JOIN staff ON activity_downtime.id_staff=staff.id_staff
         INNER JOIN planning ON activity_downtime.id_task=planning.id_task
         INNER JOIN code_downtime ON activity_downtime.id_code_downtime=code_downtime.id_code_downtime
         WHERE activity_downtime.id_code_downtime <> 'D07' AND " . $sql_where_downtime . $sql_order_by_downtime;
-//echo $sql;
+
+echo $sql . "<br><br>";
 $query_activity_downtime = $conn->query($sql);
+$list_current_op_activity_id = array();
 while ($data_activity_downtime = $query_activity_downtime->fetch_assoc()) {
     $data_activity_downtime['id_machine'] = make_machine_name($data_activity_downtime['id_machine']);
 //    $data_activity_downtime['id_shif'] = make_shif_code($data_activity_downtime['id_shif'], $data_activity_downtime['time_start']);
     $data_activity_downtime = make_downtime_array($data_activity_downtime);
     $data_activity_downtime['time_start'] = date( 'd/m/y', strtotime($data_activity_downtime['time_start']));
     $data_activity_downtime['total_work'] = number_format(time2float($data_activity_downtime['total_work']), 2);
+
+    array_push($list_current_op_activity_id, $data_activity_downtime['id_activity']);
+    unset($data_activity_downtime['id_activity']);
+    unset($data_activity_downtime['status_work']);
+
     $writer->writeSheetRow(SHEET_DOWNTIME, $data_activity_downtime);
 }
+//print_r($list_current_op_activity_id);
+
+$sql = "UPDATE activity_downtime SET status_downtime=5 WHERE status_downtime=3 AND id_activity_downtime IN
+        (" . implode(',', array_map('intval', $list_current_op_activity_id)) . ")";
+echo $sql . "<br><br>";
+$query_update_status_downtime = $conn->query($sql);
 
 $sql = "SELECT activity_downtime.id_staff, planning.id_job, date_eff AS time_start, shif, planning.site, item_no, planning.operation, prod_line, work_center, activity_downtime.id_machine,
         activity_downtime.total_work FROM activity_downtime
