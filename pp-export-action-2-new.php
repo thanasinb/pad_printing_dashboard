@@ -207,7 +207,7 @@ $sql_order_by_downtime = " ORDER BY planning.id_job, planning.operation, activit
 $sql = "SELECT planning.id_task, planning.id_job, planning.operation FROM activity 
     INNER JOIN planning ON activity.id_task=planning.id_task WHERE " . $sql_where . " GROUP BY activity.id_task ORDER BY planning.id_job, planning.operation";
 $query_tasks_in_shif = $conn->query($sql);
-//echo $sql . "<br><br>";
+echo $sql . "<br><br>";
 
 if(mysqli_num_rows($query_tasks_in_shif)>0){
     // SELECT THE FIRST OPERATION (id_task) OF SUCH TASKS
@@ -295,16 +295,20 @@ if(mysqli_num_rows($query_tasks_in_shif)>0){
     }
 }
 
-$sql = "SELECT activity.id_staff, planning.id_job, date_eff AS time_start, shif, planning.site, item_no, planning.operation, prod_line, work_center, activity.id_machine,
-        no_pulse2, no_pulse3, activity.total_work, time_close, divider.divider AS multiplier FROM activity
+$sql = "SELECT activity.id_staff, planning.id_job, date_eff AS time_start, shif, 
+        planning.site, planning.item_no, planning.operation, prod_line, work_center, activity.id_machine,
+        no_pulse2, no_pulse3, activity.total_work, time_close, divider.divider AS multiplier, 
+        activity.id_activity, activity.status_work FROM activity
         INNER JOIN staff ON activity.id_staff=staff.id_staff
         INNER JOIN planning ON activity.id_task=planning.id_task
         INNER JOIN divider ON (planning.op_color=divider.op_color AND planning.op_side=divider.op_side)
         WHERE " . $sql_where . $sql_order_by;
 $query_current_op_activity = $conn->query($sql);
+echo $sql . "<br><br>";
+$query_update = $conn->query($sql);
 
 $list_current_op_activity = array();
-
+$list_current_op_activity_id = array();
 while ($data_current_op_activity = $query_current_op_activity->fetch_assoc()){
 
     $data_current_op_activity['id_machine'] = make_machine_name($data_current_op_activity['id_machine']);
@@ -317,8 +321,16 @@ while ($data_current_op_activity = $query_current_op_activity->fetch_assoc()){
     unset($data_current_op_activity['no_pulse3']);
     unset($data_current_op_activity['time_close']);
     array_push($list_current_op_activity,$data_current_op_activity);
+
+    array_push($list_current_op_activity_id,$data_current_op_activity['id_activity']);
+    unset($data_current_op_activity['id_activity']);
 }
-// print_r($list_first_op_activity.'--test123--'.$list_current_op_activity);
+//echo implode(',', array_map('intval', $list_current_op_activity_id));
+
+$sql = "UPDATE activity SET status_work=5 WHERE status_work=3 AND id_activity IN 
+        (" . implode(',', array_map('intval', $list_current_op_activity_id)) . ")";
+echo $sql;
+
 $qty_summary_list = array();
 $temp_current_op_activity = $list_current_op_activity;
 $main_list=0;
@@ -396,12 +408,12 @@ while ($data_activity_setup = $query_activity_setup->fetch_assoc()) {
 
 require 'update/terminate.php';
 
-$filename='export';
-header("Content-Type: application/xls");
-header("Content-Disposition: attachment; filename=$filename.xlsx");
-header("Pragma: no-cache");
-header("Expires: 0");
+//$filename='export';
+//header("Content-Type: application/xls");
+//header("Content-Disposition: attachment; filename=$filename.xlsx");
+//header("Pragma: no-cache");
+//header("Expires: 0");
 
-$writer->writeToStdOut();
+//$writer->writeToStdOut();
 
 ?>
