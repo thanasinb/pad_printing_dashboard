@@ -207,7 +207,7 @@ $sql_order_by_downtime = " ORDER BY planning.id_job, planning.operation, activit
 $sql = "SELECT planning.id_task, planning.id_job, planning.operation FROM activity 
     INNER JOIN planning ON activity.id_task=planning.id_task WHERE " . $sql_where . " GROUP BY activity.id_task ORDER BY planning.id_job, planning.operation";
 $query_tasks_in_shif = $conn->query($sql);
-echo $sql . "<br><br>";
+//echo $sql . "<br><br>";
 
 if(mysqli_num_rows($query_tasks_in_shif)>0){
     // SELECT THE FIRST OPERATION (id_task) OF SUCH TASKS
@@ -304,8 +304,7 @@ $sql = "SELECT activity.id_staff, planning.id_job, date_eff AS time_start, shif,
         INNER JOIN divider ON (planning.op_color=divider.op_color AND planning.op_side=divider.op_side)
         WHERE " . $sql_where . $sql_order_by;
 $query_current_op_activity = $conn->query($sql);
-echo $sql . "<br><br>";
-$query_update = $conn->query($sql);
+//echo $sql . "<br><br>";
 
 $list_current_op_activity = array();
 $list_current_op_activity_id = array();
@@ -331,7 +330,7 @@ while ($data_current_op_activity = $query_current_op_activity->fetch_assoc()){
 
 $sql = "UPDATE activity SET status_work=5 WHERE status_work=3 AND id_activity IN 
         (" . implode(',', array_map('intval', $list_current_op_activity_id)) . ")";
-echo $sql . "<br><br>";
+//echo $sql . "<br><br>";
 $query_update_status = $conn->query($sql);
 
 $qty_summary_list = array();
@@ -385,7 +384,7 @@ $sql = "SELECT activity_downtime.id_staff, planning.id_job, date_eff AS time_sta
         INNER JOIN code_downtime ON activity_downtime.id_code_downtime=code_downtime.id_code_downtime
         WHERE activity_downtime.id_code_downtime <> 'D07' AND " . $sql_where_downtime . $sql_order_by_downtime;
 
-echo $sql . "<br><br>";
+//echo $sql . "<br><br>";
 $query_activity_downtime = $conn->query($sql);
 $list_current_op_activity_id = array();
 while ($data_activity_downtime = $query_activity_downtime->fetch_assoc()) {
@@ -405,32 +404,46 @@ while ($data_activity_downtime = $query_activity_downtime->fetch_assoc()) {
 
 $sql = "UPDATE activity_downtime SET status_downtime=5 WHERE status_downtime=3 AND id_activity_downtime IN
         (" . implode(',', array_map('intval', $list_current_op_activity_id)) . ")";
-echo $sql . "<br><br>";
+//echo $sql . "<br><br>";
 $query_update_status_downtime = $conn->query($sql);
 
-$sql = "SELECT activity_downtime.id_staff, planning.id_job, date_eff AS time_start, shif, planning.site, item_no, planning.operation, prod_line, work_center, activity_downtime.id_machine,
-        activity_downtime.total_work FROM activity_downtime
+$sql = "SELECT activity_downtime.id_staff, planning.id_job, date_eff AS time_start, shif, planning.site, item_no, 
+        planning.operation, prod_line, work_center, activity_downtime.id_machine, activity_downtime.total_work, 
+        id_activity_downtime AS id_activity, status_downtime AS status_work FROM activity_downtime
         INNER JOIN staff ON activity_downtime.id_staff=staff.id_staff
         INNER JOIN planning ON activity_downtime.id_task=planning.id_task
         WHERE activity_downtime.id_code_downtime = 'D07' AND " . $sql_where_downtime . $sql_order_by_downtime;
+
+//echo $sql . "<br><br>";
 $query_activity_setup = $conn->query($sql);
+$list_current_op_activity_id = array();
 while ($data_activity_setup = $query_activity_setup->fetch_assoc()) {
     $data_activity_setup['id_machine'] = make_machine_name($data_activity_setup['id_machine']);
 //    $data_activity_setup['id_shif'] = make_shif_code($data_activity_setup['id_shif'], $data_activity_setup['time_start']);
     $data_activity_setup = make_downtime_array($data_activity_setup);
     $data_activity_setup['time_start'] = date( 'd/m/y', strtotime($data_activity_setup['time_start']));
     $data_activity_setup['total_work'] = number_format(time2float($data_activity_setup['total_work']), 2);
+
+    array_push($list_current_op_activity_id, $data_activity_setup['id_activity']);
+    unset($data_activity_setup['id_activity']);
+    unset($data_activity_setup['status_work']);
+
     $writer->writeSheetRow(SHEET_SETUP, $data_activity_setup);
 }
 
+$sql = "UPDATE activity_downtime SET status_downtime=5 WHERE status_downtime=3 AND id_activity_downtime IN
+        (" . implode(',', array_map('intval', $list_current_op_activity_id)) . ")";
+//echo $sql . "<br><br>";
+$query_update_status_setup = $conn->query($sql);
+
 require 'update/terminate.php';
 
-//$filename='export';
-//header("Content-Type: application/xls");
-//header("Content-Disposition: attachment; filename=$filename.xlsx");
-//header("Pragma: no-cache");
-//header("Expires: 0");
+$filename='export';
+header("Content-Type: application/xls");
+header("Content-Disposition: attachment; filename=$filename.xlsx");
+header("Pragma: no-cache");
+header("Expires: 0");
 
-//$writer->writeToStdOut();
+$writer->writeToStdOut();
 
 ?>
