@@ -184,21 +184,44 @@ if($error_code==0){
                 add_log($conn, $sql_update);
                 break;
             }
-
-            $sql_update = "UPDATE activity SET status_work=6 WHERE status_work=5 AND id_task=" . $data_planning['id_task'];
-            $conn->query($sql_update);
-            if ($conn->errno){
-                $error_code = $conn->errno;
-                add_log($conn, $sql_update);
-                break;
-            }
+//            I think the code below is non sense, set status_work to backup even the record exists!
+//            $sql_update = "UPDATE activity SET status_work=6 WHERE status_work=5 AND id_task=" . $data_planning['id_task'];
+//            echo $sql_update . "<br>";
+//            $conn->query($sql_update);
+//            if ($conn->errno){
+//                $error_code = $conn->errno;
+//                add_log($conn, $sql_update);
+//                break;
+//            }
         }
     }
 
     $list_planning = rtrim($list_planning, ",");
     $list_planning = $list_planning . ")";
 
-    $sql_backup = "UPDATE activity INNER JOIN planning ON activity.id_task=planning.id_task SET activity.status_work=6 WHERE activity.status_work=5 AND (planning.id_job, planning.operation) NOT IN " . $list_planning;
+    $sql_backup = "UPDATE activity INNER JOIN planning ON activity.id_task=planning.id_task
+                    SET activity.status_work=6 WHERE activity.status_work=5
+                    AND (planning.id_job, planning.operation) NOT IN " . $list_planning;
+//    echo $sql_backup . "<br>";
+    $conn->query($sql_backup);
+    if ($conn->errno){
+        $error_code = $conn->errno;
+        add_log($conn, $sql_backup);
+    }
+
+    $sql_backup = "UPDATE activity_downtime INNER JOIN planning ON activity_downtime.id_task=planning.id_task
+                    SET activity_downtime.status_downtime=6 WHERE activity_downtime.status_downtime=5
+                    AND (planning.id_job, planning.operation) NOT IN " . $list_planning;
+//    echo $sql_backup . "<br>";
+    $conn->query($sql_backup);
+    if ($conn->errno){
+        $error_code = $conn->errno;
+        add_log($conn, $sql_backup);
+    }
+
+    $sql_backup = "UPDATE activity_rework INNER JOIN planning ON activity_rework.id_task=activity_rework.id_task
+                    SET activity_rework.status_work=6 WHERE activity_rework.status_work=5
+                    AND (planning.id_job, planning.operation) NOT IN " . $list_planning;
 //    echo $sql_backup . "<br>";
     $conn->query($sql_backup);
     if ($conn->errno){
