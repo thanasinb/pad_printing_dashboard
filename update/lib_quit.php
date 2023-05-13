@@ -38,7 +38,7 @@ function quit($conn,
                 $no_pulse3,
                 $multiplier);
 
-            $sql = "UPDATE machine_queue SET id_staff='' WHERE id_machine='" . $id_mc . "' AND queue_number=1";
+            $sql = "UPDATE machine_queue SET id_staff='', id_activity=0, activity_type=0 WHERE id_machine='" . $id_mc . "' AND queue_number=1";
             $result = $conn->query($sql);
 
             $data_json = json_encode(array_merge(json_decode($data_json, true), array("quit_complete"=>true)));

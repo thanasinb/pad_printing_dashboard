@@ -28,7 +28,8 @@ if(empty($data_machine_queue['id_staff'])){
             $_GET['id_staff'],
             $shif,
             $date_eff,
-            $data_planning['multiplier']);
+            $data_planning['multiplier'],
+            $_GET['activity_type']);
 
         end_activity_idle($conn, $_GET['id_mc']);
 
@@ -45,7 +46,8 @@ if(empty($data_machine_queue['id_staff'])){
             $_GET['id_staff'],
             $shif,
             $date_eff,
-            $data_planning['multiplier']);
+            $data_planning['multiplier'],
+            $_GET['activity_type']);
 
         end_activity_idle($conn, $_GET['id_mc']);
 
@@ -63,7 +65,8 @@ if(empty($data_machine_queue['id_staff'])){
             $shif,
             $date_eff,
             $_GET['code_downtime'],
-            $data_planning['multiplier']);
+            $data_planning['multiplier'],
+            $_GET['activity_type']);
 
         end_activity_idle($conn, $_GET['id_mc']);
 

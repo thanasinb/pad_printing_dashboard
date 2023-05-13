@@ -1,5 +1,5 @@
 <?php
-function add_activity($conn, $table, $id_task, $id_machine, $id_staff, $shif, $date_eff, $multiplier){
+function add_activity($conn, $table, $id_task, $id_machine, $id_staff, $shif, $date_eff, $multiplier, $activity_type){
     $sql = "INSERT INTO " . $table . " (
     id_task, 
     id_machine, 
@@ -25,7 +25,10 @@ function add_activity($conn, $table, $id_task, $id_machine, $id_staff, $shif, $d
     $data_activity = $result->fetch_assoc();
     $data_json = json_encode(($data_activity), JSON_UNESCAPED_UNICODE);
 
-    $sql = "UPDATE machine_queue SET id_staff='" . $id_staff . "' WHERE id_machine='" . $id_machine . "' AND queue_number=1";
+    $sql = "UPDATE machine_queue SET id_staff='" . $id_staff . "',
+        id_activity=" . $data_activity['id_activity'] . ",
+        activity_type=" .$activity_type . "
+        WHERE id_machine='" . $id_machine . "' AND queue_number=1";
     $result = $conn->query($sql);
 
     return $data_json;
