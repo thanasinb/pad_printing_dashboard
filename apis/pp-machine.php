@@ -15,6 +15,7 @@ while($r = mysqli_fetch_assoc($query_machine_queue)) {
 
     list($table, $str_activity, $str_status) = get_info_from_activity_type($r['activity_type']);
 
+    // IF THIS MACHINE IS NOT IDLE, GET THE ACTIVITY INFO
     if(intval($r['id_activity'])!=0){
         $sql = "SELECT * FROM " . $table . "
             WHERE " . $str_activity . "=" . $r['id_activity'];
