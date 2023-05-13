@@ -32,4 +32,7 @@ if($data['quit_complete']){
 require "contact.php";
 require 'terminate.php';
 
-print_r($data_json);
+if(strcmp($_GET['dashboard'],'1')==0){
+    header("Location: ../pp-machine.php");
+    die();
+}

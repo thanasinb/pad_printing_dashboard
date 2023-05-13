@@ -18,15 +18,16 @@ if(!empty($data_machine_queue)){
         "&no_pulse1=0" .
         "&no_pulse2=0" .
         "&no_pulse3=0" .
-        "&multiplier=-1");
+        "&multiplier=-1" .
+        "&dashboard=1");
 
     die();
 }
 
-$data_json = json_encode(array("code"=>"200", "message"=>"OK"), JSON_UNESCAPED_UNICODE);
-print_r($data_json);
-
-if(strcmp($_GET['dashboard'],'1')==0){
-    header("Location: ../pp-machine.php");
-    die();
-}
+//$data_json = json_encode(array("code"=>"200", "message"=>"OK"), JSON_UNESCAPED_UNICODE);
+//print_r($data_json);
+//
+//if(strcmp($_GET['dashboard'],'1')==0){
+//    header("Location: ../pp-machine.php");
+//    die();
+//}
