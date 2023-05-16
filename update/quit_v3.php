@@ -36,3 +36,5 @@ if(strcmp($_GET['dashboard'],'1')==0){
     header("Location: ../pp-machine.php");
     die();
 }
+
+print_r($data_json);
