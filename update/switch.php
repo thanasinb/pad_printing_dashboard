@@ -56,7 +56,8 @@ if($_GET['activity_type']==3){
         $_GET['id_staff'],
         $shif,
         $date_eff,
-        $data_planning['multiplier']);
+        $data_planning['multiplier'],
+        $_GET['activity_type']);
 }
 
 require 'terminate.php';
