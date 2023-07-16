@@ -24,7 +24,7 @@ WHERE planning.id_task=" . $data_activity['id_task'];
 
     $total_food = strtotime("1970-01-01 " . $data_activity["total_food"] . " UTC");
     $total_toilet = strtotime("1970-01-01 " . $data_activity["total_toilet"] . " UTC");
-    $total_break = $total_food + $total_toilet;
+    $total_break = $total_food;
     $time_start = strtotime($data_activity["time_start"]);
     $time_current = strtotime($data_activity["time_current"]);
     $time_total_second = $time_current - $time_start - $total_break;

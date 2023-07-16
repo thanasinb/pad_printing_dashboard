@@ -68,7 +68,9 @@ function make_downtime_array($ar){
 
 function time2float($t){
     $parts = explode(':', $t);
-    return $parts[0] + floor(($parts[1]/60)*100) / 100;
+//    echo "parts[1]: " . $parts[1]/60 . "<br>";
+//    echo "parts[0] + parts[1]: " . ($parts[0] + ($parts[1]/60) + ($parts[2]/3600)) . "<br>";
+    return $parts[0] + ($parts[1]/60) + ($parts[2]/3600);
 }
 
 $writer = new XLSXWriter();
@@ -314,6 +316,7 @@ while ($data_current_op_activity = $query_current_op_activity->fetch_assoc()){
     $data_current_op_activity = make_next_operation_array($data_current_op_activity);
     $data_current_op_activity['time_start'] = date( 'd/m/y', strtotime($data_current_op_activity['time_start']));
     $data_current_op_activity['total_work'] = number_format(time2float($data_current_op_activity['total_work']), 2);
+//    echo "time2float: " . $data_current_op_activity['total_work'] . "<br>";
 //    $data_current_op_activity['no_pulse1']= strval(floor(floatval($data_current_op_activity['no_pulse1'])*floatval($data_current_op_activity['multiplier'])) - intval($data_current_op_activity['num_repeat']) );
     $data_current_op_activity['no_pulse2']= strval(intval($data_current_op_activity['no_pulse2']) + intval($data_current_op_activity['no_pulse3']));
     unset($data_current_op_activity['multiplier']);
@@ -356,7 +359,9 @@ foreach($list_current_op_activity as $data){
                 $main_list = $count;
             }
             $qty_summary += $data_in['no_pulse2'];
+//            echo "next_op: " . $data_in['total_work'] . "<br>";
             $qty_time_work += $data_in['total_work'];
+//            echo "next_op_sum: " . $qty_time_work . "<br>";
             if($reach >= 1){
                 unset($temp_current_op_activity[$count]);
                 $temp_current_op_activity[$main_list]['no_pulse2'] = strval($qty_summary);
