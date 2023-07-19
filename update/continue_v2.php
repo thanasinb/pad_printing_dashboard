@@ -32,10 +32,10 @@ if(empty($data_activity)) {
     print_r($data_json);
 }else{
     $break_code = intval($data_break["break_code"]);
-    // BREAK CODE: 1=FOOD, 2=TOILET
-    if($break_code==1){
+    // BREAK CODE: 2=FOOD, 1=TOILET
+    if($break_code==2){
         $total_break = strtotime("1970-01-01 " . $data_activity["total_food"] . " UTC");
-    }elseif ($break_code==2){
+    }elseif ($break_code==1){
         $total_break = strtotime("1970-01-01 " . $data_activity["total_toilet"] . " UTC");
     }
 
@@ -45,10 +45,10 @@ if(empty($data_activity)) {
     $break_duration_text = gmdate('H:i:s', $break_duration);
     $total_break_text =  gmdate('H:i:s', $break_duration + $total_break);
 
-    // BREAK CODE: 1=FOOD, 2=TOILET
-    if($break_code==1){
+    // BREAK CODE: 2=FOOD, 1=TOILET
+    if($break_code==2){
         $sql = "UPDATE " . $table_activity . " SET status_work=1, total_food='" . $total_break_text . "' WHERE id_activity=" . $data_activity["id_activity"];
-    }elseif ($break_code==2) {
+    }elseif ($break_code==1) {
         $sql = "UPDATE " . $table_activity . " SET status_work=1, total_toilet='" . $total_break_text . "' WHERE id_activity=" . $data_activity["id_activity"];
     }
     $result = $conn->query($sql);
