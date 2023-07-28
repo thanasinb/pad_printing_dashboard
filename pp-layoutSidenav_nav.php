@@ -58,6 +58,16 @@
                         <a class="nav-link" href="pp-export.php">Export Jobs</a>
                     </nav>
                 </div>
+                <a class="nav-link collapsed" href="javascript:void(0);" data-bs-toggle="collapse" data-bs-target="#collapseDowntime" aria-expanded="false" aria-controls="collapseDowntime">
+                    <div class="nav-link-icon"><i class="fas fa-cogs"></i></div>
+                    Setting
+                    <div class="sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
+                </a>
+                <div class="collapse" id="collapseDowntime" data-bs-parent="#accordionSidenav">
+                    <nav class="sidenav-menu-nested nav accordion" id="accordionSidenavPages">
+                        <a class="nav-link" href="pp-setting-dt.php">Downtime</a>
+                    </nav>
+                </div>
             </div>
         </div>
         <!-- Sidenav Footer-->
