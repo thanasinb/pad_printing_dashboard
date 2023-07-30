@@ -10,7 +10,7 @@
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
         <meta name="description" content="" />
         <meta name="author" content="" />
-        <title>Job overview by Machine</title>
+        <title>Downtime Code Setup</title>
         <link href="css/simple-datatables@latest/dist/style.css" rel="stylesheet" />
         <link href="css/litepicker/dist/css/litepicker.css" rel="stylesheet" />
         <link href="css/styles.css" rel="stylesheet" />
@@ -63,43 +63,52 @@
                     <table id="modal_table" class="table table-striped">
                         <tr>
                             <td>Box Code: </td>
-                            <td id="modal_box_code"></td>
+                            <td>
+                                <input type="text" id="modal_box_code" name="modal_box_code">
+                            </td>
                             <td></td>
                         </tr>
                         <tr>
                             <td>Downtime Code: </td>
-                            <td id="modal_downtime_code"></td>
+                            <td>
+                                <input type="text" id="modal_downtime_code" name="modal_downtime_code">
+                            </td>
                             <td></td>
                         </tr>
                         <tr>
-                            <td>Description Eng</td>
-                            <td id="modal_des_eng"></td>
+                            <td>Description Eng: </td>
+                            <td>
+                                <input type="text" id="modal_des_eng" name="modal_des_eng">
+                            </td>
                             <td></td>
                         </tr>
                         <tr>
-                            <td>Description Thai: </td>
-                            <td id="modal_des_thai"></td>
+                            <td>Description Tha: </td>
+                            <td>
+                                <input type="text" id="modal_des_tha" name="modal_des_tha">
+                            </td>
                             <td></td>
                         </tr>
                         <tr>
                             <td>Enable: </td>
-                            <td id="modal_status_enable"></td>
+                            <td>
+                                <select id="modal_status_enable" name="modal_status_enable">
+                                    <option value=1>Enable</option>
+                                    <option value=0>Disable</option>
+                                </select>
+                            </td>
                             <td></td>
                         </tr>
-<!--                        <tr>-->
-<!--                            <td>By: </td>-->
-<!--                            <td id="modal_id_staff"></td>-->
-<!--                            <td></td>-->
-<!--                        </tr>-->
                         <tr>
                             <td>On: </td>
-                            <td id="modal_date_setting"></td>
+                            <td id="modal_date_setting">
+                            </td>
                             <td></td>
                         </tr>
                     </table>
                 </div>
                 <div class="modal-footer">
-                    <button class="btn btn-primary" type="button" data-bs-dismiss="modal">Close</button>
+                    <button type="button" id="modal_button_save" class="btn btn-primary">Save</button>
                 </div>
             </div>
         </div>

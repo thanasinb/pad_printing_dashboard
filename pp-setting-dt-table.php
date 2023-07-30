@@ -9,22 +9,18 @@ while($data_code = $result_code->fetch_assoc()) {
     echo "<tr class='text-black fw-bold row_downtime'>";
     echo "<td class='box_code'>" . $data_code['id_code_downtime'] . "</td>";
     echo "<td class='code_downtime'>" . $data_code['code_downtime'] . "</td>";
-    echo "<td class='des_downtime'>" . $data_code['des_downtime'] . "</td>";
-    echo "<td class='des_downtime_thai'>" . $data_code['des_downtime_thai'] . "</td>";
+    echo "<td class='des_downtime_eng'>" . $data_code['des_downtime'] . "</td>";
+    echo "<td class='des_downtime_tha'>" . $data_code['des_downtime_thai'] . "</td>";
     echo "<td class='status_enable'>";
     $status_enable = intval($data_code['enable']);
     if ($status_enable==1)
-        echo "Y";
+        echo "<input type='hidden' id='status_enable_hidden' value='1'><i class='fa fa-check fs-6'></i>";
     elseif ($status_enable==0)
-        echo "N";
+        echo "<input type='hidden' id='status_enable_hidden' value='0'><i class='fa fa-times fs-6'></i>";
     echo "</td>";
 
     $date_valid = strcmp($data_code['date_setting'], '0000-00-00 00:00:00');
 
-//    echo "<td class='id_staff'>";
-//    if ($date_valid!=0)
-//        echo $data_code['id_staff'];
-//    echo "</td>";
     echo "<td class='date_setting'>";
     if ($date_valid!=0)
         echo $data_code['date_setting'];
