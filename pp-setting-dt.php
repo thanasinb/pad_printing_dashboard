@@ -17,17 +17,9 @@
         <link rel="icon" type="image/x-icon" href="assets/img/favicon.png" />
         <script data-search-pseudo-elements defer src="js/font-awesome/5.15.3/js/all.min.js"></script>
         <script src="js/feather-icons/4.28.0/feather.min.js"></script>
-        <link rel="stylesheet" href="css/reorder-columns/dragtable.css">
-        <link rel="stylesheet" href="css/reorder-columns/bootstrap-table.min.css">
         <link rel="stylesheet" href="css/majorette.css">
         <script src="js/jquery/jquery.min.js"></script>
         <script src="js/jquery/jquery-ui.min.js"></script>
-        <script src="js/reorder-columns/jquery.dragtable.js"></script>
-        <script src="js/reorder-columns/bootstrap-table.min.js"></script>
-        <script src="js/reorder-columns/bootstrap-table-reorder-columns.js"></script>
-        <script type="text/javascript" src="js/datetimepicker4/moment.min.js"></script>
-        <script type="text/javascript" src="js/datetimepicker4/tempusdominus-bootstrap-4.min.js"></script>
-        <link rel="stylesheet" href="css/datetimepicker4/tempusdominus-bootstrap-4.min.css" />
         <script type="text/javascript" src="js/majorette/pp-setting-dt.js"></script>
     </head>
     <body class="nav-fixed">
@@ -46,10 +38,12 @@
                     <div class="container-fluid px-4 mt-n10">
                         <!-- Example DataTable for Dashboard Demo-->
                         <div class="card mb-4 w-100" id="table-machine">
-                            <div class="card-header bg-red fw-bold text-white fs-4">Downtime List</div>
+                            <div class="card-header bg-red fw-bold text-white fs-4">Downtime Code Setup</div>
                             <div class="card-body">
                                 <table id="datatablesSimple" class="table table-striped">
-                                    <thead class="text-black" style="background-color: #ffea07"><?php require 'pp-setting-dt-table-head.php' ?></thead>
+                                    <thead class="text-black" style="background-color: #ffea07">
+                                    <?php require 'pp-setting-dt-table-head.php' ?>
+                                    </thead>
                                     <tbody><?php require "pp-setting-dt-table.php"; ?></tbody>
                                 </table>
                             </div>
@@ -62,99 +56,22 @@
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="setting_dt_modal_label">Downtime</h5>
+                    <h5 class="modal-title" id="setting_dt_modal_label">Downtime Setup</h5>
                     <button class="btn-close" type="button" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
                     <span id="modal_span_setting_dt_id"></span>
                     <table id="modal_table" class="table table-striped">
-                        <tr>
-                            <td>Downtime ID</td>
-                            <td id="modal_setting_dt_id"><input type="text" id="input_setting_dt_id" name="input_setting_dt_id" disabled></td>
-                            <td></td>
-                        </tr>
-                        <tr>
-                            <td>RFID</td>
-                            <td id="modal_rfid"><input type="text" id="input_rfid" name="input_rfid" disabled></td>
-                            <td>
-<!--                                <button id="button_rfid" class="btn btn-primary btn-sm" type="button">Change</button>-->
-<!--                                <button id="button_save_rfid" class="btn btn-primary btn-sm" type="button">Save</button>-->
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>Prefix</td>
-                            <td > <form>
-                                    <select name="prefix_name" id="prefix_name"disabled>
-                                        <option value=" ">กรุณาเลือก...</option>
-                                        <option value="1">นาย</option>
-                                        <option value="2">นาง</option>
-                                        <option value="3">นางสาว</option>
-                                    </select>
-                                </form></td>
-                            <td></td>
-                        </tr>
-                        <tr>
-                            <td>First name</td>
-                            <td id="modal_name"><input type="text" id="input_name" name="input_name" disabled></td>
-                            <td></td>
-                        </tr>
-                        <tr>
-                            <td>Last name</td>
-                            <td id="modal_last"><input type="text" id="input_last" name="input_last" disabled></td>
-                            <td></td>
-                        </tr>
-                        <tr>
-                            <td>Site</td>
-                            <td id="modal_site"><input type="text" id="input_site" name="input_site" disabled></td>
-                            <td></td>
-                        </tr>
-                        <tr>
-                            <td>Role</td>
-                            <td > <form>
-                                    <select name="role" id="role"disabled>
-                                        <option value=" ">กรุณาเลือก...</option>
-                                        <option value="1">Operator</option>
-                                        <option value="2">Technician</option>
-                                        <option value="3">Production Support</option>
-                                        <option value="4">Instructor</option>
-                                        <option value="5">Senior Instructor</option>
-                                        <option value="6">Foreman</option>
-                                        <option value="7">Leader</option>
-                                        <option value="8">Senior Technician</option>
-                                        <option value="9">Manager</option>
-                                        <option value="10">Engineering</option>
-                                    </select>
-                                </form></td>
-                            <td></td>
-                        </tr>
-                        <tr>
-                            <td>Shif</td>
-                            <td > <form>
-                                    <select name="shift" id="shift"disabled>
-                                        <option value=" ">กรุณาเลือก...</option>
-                                        <option value="A">A</option>
-                                        <option value="B">B</option>
-                                        <option value="C">C</option>
-                                    </select>
-                                </form></td>
-                            <td></td>
-                        </tr>
                     </table>
                 </div>
                 <div class="modal-footer">
-                    <button id="button_rfid" class="btn btn-primary" type="button">Change</button>
-                    <button id="button_save_rfid" class="btn btn-primary" type="button">Save</button>
                     <button class="btn btn-primary" type="button" data-bs-dismiss="modal">Close</button>
-<!--                    <button class="btn btn-primary" type="button">Save changes</button>-->
                 </div>
             </div>
         </div>
     </div>
         <script src="js/bootstrap@5.0.1/dist/js/bootstrap.bundle.min.js"></script>
         <script src="js/scripts.js"></script>
-        <script src="js/Chart.js/2.9.4/Chart.min.js"></script>
-        <script src="assets/demo/chart-area-demo.js"></script>
-        <script src="assets/demo/chart-bar-demo.js"></script>
         <script src="js/simple-datatables@latest" type="text/javascript"></script>
         <script src="js/datatables/datatables-simple-demo.js"></script>
         <script src="js/litepicker/dist/bundle.js"></script>
