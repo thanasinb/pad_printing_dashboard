@@ -60,8 +60,42 @@
                     <button class="btn-close" type="button" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    <span id="modal_span_setting_dt_id"></span>
                     <table id="modal_table" class="table table-striped">
+                        <tr>
+                            <td>Box Code: </td>
+                            <td id="modal_box_code"></td>
+                            <td></td>
+                        </tr>
+                        <tr>
+                            <td>Downtime Code: </td>
+                            <td id="modal_downtime_code"></td>
+                            <td></td>
+                        </tr>
+                        <tr>
+                            <td>Description Eng</td>
+                            <td id="modal_des_eng"></td>
+                            <td></td>
+                        </tr>
+                        <tr>
+                            <td>Description Thai: </td>
+                            <td id="modal_des_thai"></td>
+                            <td></td>
+                        </tr>
+                        <tr>
+                            <td>Enable: </td>
+                            <td id="modal_status_enable"></td>
+                            <td></td>
+                        </tr>
+<!--                        <tr>-->
+<!--                            <td>By: </td>-->
+<!--                            <td id="modal_id_staff"></td>-->
+<!--                            <td></td>-->
+<!--                        </tr>-->
+                        <tr>
+                            <td>On: </td>
+                            <td id="modal_date_setting"></td>
+                            <td></td>
+                        </tr>
                     </table>
                 </div>
                 <div class="modal-footer">

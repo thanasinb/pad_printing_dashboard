@@ -14,11 +14,13 @@ $(document).ready(function(){
         // date_due = button.getAttribute('data-bs-date_due');
         // alert($(event.relatedTarget).parent().parent().find('.qty_per_tray').html());
 
-        // id_machine = $(event.relatedTarget).parent().parent().find('.id_machine').text();
-        // item_no = $(event.relatedTarget).parent().parent().find('.item_no').text();
-        // operation = $(event.relatedTarget).parent().parent().find('.operation').text();
-        // date_due = $(event.relatedTarget).parent().parent().find('.date_due').text();
-        // qty_per_tray = $(event.relatedTarget).parent().parent().find('.qty_per_tray').text();
+        var box_code = $(event.relatedTarget).parent().parent().find('.box_code').text();
+        var modal_downtime_code = $(event.relatedTarget).parent().parent().find('.item_no').text();
+        var modal_des_eng = $(event.relatedTarget).parent().parent().find('.operation').text();
+        var modal_des_thai = $(event.relatedTarget).parent().parent().find('.date_due').text();
+        var modal_status_enable = $(event.relatedTarget).parent().parent().find('.qty_per_tray').text();
+        // var modal_id_staff = $(event.relatedTarget).parent().parent().find('.qty_per_tray').text();
+        var modal_date_setting = $(event.relatedTarget).parent().parent().find('.qty_per_tray').text();
         // qty_accum = button.getAttribute('data-bs-qty_accum');
         // qty_order = button.getAttribute('data-bs-qty_order');
         // qty_percent = button.getAttribute('data-bs-qty_percent');
@@ -30,7 +32,7 @@ $(document).ready(function(){
         // and then do the updating in a callback.
         //
         // Update the modal's content.
-        // var modalTitle = currentTaskModal.querySelector('.modal-title');
+        var modalBoxCode = setting_dt_modal.querySelector('#modal_box_code');
         // var modal_id_machine = currentTaskModal.querySelector('#modal_id_machine');
         // var modal_item_no = currentTaskModal.querySelector('#modal_item_no');
         // var modal_operation = currentTaskModal.querySelector('#modal_operation');
@@ -45,6 +47,8 @@ $(document).ready(function(){
         //
         // modalTitle.textContent = 'Current task for machine: ' + id_machine;
         // modal_id_machine.textContent = id_machine;
+
+        modalBoxCode.textContent = box_code;
 
     });
 
