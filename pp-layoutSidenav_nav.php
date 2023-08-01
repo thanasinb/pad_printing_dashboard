@@ -65,7 +65,8 @@
                 </a>
                 <div class="collapse" id="collapseDowntime" data-bs-parent="#accordionSidenav">
                     <nav class="sidenav-menu-nested nav accordion" id="accordionSidenavPages">
-                        <a class="nav-link" href="pp-setting-dt.php">Downtime</a>
+                        <a class="nav-link" href="pp-setting-dt.php">Downtime List</a>
+                        <a class="nav-link" href="pp-setting-dt-add.php">Add Downtime</a>
                     </nav>
                 </div>
             </div>
