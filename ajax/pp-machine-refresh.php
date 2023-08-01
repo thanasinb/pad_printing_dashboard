@@ -44,9 +44,9 @@ $data_rework_time = $query_rework_time->fetch_assoc();
 //print_r($data_rework_time);
 
 // SELECT THE DOWNTIME ACTIVITY OF SUCH TASK
-$sql = "SELECT id_staff, status_downtime, code_downtime FROM activity_downtime 
-    INNER JOIN code_downtime ON activity_downtime.id_code_downtime=code_downtime.id_code_downtime 
-WHERE status_downtime<3 AND id_task=" . $id_task . " AND id_machine='" . $_GET["id_mc"] . "'";
+$sql = "SELECT activity_downtime.id_staff, activity_downtime.status_downtime, code_downtime.code_downtime FROM activity_downtime 
+    INNER JOIN code_downtime ON activity_downtime.id_downtime=code_downtime.id_downtime 
+    WHERE status_downtime<3 AND id_task=" . $id_task . " AND id_machine='" . $_GET["id_mc"] . "'";
 //echo $sql;
 $query_activity_downtime = $conn->query($sql);
 $data_activity_downtime = $query_activity_downtime->fetch_assoc();
