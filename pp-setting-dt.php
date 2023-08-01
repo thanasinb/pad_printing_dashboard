@@ -102,7 +102,30 @@
             </div>
         </div>
     </div>
-        <script src="js/bootstrap@5.0.1/dist/js/bootstrap.bundle.min.js"></script>
+    <div class="modal fade" id="delete_dt_modal" tabindex="-1" role="dialog" aria-labelledby="delete_dt_modal_label" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="delete_dt_modal_label">Downtime Delete</h5>
+                    <button class="btn-close" type="button" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <table id="modal_table" class="table table-striped">
+                        <tr>
+                            <td>Confirm delete downtime code: </td>
+                            <td id="modal_delete_downtime_code"></td>
+                            <td></td>
+                        </tr>
+                    </table>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" id="modal_button_delete" class="btn btn-primary">Delete</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="js/bootstrap@5.0.1/dist/js/bootstrap.bundle.min.js"></script>
         <script src="js/scripts.js"></script>
         <script src="js/simple-datatables@latest" type="text/javascript"></script>
         <script src="js/datatables/datatables-simple-demo.js"></script>

@@ -43,4 +43,33 @@ $(document).ready(function(){
             }
         });
     });
+
+    var delete_dt_modal = document.getElementById('delete_dt_modal');
+    delete_dt_modal.addEventListener('show.bs.modal', function (event) {
+        // Button that triggered the modal
+        // var button = event.relatedTarget;
+
+        var selectedRow=$(event.relatedTarget).parent().parent();
+        var modalBoxCodeText = selectedRow.find('.box_code').text();
+
+        $('#modal_delete_downtime_code').html(modalBoxCodeText);
+    });
+
+    $('#modal_button_delete').click(function (){
+        var modalBoxCode = $('#modal_delete_downtime_code').html();
+
+        $.ajax({
+            url: "ajax/pp-setting-dt-delete.php",
+            type: "GET",
+            data: {
+                box_code: modalBoxCode
+            },
+            context: this,
+            cache: false,
+            success: function(dataResult){
+                var dataResult = JSON.parse(dataResult);
+                location.reload();
+            }
+        });
+    });
 });
