@@ -63,8 +63,7 @@
                     <table id="modal_table" class="table table-striped">
                         <tr>
                             <td>Box Code: </td>
-                            <td>
-                                <input type="text" id="modal_box_code" name="modal_box_code">
+                            <td id="modal_box_code">
                             </td>
                             <td></td>
                         </tr>
@@ -86,16 +85,6 @@
                             <td>Description Tha: </td>
                             <td>
                                 <input type="text" id="modal_des_tha" name="modal_des_tha">
-                            </td>
-                            <td></td>
-                        </tr>
-                        <tr>
-                            <td>Enable: </td>
-                            <td>
-                                <select id="modal_status_enable" name="modal_status_enable">
-                                    <option value=1>Enable</option>
-                                    <option value=0>Disable</option>
-                                </select>
                             </td>
                             <td></td>
                         </tr>
