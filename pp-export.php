@@ -15,27 +15,12 @@
         <link rel="icon" type="image/x-icon" href="assets/img/favicon.png" />
         <script data-search-pseudo-elements defer src="js/font-awesome/5.15.3/js/all.min.js"></script>
         <script src="js/feather-icons/4.28.0/feather.min.js"></script>
-        <link rel="stylesheet" href="css/reorder-columns/dragtable.css">
-        <link rel="stylesheet" href="css/reorder-columns/bootstrap-table.min.css">
         <script src="js/jquery/jquery.min.js"></script>
         <script src="js/jquery/jquery-ui.min.js"></script>
-        <script src="js/reorder-columns/jquery.dragtable.js"></script>
-        <script src="js/reorder-columns/bootstrap-table.min.js"></script>
-        <script src="js/reorder-columns/bootstrap-table-reorder-columns.js"></script>
-<!--        <script src="js/majorette/pp-export.js"></script>-->
         <script src="js/majorette/pp-export-2.js"></script>
         <script type="text/javascript" src="js/datetimepicker4/moment.min.js"></script>
         <script type="text/javascript" src="js/datetimepicker4/tempusdominus-bootstrap-4.min.js"></script>
         <link rel="stylesheet" href="css/datetimepicker4/tempusdominus-bootstrap-4.min.css" />
-<!--        <script type="text/javascript" src="//unpkg.com/xlsx/dist/shim.min.js"></script>-->
-<!--        <script type="text/javascript" src="//cdn.jsdelivr.net/npm/xlsx/dist/xlsx.full.min.js"></script>-->
-<!--        <script type="text/javascript" src="//unpkg.com/blob.js@1.0.1/Blob.js"></script>-->
-<!--        <script type="text/javascript" src="//unpkg.com/file-saver@1.3.3/FileSaver.js"></script>-->
-<!--        <script type="text/javascript" src="/js/SheetJS/shim.min.js"></script>-->
-<!--        <script type="text/javascript" src="/js/SheetJS/xlsx.full.min.js"></script>-->
-<!--        <script type="text/javascript" src="/js/SheetJS/Blob.js"></script>-->
-<!--        <script type="text/javascript" src="/js/SheetJS/FileSaver.js"></script>-->
-
         <script type="text/javascript">
             $(function () {
                 $('#datetimepicker7').datetimepicker({
@@ -134,54 +119,8 @@
                         <div class="card mb-4 w-100" id="card_table_export" hidden>
                             <div class="card-header bg-dark fw-bold text-white">Export Data</div>
                             <div class="card-body" id="div_table_export">
-<!--                                <table id="export_me">-->
-<!--                                    <tr><td>Hello</td></tr>-->
-<!--                                </table>-->
-<!--                                <table class="table table-striped table-sm">-->
-<!--                                    <tbody>-->
-<!--                                    <tr class="fw-bold text-center">-->
-<!--                                        <th>Work Center</th>-->
-<!--                                        <th>Line</th>-->
-<!--                                        <th>Operation</th>-->
-<!--                                        <th>Description</th>-->
-<!--                                        <th>Machine NO.</th>-->
-<!--                                        <th>Set up By</th>-->
-<!--                                    </tr>-->
-<!--                                    <tr class="fw-bold text-center">-->
-<!--                                        <th>ID</th>-->
-<!--                                        <th>Item Number</th>-->
-<!--                                        <th>Description</th>-->
-<!--                                        <th>Qty Order</th>-->
-<!--                                        <th></th>-->
-<!--                                        <th></th>-->
-<!--                                    </tr>-->
-<!--                                    </tbody>-->
-<!--                                </table>-->
-<!--                                <table id="table_export" class="table table-striped table-sm">-->
-<!--                                    <thead class="table-dark">-->
-<!--                                    --><?php //require 'pp-export-table-head.php'; ?>
-<!--                                    </thead>-->
-<!--                                    <tbody id="tbody_export">-->
-<!--                                    <tr></tr>-->
-<!--                                    --><?php //// require 'pp-export-list-task-script.php'; ?>
-<!--                                    </tbody>-->
-<!--                                </table>-->
-<!--                                <form class="text-black" action="pp-export-action.php" method="post" enctype="multipart/form-data">-->
                                     <input class="btn btn-primary" type="submit" value="Export!" name="submit" id="button_export">
                                     <br><br>
-<!--                                    --><?php
-//
-//                                    ini_set('display_errors', 0);
-//                                    error_reporting(E_ERROR | E_WARNING | E_PARSE);
-//
-//                                    if ($_GET['error_code']!=null){
-//                                        if ($_GET['error_code'])
-//                                            echo "Upload error! Code: " . $_GET['error_code'];
-//                                        else
-//                                            echo "Upload successfully! Code: " . $_GET['error_code'];
-//                                    }
-//                                    ?>
-<!--                                </form>-->
                             </div>
                         </div>
                     </div>
@@ -190,9 +129,6 @@
         </div>
         <script src="js/bootstrap@5.0.1/dist/js/bootstrap.bundle.min.js"></script>
         <script src="js/scripts.js"></script>
-        <script src="js/Chart.js/2.9.4/Chart.min.js"></script>
-        <script src="assets/demo/chart-area-demo.js"></script>
-        <script src="assets/demo/chart-bar-demo.js"></script>
         <script src="js/simple-datatables@latest" type="text/javascript"></script>
         <script src="js/datatables/datatables-simple-demo.js"></script>
         <script src="js/litepicker/dist/bundle.js"></script>
