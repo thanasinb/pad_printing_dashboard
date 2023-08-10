@@ -387,7 +387,7 @@ $sql = "SELECT activity_downtime.id_staff, planning.id_job, date_eff AS time_sta
         INNER JOIN staff ON activity_downtime.id_staff=staff.id_staff
         INNER JOIN planning ON activity_downtime.id_task=planning.id_task
         INNER JOIN code_downtime ON activity_downtime.id_downtime=code_downtime.id_downtime
-        WHERE activity_downtime.id_downtime <> (SELECT id_downtime FROM code_downtime WHERE id_code_downtime='D07' AND enable=1) AND " .
+        WHERE activity_downtime.id_downtime <> (SELECT id_downtime FROM code_downtime WHERE id_code_downtime='D07') AND " .
         $sql_where_downtime . $sql_order_by_downtime;
 
 //echo $sql . "<br><br>";
@@ -418,7 +418,7 @@ $sql = "SELECT activity_downtime.id_staff, planning.id_job, date_eff AS time_sta
         id_activity_downtime AS id_activity, status_downtime AS status_work FROM activity_downtime
         INNER JOIN staff ON activity_downtime.id_staff=staff.id_staff
         INNER JOIN planning ON activity_downtime.id_task=planning.id_task
-        WHERE activity_downtime.id_downtime = (SELECT id_downtime FROM code_downtime WHERE id_code_downtime='D07' AND enable=1) AND " .
+        WHERE activity_downtime.id_downtime = (SELECT id_downtime FROM code_downtime WHERE id_code_downtime='D07') AND " .
         $sql_where_downtime . $sql_order_by_downtime;
 
 //echo $sql . "<br><br>";
