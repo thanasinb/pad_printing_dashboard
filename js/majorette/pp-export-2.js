@@ -98,7 +98,6 @@ $(document).ready(function(){
          // var url="https://bunnam.com/projects/majorette_pp/";
 
 
-
         if (shif_number==3){
             window.open(url + "pp-export-action-3.php?shif_start=" + shif_start + "&shif_end=" + shif_end + "&shif_number=" + shif_number, "_self");
         }else if(shif_number==2){

@@ -1,10 +1,10 @@
 <?php
 function add_activity_downtime($conn, $table, $id_task, $id_machine, $id_staff, $shif, $date_eff, $code_downtime, $multiplier){
-    $sql = "SELECT id_code_downtime FROM code_downtime WHERE id_code_downtime='" . $code_downtime . "'";
-    $query_code_downtime = $conn->query($sql);
-    $data_code_downtime = $query_code_downtime->fetch_assoc();
+    $sql = "SELECT id_downtime FROM code_downtime WHERE id_code_downtime='" . $code_downtime . "'";
+    $data_id_downtime = $conn->query($sql)->fetch_assoc();
+//    $data_id_downtime = $query_code_downtime->fetch_assoc();
 
-    if (empty($data_code_downtime)) {
+    if (empty($data_id_downtime['id_downtime'])) {
         $data_json = json_encode(array("code" => "015", "message" => "Invalid downtime code"), JSON_UNESCAPED_UNICODE);
     }
     else{
@@ -15,7 +15,7 @@ function add_activity_downtime($conn, $table, $id_task, $id_machine, $id_staff, 
         id_staff, 
         shif, 
         date_eff, 
-        id_code_downtime, 
+        id_downtime, 
         status_downtime, 
         time_start, 
         multiplier) 
@@ -25,7 +25,7 @@ function add_activity_downtime($conn, $table, $id_task, $id_machine, $id_staff, 
         $sql = $sql . "'" . $id_staff . "',";
         $sql = $sql . "'" . $shif . "',";
         $sql = $sql . "'" . $date_eff . "',";
-        $sql = $sql . "'" . $code_downtime . "',";
+        $sql = $sql . $data_id_downtime['id_downtime'] . ",";
         $sql = $sql . "1,";
         $sql = $sql . "CURRENT_TIMESTAMP(),";
         $sql = $sql . $multiplier;
