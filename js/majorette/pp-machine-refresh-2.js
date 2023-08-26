@@ -99,9 +99,6 @@ function loadData() {
                     rework = dataResult.rework;
                     qty_manual = parseInt(dataResult.qty_manual);
 
-                    // $(this).parent().find('.id_staff').text(dataResult.id_staff);
-                    // $(this).parent().find('.status_work').text(dataResult.id_staff);
-
                     qty_accum = qty_complete + qty_process + qty_manual;
                     percent = Math.round((qty_accum/qty_order)*100);
 
@@ -226,7 +223,7 @@ function loadData() {
                         $(this).parent().find('.fa-flag').addClass('text-black-25');
                     }
 
-                    if(status_work==0 || status_work==3 || status_work==5 || status_work==6){
+                    if(status_work==0 || status_work>=3){
                         $(this).parent().find('.status_work').removeClass('bg-green bg-yellow bg-red');
                         $(this).parent().find('.status_work').text("");
                         $(this).parent().find('.status_work').append("<i class='status_work_icon fs-6'></i>");
@@ -235,11 +232,11 @@ function loadData() {
                         $(this).parent().find('.status_work').removeClass('bg-blue bg-yellow bg-red');
                         $(this).parent().find('.status_work').text(dataResult.id_staff);
                         $(this).parent().find('.status_work').addClass('bg-green');
-                    }else if(status_work==2 || status_work==42){
+                    }else if(status_work==2){
                         $(this).parent().find('.status_work').removeClass('bg-blue bg-green bg-red');
                         $(this).parent().find('.status_work').text(dataResult.id_staff);
                         $(this).parent().find('.status_work').addClass('bg-yellow');
-                    }else if(status_work==4){
+                    }else if(status_work==-1){
                         $(this).parent().find('.status_work').removeClass('bg-blue bg-yellow bg-green');
                         $(this).parent().find('.status_work').text(dataResult.id_staff + '\n' + dataResult.code_downtime);
                         $(this).parent().find('.status_work').addClass('bg-red');
@@ -251,43 +248,20 @@ function loadData() {
                         }
                     }else {
                         if($(this).parent().find('.status_work').parent().text()=='  RW') {
-                            // alert($(this).parent().find('.status_work').parent().html());
                             $(this).parent().find('.status_work').parent().html($(this).parent().find('.status_work').parent().html().slice(0, -1));
-                            // $(this).parent().find('.status_work').addClass('fas fa-circle');
                         }
                     }
 
-                    if (task_complete==1) {
-                        if (status_backup == 1) {
-                            $(this).parent().find('.status_work_icon').removeClass('fas fa-circle fa-check-square');
-                            $(this).parent().find('.status_work_icon').addClass('far fa-file-archive');
-                        }else {
-                            $(this).parent().find('.status_work .status_work_icon').removeClass('fas fa-circle fa-file-archive');
-                            $(this).parent().find('.status_work .status_work_icon').addClass('far fa-check-square');
-                        }
-                    }else {
-                        $(this).parent().find('.status_work_icon .status_work_icon').removeClass('far fa-check-square fa-file-archive');
-                        // $(this).parent().find('.status_work').addClass('fas fa-circle');
-                    }
-
-                    //     $(this).parent().find('.status_work').removeClass('fa-circle');
-                    //     $(this).parent().find('.status_work').addClass('fa-check-square');
-                    // }else if (status_backup==1){
-                    //     $(this).parent().find('.status_work').removeClass('fas fa-circle');
-                    //     $(this).parent().find('.status_work').addClass('far fa-file-archive');
-                    // }
-
-                    // if (status_backup==0){
-                    //     if (task_complete==0){
-                    //         $(this).parent().find('.status_work').removeClass('far fa-check-square fa-file-archive');
-                    //         $(this).parent().find('.status_work').addClass('fas fa-circle');
+                    // if (task_complete==1) {
+                    //     if (status_backup == 1) {
+                    //         $(this).parent().find('.status_work_icon').removeClass('fas fa-circle fa-check-square');
+                    //         $(this).parent().find('.status_work_icon').addClass('far fa-file-archive');
                     //     }else {
-                    //         $(this).parent().find('.status_work').removeClass('fas fa-circle');
-                    //         $(this).parent().find('.status_work').addClass('far fa-check-square ');
+                    //         $(this).parent().find('.status_work .status_work_icon').removeClass('fas fa-circle fa-file-archive');
+                    //         $(this).parent().find('.status_work .status_work_icon').addClass('far fa-check-square');
                     //     }
-                    // }else{
-                    //     $(this).parent().find('.status_work').removeClass('fas fa-circle');
-                    //     $(this).parent().find('.status_work').addClass('far fa-file-archive');
+                    // }else {
+                    //     $(this).parent().find('.status_work_icon .status_work_icon').removeClass('far fa-check-square fa-file-archive');
                     // }
                 }
             });

@@ -1,0 +1,8 @@
+<?php
+const STATUS_WORKING=1;
+const STATUS_BREAK=2;
+const STATUS_CLOSED=3;
+const STATUS_EXPORTED=4;
+const STATUS_UPDATED=5;
+const STATUS_COMPLETE=6;
+?>
