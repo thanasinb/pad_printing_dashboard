@@ -26,9 +26,9 @@
         <script src="js/reorder-columns/bootstrap-table.min.js"></script>
         <script src="js/reorder-columns/bootstrap-table-reorder-columns.js"></script>
 <!--        <script src="js/majorette/pp-dragtable.js"></script>-->
-        <script type="text/javascript" src="js/datetimepicker4/moment.min.js"></script>
-        <script type="text/javascript" src="js/datetimepicker4/tempusdominus-bootstrap-4.min.js"></script>
-        <link rel="stylesheet" href="css/datetimepicker4/tempusdominus-bootstrap-4.min.css" />
+<!--        <script type="text/javascript" src="js/datetimepicker4/moment.min.js"></script>-->
+<!--        <script type="text/javascript" src="js/datetimepicker4/tempusdominus-bootstrap-4.min.js"></script>-->
+<!--        <link rel="stylesheet" href="css/datetimepicker4/tempusdominus-bootstrap-4.min.css" />-->
         <script type="text/javascript" src="js/majorette/pp-machine-staff.js"></script>
 <!--        <script type="text/javascript" src="js/majorette/pp-machine-currentTaskModal.js"></script>-->
 <!--        <script type="text/javascript" src="js/majorette/pp-machine-refresh.js"></script>-->
@@ -144,9 +144,9 @@
                         </tr>
                     </table>
                 </div>
-                <div class="modal-footer">
-                    <button id="button_rfid" class="btn btn-primary" type="button">Change</button>
-                    <button id="button_save_rfid" class="btn btn-primary" type="button">Save</button>
+                <div class="modal-footer justify-content-between">
+                    <button id="button_rfid" class="btn btn-primary mr-auto" type="button">Change</button>
+                    <button id="button_save_rfid" class="btn btn-primary mr-auto" type="button">Save</button>
                     <button class="btn btn-primary" type="button" data-bs-dismiss="modal">Close</button>
                     <!--                    <button class="btn btn-primary" type="button">Save changes</button>-->
                 </div>
@@ -155,9 +155,9 @@
     </div>
         <script src="js/bootstrap@5.0.1/dist/js/bootstrap.bundle.min.js"></script>
         <script src="js/scripts.js"></script>
-        <script src="js/Chart.js/2.9.4/Chart.min.js"></script>
-        <script src="assets/demo/chart-area-demo.js"></script>
-        <script src="assets/demo/chart-bar-demo.js"></script>
+<!--        <script src="js/Chart.js/2.9.4/Chart.min.js"></script>-->
+<!--        <script src="assets/demo/chart-area-demo.js"></script>-->
+<!--        <script src="assets/demo/chart-bar-demo.js"></script>-->
         <script src="js/simple-datatables@latest" type="text/javascript"></script>
         <script src="js/datatables/datatables-simple-demo.js"></script>
         <script src="js/litepicker/dist/bundle.js"></script>
