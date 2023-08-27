@@ -271,9 +271,9 @@
                         </div>
                     </form>
                 </div>
-                <div class="modal-footer">
-                    <button type="button" id="modal_button_change" class="btn btn-primary">Change</button>
-                    <button type="button" id="modal_button_save" class="btn btn-primary">Save</button>
+                <div class="modal-footer justify-content-between">
+                    <button type="button" id="modal_button_change" class="btn btn-primary mr-auto">Change</button>
+                    <button type="button" id="modal_button_save" class="btn btn-primary mr-auto">Save</button>
                     <button type="button" id="modal_button_go" type='submit' class="btn btn-primary" disabled>Go!</button>
 <!--                    <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Close</button>-->
                 </div>
