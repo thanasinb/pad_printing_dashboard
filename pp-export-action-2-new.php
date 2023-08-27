@@ -3,22 +3,8 @@ ini_set('display_errors', 0);
 error_reporting(E_ERROR | E_WARNING | E_PARSE);
 
 include_once ("PHP_XLSXWriter/xlsxwriter.class.php");
-
-const SHEET_BF_FIRST = 'CIM BF-first OP';
-const SHEET_BF_NEXT = 'CIM BF-next OP';
-const SHEET_DOWNTIME = 'CIM Down Time';
-const SHEET_SCRAP = 'Cim Scarp';
-const SHEET_SETUP = 'Cim Setup';
-const SHEET_REWORK = 'Cim Rework';
-
-const SHIF_DAY_START='07:00:00';
-const SHIF_DAY_CLOSE='15:45:00';
-const SHIF_DAY_OT_START='07:00:00';
-const SHIF_DAY_OT_CLOSE='19:00:00';
-const SHIF_NIGHT_START='23:00:00';
-const SHIF_NIGHT_CLOSE='07:00:00';
-const SHIF_NIGHT_OT_START='19:00:00';
-const SHIF_NIGHT_OT_CLOSE='07:00:00';
+require "const-shif.php";
+require "const-status.php";
 
 function make_machine_name($id_machine){
     $id_machine = str_replace('-','',$id_machine);
@@ -194,14 +180,12 @@ $writer->writeSheetHeader(SHEET_REWORK, $header);
 
 require 'update/establish.php';
 
-//if(strcmp($_GET['shif'], 'day_2')==0){
-$sql_where = "(status_work=3 OR status_work=5) AND (time_start BETWEEN '" .
+$sql_where = "(status_work=" . STATUS_CLOSED . " OR status_work=" . STATUS_EXPORTED . ") AND (time_start BETWEEN '" .
     $_GET['shif_start'] . ' ' . $_GET['time_start'] . "' AND '" .
     $_GET['shif_end'] . ' ' . $_GET['time_close'] . "')";
-$sql_where_downtime = "(status_downtime=3 OR status_downtime=5) AND (time_start BETWEEN '" .
+$sql_where_downtime = "(status_downtime=" . STATUS_CLOSED . " OR status_downtime= " . STATUS_EXPORTED . ") AND (time_start BETWEEN '" .
     $_GET['shif_start'] . ' ' . $_GET['time_start'] . "' AND '" .
     $_GET['shif_end'] . ' ' . $_GET['time_close'] . "')";
-//}
 $sql_order_by = " ORDER BY planning.id_job, planning.operation, activity.id_machine, activity.time_start";
 $sql_order_by_downtime = " ORDER BY planning.id_job, planning.operation, activity_downtime.id_machine, activity_downtime.time_start";
 
@@ -331,7 +315,7 @@ while ($data_current_op_activity = $query_current_op_activity->fetch_assoc()){
 }
 //echo implode(',', array_map('intval', $list_current_op_activity_id));
 
-$sql = "UPDATE activity SET status_work=5 WHERE status_work=3 AND id_activity IN 
+$sql = "UPDATE activity SET status_work=" . STATUS_EXPORTED . " WHERE status_work=" . STATUS_CLOSED . " AND id_activity IN 
         (" . implode(',', array_map('intval', $list_current_op_activity_id)) . ")";
 //echo $sql . "<br><br>";
 $query_update_status = $conn->query($sql);
@@ -408,7 +392,7 @@ while ($data_activity_downtime = $query_activity_downtime->fetch_assoc()) {
 }
 //print_r($list_current_op_activity_id);
 
-$sql = "UPDATE activity_downtime SET status_downtime=5 WHERE status_downtime=3 AND id_activity_downtime IN
+$sql = "UPDATE activity_downtime SET status_downtime=" . STATUS_EXPORTED . " WHERE status_downtime=" . STATUS_CLOSED . " AND id_activity_downtime IN
         (" . implode(',', array_map('intval', $list_current_op_activity_id)) . ")";
 //echo $sql . "<br><br>";
 $query_update_status_downtime = $conn->query($sql);
@@ -438,7 +422,7 @@ while ($data_activity_setup = $query_activity_setup->fetch_assoc()) {
     $writer->writeSheetRow(SHEET_SETUP, $data_activity_setup);
 }
 
-$sql = "UPDATE activity_downtime SET status_downtime=5 WHERE status_downtime=3 AND id_activity_downtime IN
+$sql = "UPDATE activity_downtime SET status_downtime=" . STATUS_EXPORTED . " WHERE status_downtime=" . STATUS_CLOSED . " AND id_activity_downtime IN
         (" . implode(',', array_map('intval', $list_current_op_activity_id)) . ")";
 //echo $sql . "<br><br>";
 $query_update_status_setup = $conn->query($sql);

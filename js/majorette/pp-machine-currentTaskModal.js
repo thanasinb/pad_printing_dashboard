@@ -90,6 +90,8 @@ $(document).ready(function(){
     currentTaskModal.addEventListener('hide.bs.modal', function (event) {
         $('input[name=radioCurrentTask]:checked').prop('checked', false);
         $('#modal_button_save').hide();
+        $('#modal_button_change').show();
+        $('#modal_qty_per_tray').attr('disabled', false);
     });
 
     // currentTaskModal.addEventListener('hidden.bs.modal', function (event) {

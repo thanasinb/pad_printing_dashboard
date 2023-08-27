@@ -67,9 +67,9 @@ require 'pp-planning-sidenavAccordion.php';
 </div>
 <script src="js/bootstrap@5.0.1/dist/js/bootstrap.bundle.min.js"></script>
 <script src="js/scripts.js"></script>
-<script src="js/Chart.js/2.9.4/Chart.min.js"></script>
-<script src="assets/demo/chart-area-demo.js"></script>
-<script src="assets/demo/chart-bar-demo.js"></script>
+<!--<script src="js/Chart.js/2.9.4/Chart.min.js"></script>-->
+<!--<script src="assets/demo/chart-area-demo.js"></script>-->
+<!--<script src="assets/demo/chart-bar-demo.js"></script>-->
 <script src="js/simple-datatables@latest" type="text/javascript"></script>
 <script src="js/datatables/datatables-machine-list-task.js"></script>
 <script src="js/litepicker/dist/bundle.js"></script>

@@ -2,6 +2,8 @@
 
 ini_set('display_errors', 0);
 error_reporting(E_ERROR | E_WARNING | E_PARSE);
+require "const-status.php";
+require "const-import.php";
 
 $target_dir = "uploads/";
 $target_file = $target_dir . basename($_FILES["fileToUpload"]["name"]);
@@ -40,15 +42,6 @@ if (strcmp($imageFileType, "xlsx")==0){
     $msg = "Error code: 1";
 }
 
-const FIELD_ID_JOB=0;
-const FIELD_PCS_PER_TRAY=7;
-const FIELD_OPERATION=12;
-const FIELD_FIRST_OP=13;
-const FIELD_OP_DESCRIPTION=14;
-const FIELD_QTY_ORDER=17;
-const FIELD_QTY_COMP=18;
-const FIELD_QTY_OPEN=19;
-
 if($error_code==0){
     require 'update/establish.php';
     require 'update/lib_add_log.php';
@@ -72,17 +65,11 @@ if($error_code==0){
         $qty_order = $fields[FIELD_QTY_ORDER];
         $qty_comp = $fields[FIELD_QTY_COMP];
         $qty_open = $fields[FIELD_QTY_OPEN];
-//        $op_description = preg_replace('/[^A-Za-z0-9\-]/', '', $op_description);
-//        echo $op_description . "<br>";
-//        echo substr($op_description, 0, 3) . "<br>";
         $offset=-2;
         $op_side = substr($op_description, $offset, 1);
-//        echo $op_side . "<br>";
-//        echo strpos($op_description,"TOP") . "<br>";
         if (strcmp($op_side,"X")==0) {
             $offset--;
             $op_side = substr($op_description, $offset, 1);
-//            echo "hello0<br>";
             if (strcmp(($op_side), " ") == 0) {
                 $offset--;
                 $op_side = substr($op_description, $offset, 1);
@@ -110,19 +97,11 @@ if($error_code==0){
         }elseif (strpos($op_description, "TOP")) {
             $op_side = "B";
             $op_color = "1";
-//            echo "hello1<br>";
         }
-//        elseif (strpos($op_description, "LIGHT")){
-//            $op_side = "B";
-//            $op_color = "1";
-//            echo "hello1<br>";
-//        }
         elseif (strpos($op_description,"MIRROR")){
             $op_side="B";
             $op_color="1";
-//            echo "hello1<br>";
         }else{
-//            echo "hello3<br>";
             continue;
         }
 
@@ -153,9 +132,6 @@ if($error_code==0){
         $list_planning = $list_planning . "(" . $id_job . "," . $operation . "),";
 
         $sql_select = "SELECT id_task FROM planning WHERE id_job='" . $id_job . "' AND operation = '" . $operation . "'";
-//        echo $sql_select . "<br>";
-//        echo $stmt . "<br>";
-//        echo $op_description . "," . $op_color . "," . $op_side . "<br>";
 
         $query_planning = $conn->query($sql_select);
         $data_planning = $query_planning->fetch_assoc();
@@ -185,15 +161,35 @@ if($error_code==0){
                 add_log($conn, $sql_update);
                 break;
             }
-//            I think the code below is non sense, set status_work to backup even the record exists!
-//            $sql_update = "UPDATE activity SET status_work=6 WHERE status_work=5 AND id_task=" . $data_planning['id_task'];
-//            echo $sql_update . "<br>";
-//            $conn->query($sql_update);
-//            if ($conn->errno){
-//                $error_code = $conn->errno;
-//                add_log($conn, $sql_update);
-//                break;
-//            }
+            $sql_update = "UPDATE activity 
+                    SET activity.status_work=" . STATUS_UPDATED . " 
+                    WHERE activity.status_work=" . STATUS_EXPORTED . " 
+                    AND activity.id_task=" . $data_planning['id_task'];
+            $conn->query($sql_update);
+            if ($conn->errno){
+                $error_code = $conn->errno;
+                add_log($conn, $sql_update);
+            }
+
+            $sql_update = "UPDATE activity_downtime 
+                    SET activity_downtime.status_downtime=" . STATUS_UPDATED . " 
+                    WHERE activity_downtime.status_downtime=" . STATUS_EXPORTED . " 
+                    AND activity_downtime.id_task=" . $data_planning['id_task'];
+            $conn->query($sql_update);
+            if ($conn->errno){
+                $error_code = $conn->errno;
+                add_log($conn, $sql_update);
+            }
+
+            $sql_update = "UPDATE activity_rework 
+                    SET activity_rework.status_work=" . STATUS_UPDATED . " 
+                    WHERE activity_rework.status_work=" . STATUS_EXPORTED . " 
+                    AND activity_rework.id_task=" . $data_planning['id_task'];
+            $conn->query($sql_update);
+            if ($conn->errno){
+                $error_code = $conn->errno;
+                add_log($conn, $sql_update);
+            }
         }
     }
 
@@ -201,9 +197,9 @@ if($error_code==0){
     $list_planning = $list_planning . ")";
 
     $sql_backup = "UPDATE activity INNER JOIN planning ON activity.id_task=planning.id_task
-                    SET activity.status_work=6 WHERE activity.status_work=5
+                    SET activity.status_work=" . STATUS_COMPLETE . " 
+                    WHERE activity.status_work<=" . STATUS_UPDATED . " 
                     AND (planning.id_job, planning.operation) NOT IN " . $list_planning;
-//    echo $sql_backup . "<br>";
     $conn->query($sql_backup);
     if ($conn->errno){
         $error_code = $conn->errno;
@@ -211,9 +207,9 @@ if($error_code==0){
     }
 
     $sql_backup = "UPDATE activity_downtime INNER JOIN planning ON activity_downtime.id_task=planning.id_task
-                    SET activity_downtime.status_downtime=6 WHERE activity_downtime.status_downtime=5
+                    SET activity_downtime.status_downtime=" . STATUS_COMPLETE . " 
+                    WHERE activity_downtime.status_downtime<=" . STATUS_UPDATED . " 
                     AND (planning.id_job, planning.operation) NOT IN " . $list_planning;
-//    echo $sql_backup . "<br>";
     $conn->query($sql_backup);
     if ($conn->errno){
         $error_code = $conn->errno;
@@ -221,9 +217,9 @@ if($error_code==0){
     }
 
     $sql_backup = "UPDATE activity_rework INNER JOIN planning ON activity_rework.id_task=activity_rework.id_task
-                    SET activity_rework.status_work=6 WHERE activity_rework.status_work=5
+                    SET activity_rework.status_work=" . STATUS_COMPLETE . " 
+                    WHERE activity_rework.status_work<=" . STATUS_UPDATED . " 
                     AND (planning.id_job, planning.operation) NOT IN " . $list_planning;
-//    echo $sql_backup . "<br>";
     $conn->query($sql_backup);
     if ($conn->errno){
         $error_code = $conn->errno;

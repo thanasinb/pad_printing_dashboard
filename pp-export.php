@@ -114,6 +114,13 @@
                                     <br>
                                 </form>
                                 <input class="btn btn-primary" type="submit" value="Lists" id="button_list">
+                                <br><br>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" value="" id="check_debug">
+                                    <label class="form-check-label" for="check_debug">
+                                        Debug
+                                    </label>
+                                </div>
                             </div>
                         </div>
                         <div class="card mb-4 w-100" id="card_table_export" hidden>

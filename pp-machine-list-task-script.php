@@ -6,14 +6,14 @@ $current_operation = $_POST['operation'];
 
 // CHANGE OP, SAME JOB ID
 if ($selected_radio==1){
-    $sql = "SELECT * FROM planning WHERE id_job=" . $_POST["id_job"] . " AND status_backup=0 AND task_complete=0 AND 
+    $sql = "SELECT * FROM planning WHERE id_job=" . $_POST["id_job"] . " AND status_backup=0 AND 
     id_task IN (SELECT id_task FROM machine_queue WHERE id_machine='" . $_POST["id_mc"] . "') ORDER BY date_due ASC";
 }
 
 // SELECT NEW TASK
 else{
     $sql = "SELECT * FROM planning WHERE id_task IN (SELECT id_task FROM machine_queue WHERE id_machine='" . $_POST["id_mc"] . "') 
-    AND status_backup=0 AND task_complete=0 ORDER BY date_due ASC, id_job ASC";
+    AND status_backup=0 ORDER BY date_due ASC, id_job ASC";
 }
 $result_planning_machine = $conn->query($sql);
 
@@ -66,12 +66,12 @@ while($row_planning_machine = $result_planning_machine->fetch_assoc()){
 }
 
 if ($selected_radio==1) {
-    $sql = "SELECT * FROM planning WHERE id_job=" . $_POST["id_job"] . " AND status_backup=0 AND task_complete=0 AND 
+    $sql = "SELECT * FROM planning WHERE id_job=" . $_POST["id_job"] . " AND status_backup=0 AND 
     id_task NOT IN (SELECT id_task FROM machine_queue WHERE id_machine='" . $_POST["id_mc"] . "') ORDER BY date_due ASC, id_job ASC";
 }
 else{
     $sql = "SELECT * FROM planning WHERE id_task NOT IN (SELECT id_task FROM machine_queue WHERE id_machine='" . $_POST["id_mc"] . "') 
-    AND status_backup=0 AND task_complete=0 ORDER BY date_due ASC, id_job ASC";
+    AND status_backup=0 ORDER BY date_due ASC, id_job ASC";
 }
 $result_planning_others = $conn->query($sql);
 
