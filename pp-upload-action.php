@@ -154,7 +154,9 @@ if($error_code==0){
             $sql_update = $sql_update . "qty_open=" . $qty_open . ", ";
             $sql_update = $sql_update . "datetime_update='" . date('Y-m-d H:i:s') . "' ";
             $sql_update = $sql_update . "WHERE id_task=" . $data_planning['id_task'] . " ";
-            $sql_update = $sql_update . "AND qty_comp < " . $qty_comp . " ";
+            $sql_update = $sql_update . "AND (qty_comp <> " . $qty_comp . " ";
+            $sql_update = $sql_update . "OR qty_order <> " . $qty_order . " ";
+            $sql_update = $sql_update . "OR qty_open <> " . $qty_open . ")";
             $conn->query($sql_update);
             if ($conn->errno){
                 $error_code = $conn->errno;
