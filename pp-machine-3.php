@@ -137,11 +137,13 @@
                                 </div>
                                 <table id="datatablesSimple" class="table table-striped">
                                     <thead class="text-black" style="background-color: #ffea07">
-                                    <?php require 'pp-machine-table-head.php' ?>
-                                    </thead>
-                                    <tbody>
                                     <?php
-                                    require "pp-machine-list-machine-script-3.php";
+//                                        require 'pp-machine-table-head.php'
+                                    ?>
+                                    </thead>
+                                    <tbody id="table_body"">
+                                    <?php
+//                                    require "pp-machine-list-machine-script-3.php";
                                     ?>
                                     </tbody>
                                 </table>
