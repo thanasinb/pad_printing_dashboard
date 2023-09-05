@@ -75,6 +75,9 @@ foreach ($array_machine_queue as $mq){
             $rework='y';
         }
     }
+    if ($data_activity_time['run_time_actual']==null) {
+        $data_activity_time['run_time_actual'] = '0.00';
+    }
     $array_dashboard[] = array_merge($mq, $data_activity_sum, $data_activity_time, array('rework'=>$rework));
 }
 

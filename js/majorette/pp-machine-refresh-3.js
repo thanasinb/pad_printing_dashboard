@@ -77,7 +77,7 @@ function loadData() {
                     "<td><div class=\"progress\"><div id=\"progress-bar\" class=\"progress-bar\" role=\"progressbar\" style=\"width: " +
                     item.percent + "%\" aria-valuenow=\"" + item.percent + "\" aria-valuemin=\"0\" aria-valuemax=\"100\">" +
                     item.percent + "%</div></div></td>" +
-                    "<td>" + item.run_time_actual + "/" + item.run_time_std + "</td>" +
+                    "<td>" + parseFloat(item.run_time_actual).toFixed(2) + "/" + item.run_time_std + "</td>" +
                     "<td>" + item.run_time_open + "</td>" +
                     "<td>" + item.est_time + "</td>" +
                     "</tr>"
