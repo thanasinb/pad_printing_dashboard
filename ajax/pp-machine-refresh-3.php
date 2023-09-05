@@ -17,7 +17,27 @@ $sql = "SELECT
         FROM machine_queue 
         INNER JOIN planning ON machine_queue.id_task=planning.id_task 
         WHERE machine_queue.queue_number=1 ORDER BY id_machine";
-$query_machine_queue = $conn->query($sql)->fetch_all(MYSQLI_ASSOC);
+$array_machine_queue = $conn->query($sql)->fetch_all(MYSQLI_ASSOC);
+
+//print_r($array_machine_queue);
+
+foreach ($array_machine_queue as $mq){
+//    print_r($mq);
+    echo "<br>";
+    echo $mq['id_machine'];
+
+    $sql = "SELECT SUM(no_pulse2) AS qty_process, SUM(no_pulse3) AS qty_manual FROM activity
+            WHERE status_work<" . STATUS_UPDATED . "
+            AND id_task=" . $mq['id_task'];
+    $data_activity_sum = $conn->query($sql)->fetch_assoc();
+    echo $data_activity_sum['qty_process'];
+
+    $mq = array_merge($mq, $data_activity_sum);
+    echo "<br>";
+
+    print_r($mq);
+}
+
 //$data_machine_queue = $conn->query($sql)->fetch_assoc();
 //$id_task = intval($data_machine_queue['id_task']);
 //echo $sql . "<br>";
@@ -105,6 +125,6 @@ $query_machine_queue = $conn->query($sql)->fetch_all(MYSQLI_ASSOC);
 //    echo json_encode(array_merge($data_activity_sum, $data_planning, $data_activity_time, array('rework'=>$rework)));
 //}
 
-echo json_encode(array_merge($query_machine_queue));
+//echo json_encode(array_merge($query_machine_queue));
 
 require '../update/terminate.php';
