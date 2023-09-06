@@ -65,7 +65,7 @@ function loadData() {
             data = sort_by_key(data, 'percent', -1);
             $("#table_body tr").remove();
             $.each(data, function(i, item) {
-                var row = "<tr class=\"text-black fw-bold\">" +
+                var row = "<tr class=\"text-black fw-bold\"><td></td>" +
                     "<td>" + item.id_mc + "</td>" +
                     "<td>" + item.item_no + "</td>" +
                     "<td>" + item.operation + "</td>" +
@@ -80,7 +80,7 @@ function loadData() {
                     "<td>" + parseFloat(item.run_time_actual).toFixed(2) + "/" + item.run_time_std + "</td>" +
                     "<td>" + item.run_time_open + "</td>" +
                     "<td>" + item.est_time + "</td>" +
-                    "</tr>"
+                    "<td></td><td></td></tr>"
                 $('#table_body').append(row);
             });
         }

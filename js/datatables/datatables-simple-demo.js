@@ -7,7 +7,8 @@ window.addEventListener('DOMContentLoaded', event => {
         new simpleDatatables.DataTable(datatablesSimple,{
             searchable: false,
             paging: false,
-            fixedHeight: false});
+            fixedHeight: false,
+            sortable: false});
     }
     var height_first_row = $('.first-row').height()+2;
     $("thead tr.second-row th, thead tr.second-row td").css("top", height_first_row)

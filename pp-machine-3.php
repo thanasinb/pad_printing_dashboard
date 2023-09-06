@@ -138,7 +138,7 @@
                                 <table id="datatablesSimple" class="table table-striped">
                                     <thead class="text-black" style="background-color: #ffea07">
                                     <?php
-//                                        require 'pp-machine-table-head.php'
+                                        require 'pp-machine-table-head-3.php'
                                     ?>
                                     </thead>
                                     <tbody id="table_body"">
