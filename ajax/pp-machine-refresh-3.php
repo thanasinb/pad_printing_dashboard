@@ -45,8 +45,17 @@ foreach ($array_machine_queue as $mq){
         $mq['qty_order'] = intval($mq['qty_order']);
         $mq['qty_accum']=$data_activity_sum['qty_process']+$data_activity_sum['qty_manual']+$mq['qty_comp'];
         $mq['percent']=round(($mq['qty_accum']/$mq['qty_order'])*100,0);
-        $mq['est_sec']=($mq['qty_order']-$mq['qty_accum'])*$mq['run_time_std'];
-        $mq['run_time_open'] = gmdate("H:i:s", $mq['est_sec']);
+        if ($mq['qty_accum']>$mq['qty_order']){
+            $mq['est_sec']=-$mq['percent'];
+            $mq['run_time_open'] = "00:00:00";
+        }else{
+            $mq['est_sec']=($mq['qty_order']-$mq['qty_accum'])*$mq['run_time_std'];
+            $mq['run_time_open'] = gmdate("H:i:s", $mq['est_sec']);
+        }
+        if ($mq['est_sec']>86400){
+            $days = floor($mq['est_sec']/86400);
+            $mq['run_time_open'] = $days . ":" . $mq['run_time_open'];
+        }
         $mq['est_time'] = date('d-m-Y H:i:s', $date_in_sec + $mq['est_sec']);
 
         $sql = "SELECT id_staff, status_work, total_work, run_time_actual FROM activity 
@@ -84,7 +93,7 @@ foreach ($array_machine_queue as $mq){
         $array_dashboard[] = array_merge($mq, $data_activity_sum, $data_activity_time, array('rework'=>$rework));
     }
     else{
-        $array_dashboard[] = array_merge($mq);
+        $array_dashboard[] = array_merge($mq, array('percent'=>-1, 'est_sec'=>-1));
     }
 }
 
