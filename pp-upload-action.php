@@ -159,70 +159,70 @@ if($error_code==0){
                 add_log($conn, $sql_update);
                 break;
             }
-            $sql_update = "UPDATE activity 
-                    SET activity.status_work=" . STATUS_UPDATED . " 
-                    WHERE activity.status_work=" . STATUS_EXPORTED . " 
-                    AND activity.id_task=" . $data_planning['id_task'];
-            $conn->query($sql_update);
-            if ($conn->errno){
-                $error_code = $conn->errno;
-                add_log($conn, $sql_update);
-            }
+//            $sql_update = "UPDATE activity
+//                    SET activity.status_work=" . STATUS_UPDATED . "
+//                    WHERE activity.status_work=" . STATUS_EXPORTED . "
+//                    AND activity.id_task=" . $data_planning['id_task'];
+//            $conn->query($sql_update);
+//            if ($conn->errno){
+//                $error_code = $conn->errno;
+//                add_log($conn, $sql_update);
+//            }
 
-            $sql_update = "UPDATE activity_downtime 
-                    SET activity_downtime.status_downtime=" . STATUS_UPDATED . " 
-                    WHERE activity_downtime.status_downtime=" . STATUS_EXPORTED . " 
-                    AND activity_downtime.id_task=" . $data_planning['id_task'];
-            $conn->query($sql_update);
-            if ($conn->errno){
-                $error_code = $conn->errno;
-                add_log($conn, $sql_update);
-            }
+//            $sql_update = "UPDATE activity_downtime
+//                    SET activity_downtime.status_downtime=" . STATUS_UPDATED . "
+//                    WHERE activity_downtime.status_downtime=" . STATUS_EXPORTED . "
+//                    AND activity_downtime.id_task=" . $data_planning['id_task'];
+//            $conn->query($sql_update);
+//            if ($conn->errno){
+//                $error_code = $conn->errno;
+//                add_log($conn, $sql_update);
+//            }
 
-            $sql_update = "UPDATE activity_rework 
-                    SET activity_rework.status_work=" . STATUS_UPDATED . " 
-                    WHERE activity_rework.status_work=" . STATUS_EXPORTED . " 
-                    AND activity_rework.id_task=" . $data_planning['id_task'];
-            $conn->query($sql_update);
-            if ($conn->errno){
-                $error_code = $conn->errno;
-                add_log($conn, $sql_update);
-            }
+//            $sql_update = "UPDATE activity_rework
+//                    SET activity_rework.status_work=" . STATUS_UPDATED . "
+//                    WHERE activity_rework.status_work=" . STATUS_EXPORTED . "
+//                    AND activity_rework.id_task=" . $data_planning['id_task'];
+//            $conn->query($sql_update);
+//            if ($conn->errno){
+//                $error_code = $conn->errno;
+//                add_log($conn, $sql_update);
+//            }
         }
     }
 
     $list_planning = rtrim($list_planning, ",");
     $list_planning = $list_planning . ")";
 
-    $sql_backup = "UPDATE activity INNER JOIN planning ON activity.id_task=planning.id_task
-                    SET activity.status_work=" . STATUS_COMPLETE . " 
-                    WHERE activity.status_work<=" . STATUS_UPDATED . " 
-                    AND (planning.id_job, planning.operation) NOT IN " . $list_planning;
-    $conn->query($sql_backup);
-    if ($conn->errno){
-        $error_code = $conn->errno;
-        add_log($conn, $sql_backup);
-    }
+//    $sql_backup = "UPDATE activity INNER JOIN planning ON activity.id_task=planning.id_task
+//                    SET activity.status_work=" . STATUS_COMPLETE . "
+//                    WHERE activity.status_work<=" . STATUS_UPDATED . "
+//                    AND (planning.id_job, planning.operation) NOT IN " . $list_planning;
+//    $conn->query($sql_backup);
+//    if ($conn->errno){
+//        $error_code = $conn->errno;
+//        add_log($conn, $sql_backup);
+//    }
 
-    $sql_backup = "UPDATE activity_downtime INNER JOIN planning ON activity_downtime.id_task=planning.id_task
-                    SET activity_downtime.status_downtime=" . STATUS_COMPLETE . " 
-                    WHERE activity_downtime.status_downtime<=" . STATUS_UPDATED . " 
-                    AND (planning.id_job, planning.operation) NOT IN " . $list_planning;
-    $conn->query($sql_backup);
-    if ($conn->errno){
-        $error_code = $conn->errno;
-        add_log($conn, $sql_backup);
-    }
+//    $sql_backup = "UPDATE activity_downtime INNER JOIN planning ON activity_downtime.id_task=planning.id_task
+//                    SET activity_downtime.status_downtime=" . STATUS_COMPLETE . "
+//                    WHERE activity_downtime.status_downtime<=" . STATUS_UPDATED . "
+//                    AND (planning.id_job, planning.operation) NOT IN " . $list_planning;
+//    $conn->query($sql_backup);
+//    if ($conn->errno){
+//        $error_code = $conn->errno;
+//        add_log($conn, $sql_backup);
+//    }
 
-    $sql_backup = "UPDATE activity_rework INNER JOIN planning ON activity_rework.id_task=activity_rework.id_task
-                    SET activity_rework.status_work=" . STATUS_COMPLETE . " 
-                    WHERE activity_rework.status_work<=" . STATUS_UPDATED . " 
-                    AND (planning.id_job, planning.operation) NOT IN " . $list_planning;
-    $conn->query($sql_backup);
-    if ($conn->errno){
-        $error_code = $conn->errno;
-        add_log($conn, $sql_backup);
-    }
+//    $sql_backup = "UPDATE activity_rework INNER JOIN planning ON activity_rework.id_task=activity_rework.id_task
+//                    SET activity_rework.status_work=" . STATUS_COMPLETE . "
+//                    WHERE activity_rework.status_work<=" . STATUS_UPDATED . "
+//                    AND (planning.id_job, planning.operation) NOT IN " . $list_planning;
+//    $conn->query($sql_backup);
+//    if ($conn->errno){
+//        $error_code = $conn->errno;
+//        add_log($conn, $sql_backup);
+//    }
 
     $sql_backup = "UPDATE planning SET status_backup=1 WHERE (id_job, operation) NOT IN " . $list_planning;
     $conn->query($sql_backup);
