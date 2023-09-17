@@ -1,7 +1,7 @@
 var frequency = 5000; // 5 seconds in miliseconds
 var interval_update = 0;
 var sort_key='id_mc';
-var sort_dir=1;
+var sort_dir=1; // 0 = high to low, 1 = low to high
 
 $(document).ready(function(){
     loadData();
@@ -13,7 +13,7 @@ $(document).ready(function(){
     });
     $('#dash_percent').click(function () {
         sort_key='percent';
-        sort_dir=-1;
+        sort_dir=0;
     });
     $('#dash_open').click(function () {
         sort_key='est_sec';
@@ -35,7 +35,7 @@ function sort_by_key(array, key, dir)
             var x = a[key]; var y = b[key];
             return ((x < y) ? -1 : ((x > y) ? 1 : 0));
         });
-    }else if(dir==-1){
+    }else if(dir==0){
         return array.sort(function(a, b)
         {
             var x = a[key]; var y = b[key];
@@ -63,22 +63,45 @@ function loadData() {
                     }
                 }
                 else {
-                    var row = "<tr class=\"text-black fw-bold\"><td></td>" +
-                        "<td>" + item.id_mc + "</td>" +
-                        "<td>" + item.item_no + "</td>" +
-                        "<td>" + item.operation + "</td>" +
-                        "<td>" + item.op_color + "</td>" +
-                        "<td>" + item.op_side + "</td>" +
-                        "<td>" + item.date_due + "</td>" +
-                        "<td>" + item.qty_per_tray + "</td>" +
-                        "<td>" + item.qty_accum.toLocaleString('en-US') + "/" + item.qty_order.toLocaleString('en-US') + "</td>" +
-                        "<td><div class=\"progress\"><div id=\"progress-bar\" class=\"progress-bar\" role=\"progressbar\" style=\"width: " +
-                        item.percent + "%\" aria-valuenow=\"" + item.percent + "\" aria-valuemin=\"0\" aria-valuemax=\"100\">" +
-                        item.percent + "%</div></div></td>" +
-                        "<td>" + parseFloat(item.run_time_actual).toFixed(2) + "/" + item.run_time_std + "</td>" +
+                    var row;
+                    if (item.qty_order - item.qty_accum <=500 ){
+                        row = "<tr class=\"text-black fw-bold\"><td></td>" +
+                            "<td>" + item.id_mc + "</td>" +
+                            "<td>" + item.item_no + "</td>" +
+                            "<td>" + item.operation + "</td>" +
+                            "<td>" + item.op_color + "</td>" +
+                            "<td>" + item.op_side + "</td>" +
+                            "<td>" + item.date_due + "</td>" +
+                            "<td>" + item.qty_per_tray + "</td>" +
+                            "<td>" + item.qty_accum.toLocaleString('en-US') + "/" + item.qty_order.toLocaleString('en-US') + "</td>" +
+                            "<td><div class=\"progress\"><div id=\"progress-bar\" class=\"progress-bar blink_me bg-orange\" role=\"progressbar\" style=\"width: " +
+                            item.percent + "%\" aria-valuenow=\"" + item.percent + "\" aria-valuemin=\"0\" aria-valuemax=\"100\">" +
+                            item.percent + "%</div></div></td><td>";
+                        if(item.run_time_actual>item.run_time_std){
+                            row = row + "<i class=\"fas fa-flag text-red\"></i> "
+                        }
+                        row = row + parseFloat(item.run_time_actual).toFixed(2) + "/" + item.run_time_std + "</td>" +
                         "<td>" + item.run_time_open + "</td>" +
                         "<td>" + item.est_time + "</td>" +
                         "<td></td><td></td></tr>"
+                    }else {
+                        row = "<tr class=\"text-black fw-bold\"><td></td>" +
+                            "<td>" + item.id_mc + "</td>" +
+                            "<td>" + item.item_no + "</td>" +
+                            "<td>" + item.operation + "</td>" +
+                            "<td>" + item.op_color + "</td>" +
+                            "<td>" + item.op_side + "</td>" +
+                            "<td>" + item.date_due + "</td>" +
+                            "<td>" + item.qty_per_tray + "</td>" +
+                            "<td>" + item.qty_accum.toLocaleString('en-US') + "/" + item.qty_order.toLocaleString('en-US') + "</td>" +
+                            "<td><div class=\"progress\"><div id=\"progress-bar\" class=\"progress-bar\" role=\"progressbar\" style=\"width: " +
+                            item.percent + "%\" aria-valuenow=\"" + item.percent + "\" aria-valuemin=\"0\" aria-valuemax=\"100\">" +
+                            item.percent + "%</div></div></td>" +
+                            "<td>" + parseFloat(item.run_time_actual).toFixed(2) + "/" + item.run_time_std + "</td>" +
+                            "<td>" + item.run_time_open + "</td>" +
+                            "<td>" + item.est_time + "</td>" +
+                            "<td></td><td></td></tr>"
+                    }
                 }
                 $('#table_body').append(row);
             });
