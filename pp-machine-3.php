@@ -100,7 +100,7 @@
         ?>
 <!--        <script type="text/javascript" src="js/majorette/pp-machine-assign-date.js"></script>-->
 <!--        <script type="text/javascript" src="js/majorette/pp-machine-multiplier.js"></script>-->
-        <script type="text/javascript" src="js/majorette/pp-machine-currentTaskModal.js"></script>
+<!--        <script type="text/javascript" src="js/majorette/pp-machine-currentTaskModal.js"></script>-->
         <script type="text/javascript" src="js/majorette/pp-machine-refresh-3.js"></script>
         <script type="text/javascript" src="js/majorette/pp-machine-clock.js"></script>
     </head>
@@ -135,13 +135,13 @@
                                         Hide unassigned machines (ซ่อนเครื่องไม่มีงาน)
                                     </label>
                                 </div>
-                                <table id="datatablesSimple" class="table table-striped">
+                                <table id="datatablesSimple" class="table table-striped" style="width: 100%; white-space: nowrap">
                                     <thead class="text-black" style="background-color: #ffea07">
                                     <?php
                                         require 'pp-machine-table-head-3.php'
                                     ?>
                                     </thead>
-                                    <tbody id="table_body"">
+                                    <tbody id="table_body">
                                     <?php
 //                                    require "pp-machine-list-machine-script-3.php";
                                     ?>
