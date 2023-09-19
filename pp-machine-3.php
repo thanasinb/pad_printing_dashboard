@@ -188,10 +188,15 @@
                             <td></td>
                         </tr>
                         <tr>
-                            <td>Qty accum: </td>
-                            <td id="modal_qty_accum"></td>
+                            <td>Qty/Shif: </td>
+                            <td><input type="number" id="modal_qty_shif" name="modal_qty_shif" disabled></td>
                             <td></td>
                         </tr>
+<!--                        <tr>-->
+<!--                            <td>Qty accum: </td>-->
+<!--                            <td id="modal_qty_accum"></td>-->
+<!--                            <td></td>-->
+<!--                        </tr>-->
                         <tr>
                             <td>Qty order: </td>
                             <td id="modal_qty_order"></td>

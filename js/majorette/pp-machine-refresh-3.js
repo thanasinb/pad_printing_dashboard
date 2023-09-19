@@ -107,11 +107,13 @@ $(document).ready(function(){
         $('#modal_button_save').hide();
         $('#modal_button_change').show();
         $('#modal_qty_per_tray').attr('disabled', true);
+        $('#modal_qty_shif').attr('disabled', true);
         $('#modal_id_machine').text('');
         $('#modal_item_no').text('');
         $('#modal_operation').text('');
         $('#modal_date_due').text('');
         $('#modal_qty_per_tray').val(null);
+        $('#modal_qty_shif').val(null);
         $('#modal_qty_order').text('');
         $('#modal_id_task').text('');
         $('#modal_id_job').text('');
@@ -154,6 +156,7 @@ $(document).ready(function(){
                     $('#modal_operation').text(data.operation);
                     $('#modal_date_due').text(data.date_due);
                     $('#modal_qty_per_tray').val(data.qty_per_tray);
+                    $('#modal_qty_shif').val(data.qty_shif);
                     $('#modal_qty_order').text(data.qty_order);
                     $('#modal_id_task').text(data.id_task);
                     $('#modal_id_job').text(data.id_job);
@@ -174,19 +177,22 @@ $(document).ready(function(){
     });
 
     $('#modal_button_change').click(function (){
-            $('#modal_qty_per_tray').prop('disabled', false);
-            $('#modal_button_change').hide();
+        $('#modal_qty_per_tray').prop('disabled', false);
+        $('#modal_qty_shif').prop('disabled', false);
+        $('#modal_button_change').hide();
             $('#modal_button_save').show();
         });
 
     $('#modal_button_save').click(function (){
             var qty_per_tray = $('#modal_qty_per_tray').val();
+            var qty_shif = $('#modal_qty_shif').val();
 
             $.ajax({
                 url: "ajax/pp-machine-change-tray.php",
                 type: "GET",
                 data: {
                     qty_per_tray: qty_per_tray,
+                    qty_shif: qty_shif,
                     id_task: id_task
                 },
                 context: this,
@@ -195,8 +201,10 @@ $(document).ready(function(){
                     var dataResult = JSON.parse(dataResult);
                     $('.id_machine:contains(' + id_machine + ')').parent().find('.qty_per_tray').text(qty_per_tray);
                     $('#modal_qty_per_tray').prop('disabled', true);
+                    $('#modal_qty_shif').prop('disabled', true);
                     $('#modal_button_save').hide();
                     $('#modal_button_change').show();
+                    // console.log(dataResult.affected_rows);
                 }
             });
         });
@@ -244,7 +252,7 @@ function loadData() {
                         var row = "<tr class=\"text-black fw-bold\"><td></td>" +
                             "<td class='id_machine'>" + item.id_mc + "</td>" +
                             "<td>" + html_btn_current_modal + "</td>" +
-                            "<td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td>&#9997;</td><td></td></tr>";
+                            "<td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td>&#9997;</td><td></td></tr>";
                     }
                 }
                 else {
@@ -268,8 +276,9 @@ function loadData() {
                         "<td class=\"operation\">" + item.operation + "</td>" +
                         "<td>" + item.op_color + "/" + item.op_side + "</td>" +
                         "<td>" + item.date_due + "</td>" +
-                        "<td>" + item.qty_per_tray + "</td>" +
-                        "<td>" + item.qty_accum.toLocaleString('en-US') + "/" + item.qty_order.toLocaleString('en-US') + "</td>" +
+                        "<td>" + item.qty_per_tray + "</td>";
+                    row = row + "<td>" + item.qty_shif + "</td>";
+                    row = row + "<td>" + item.qty_accum.toLocaleString('en-US') + "/" + item.qty_order.toLocaleString('en-US') + "</td>" +
                         "<td><div class=\"progress\">";
                     if (item.qty_order - item.qty_accum <= 500) {
                         row = row + "<div id=\"progress-bar\" class=\"progress-bar blink_me bg-orange\"";
