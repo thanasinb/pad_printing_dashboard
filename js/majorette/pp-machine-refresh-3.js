@@ -46,7 +46,7 @@ var sort_dir=1; // 0 = high to low, 1 = low to high
         var modalTitle = currentTaskModal.querySelector('.modal-title');
         modalTitle.textContent = 'Current task for machine: ' + id_machine;
         modal_id_machine.textContent = id_machine;
-        modal_item_no.textContent = item_no.replace('✍','');;
+        modal_item_no.textContent = item_no.replace('✍','');
 
         $.ajax({
             url: "ajax/pp-modal-get.php",
