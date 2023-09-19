@@ -63,19 +63,19 @@ foreach ($array_machine_queue as $mq){
 
         // IF THE MACHINE IS OCCUPIED
         if($mq['id_staff']!=null){
-            $sql = "SELECT id_staff, status_work, total_work, run_time_actual FROM activity 
+            $sql = "SELECT id_staff, status_work, total_work, run_time_actual, (no_pulse2 + no_pulse3) AS qty_shif FROM activity 
             WHERE status_work<" . STATUS_CLOSED . " AND id_task=" . $mq['id_task'] . " AND id_machine='" . $mq["id_mc"] . "'";
             $data_activity_time = $conn->query($sql)->fetch_assoc();
             if ($data_activity_time['status_work']==null)
             {
-                $sql = "SELECT id_staff, status_work, total_work, run_time_actual FROM activity_rework 
+                $sql = "SELECT id_staff, status_work, total_work, run_time_actual, (no_pulse2 + no_pulse3) AS qty_shif FROM activity_rework 
                 WHERE status_work<" . STATUS_CLOSED . " AND id_task=" . $mq['id_task'] . " AND id_machine='" . $mq["id_mc"] . "'";
                 $data_rework_time = $conn->query($sql)->fetch_assoc();
 
                 // NOT BACKFLUSH
                 if($data_rework_time['status_work']==null){
                     // DOWNTIME
-                    $sql = "SELECT activity_downtime.id_staff, activity_downtime.status_downtime, code_downtime.code_downtime FROM activity_downtime 
+                    $sql = "SELECT activity_downtime.id_staff, activity_downtime.status_downtime, code_downtime.code_downtime, (no_pulse2 + no_pulse3) AS qty_shif FROM activity_downtime 
                     INNER JOIN code_downtime ON activity_downtime.id_downtime=code_downtime.id_downtime 
                     WHERE status_downtime<" . STATUS_CLOSED . " AND id_task=" . $mq['id_task'] . " AND id_machine='" . $mq["id_mc"] . "'";
                     $data_activity_downtime = $conn->query($sql)->fetch_assoc();
@@ -86,6 +86,7 @@ foreach ($array_machine_queue as $mq){
                     }
                     $data_activity_time['id_staff'] = $data_activity_downtime['id_staff'];
                     $data_activity_time['code_downtime'] = $data_activity_downtime['code_downtime'];
+                    $data_activity_time['qty_shif'] = intval($data_activity_downtime['qty_shif']);
                 }else{
                     // REWORK
                     $data_activity_time=$data_rework_time;
@@ -105,6 +106,7 @@ foreach ($array_machine_queue as $mq){
             $data_activity_sum = $conn->query($sql)->fetch_assoc();
             $data_activity_sum['qty_process'] = intval($data_activity_sum['qty_process']);
             $data_activity_sum['qty_manual'] = intval($data_activity_sum['qty_manual']);
+            $data_activity_sum['qty_shif'] = 0;
             $mq['qty_comp'] = intval($mq['qty_comp']);
             $mq['qty_open'] = intval($mq['qty_open']);
             $mq['qty_order'] = intval($mq['qty_order']);
