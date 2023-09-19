@@ -40,8 +40,13 @@ var sort_dir=1; // 0 = high to low, 1 = low to high
 
     currentTaskModal.addEventListener('show.bs.modal', function (event) {
         var id_machine = $(event.relatedTarget).parent().parent().find('.id_machine').text();
+        var item_no = $(event.relatedTarget).parent().parent().find('.item_no').text();
+        var modal_id_machine = currentTaskModal.querySelector('#modal_id_machine');
+        var modal_item_no = currentTaskModal.querySelector('#modal_item_no');
         var modalTitle = currentTaskModal.querySelector('.modal-title');
         modalTitle.textContent = 'Current task for machine: ' + id_machine;
+        modal_id_machine.textContent = id_machine;
+        modal_item_no.textContent = item_no.replace('✍','');;
 
         $.ajax({
             url: "ajax/pp-modal-get.php",
@@ -53,8 +58,6 @@ var sort_dir=1; // 0 = high to low, 1 = low to high
             cache: false,
             success: function(dataResult){
                 var data = JSON.parse(dataResult);
-                $('#modal_id_machine').text(id_machine);
-                $('#modal_item_no').text(data.item_no);
                 $('#modal_operation').text(data.operation);
                 $('#modal_date_due').text(data.date_due);
                 $('#modal_qty_per_tray').val(data.qty_per_tray);
@@ -129,7 +132,7 @@ function loadData() {
                         row = row + "<td style=\"color: white\"  class=\"bg-red\">" + item.id_staff + "<br>" + item.code_downtime + "</td>";
                     }
                     row = row + "<td class='id_machine'>" + item.id_mc + "</td>" +
-                        "<td class=\"text-nowrap\">" + html_btn_current_modal + item.item_no + "</td>" +
+                        "<td class=\"text-nowrap item_no\">" + html_btn_current_modal + item.item_no + "</td>" +
                         "<td>" + item.operation + "</td>" +
                         "<td>" + item.op_color + "/" + item.op_side + "</td>" +
                         "<td>" + item.date_due + "</td>" +
