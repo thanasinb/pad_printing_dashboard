@@ -3,30 +3,110 @@ var interval_update = 0;
 var sort_key='id_mc';
 var sort_dir=1; // 0 = high to low, 1 = low to high
 
-    $(document).ready(function(){
+$(document).ready(function(){
     loadData();
     startLoop();
+
+    var id_machine, item_no, id_job, operation, id_task;
+
+    $('#modal_button_save').hide();
+    $('#modal_qty_per_tray').prop('disabled', true);
+    $('.radioCurrentTask').click(function (){
+        $('#modal_button_go').attr('disabled', false);
+    });
+    $('.radioNextTask').click(function (){
+        $('#modal_next_button_go').attr('disabled', false);
+    });
 
     $('#dash_machine').click(function () {
         sort_key='id_mc';
         sort_dir=1;
+        $('#dash_percent').html("Progress (%)<br><i class=\"fas fa-arrow-down\" style=\"opacity: 0.3\"></i>");
+        $('#dash_machine').html("M/C<br><i class=\"fas fa-arrow-down\" style=\"opacity: 1\"></i>");
+        $('#dash_cycle').html("Cycle time<br>Tray/Shif/Std<br><i class=\"fas fa-arrow-down\" style=\"opacity: 0.3\"></i>");
+        $('#dash_open').html("Open<br>run time<br><i class=\"fas fa-arrow-down\" style=\"opacity: 0.3\"></i>");
     });
     $('#dash_percent').click(function () {
         sort_key='percent';
         sort_dir=0;
+        $('#dash_percent').html("Progress (%)<br><i class=\"fas fa-arrow-down\" style=\"opacity: 1\"></i>");
+        $('#dash_machine').html("M/C<br><i class=\"fas fa-arrow-down\" style=\"opacity: 0.3\"></i>");
+        $('#dash_cycle').html("Cycle time<br>Tray/Shif/Std<br><i class=\"fas fa-arrow-down\" style=\"opacity: 0.3\"></i>");
+        $('#dash_open').html("Open<br>run time<br><i class=\"fas fa-arrow-down\" style=\"opacity: 0.3\"></i>");
+    });
+    $('#dash_cycle').click(function () {
+        // sort_key='est_sec';
+        // sort_dir=1;
+        $('#dash_percent').html("Progress (%)<br><i class=\"fas fa-arrow-down\" style=\"opacity: 0.3\"></i>");
+        $('#dash_machine').html("M/C<br><i class=\"fas fa-arrow-down\" style=\"opacity: 0.3\"></i>");
+        $('#dash_cycle').html("Cycle time<br>Tray/Shif/Std<br><i class=\"fas fa-arrow-down\" style=\"opacity: 1\"></i>");
+        $('#dash_open').html("Open<br>run time<br><i class=\"fas fa-arrow-down\" style=\"opacity: 0.3\"></i>");
     });
     $('#dash_open').click(function () {
         sort_key='est_sec';
         sort_dir=1;
+        $('#dash_percent').html("Progress (%)<br><i class=\"fas fa-arrow-down\" style=\"opacity: 0.3\"></i>");
+        $('#dash_machine').html("M/C<br><i class=\"fas fa-arrow-down\" style=\"opacity: 0.3\"></i>");
+        $('#dash_cycle').html("Cycle time<br>Tray/Shif/Std<br><i class=\"fas fa-arrow-down\" style=\"opacity: 0.3\"></i>");
+        $('#dash_open').html("Open<br>run time<br><i class=\"fas fa-arrow-down\" style=\"opacity: 1\"></i>");
+    });
+
+    $('#modal_button_go').click(function (){
+        var radio_checked = $("input[name='radioCurrentTask']:checked").val();
+        $('#selected_radio').val(radio_checked);
+        $('#hidden_id_job').val(id_job);
+        $('#hidden_id_machine').val(id_machine);
+        $('#hidden_item_no').val(item_no);
+        $('#hidden_operation').val(operation);
+
+        if (radio_checked==1){
+            $('#form_modal_current_task').attr('action', 'pp-machine-list-task.php');
+        }
+        else if (radio_checked==3){
+            $('#form_modal_current_task').attr('action', 'pp-machine-3.php');
+        }
+        else if (radio_checked==4){
+            $('#form_modal_current_task').attr('action', 'pp-machine-3.php');
+        }
+        else if (radio_checked==5){
+            $('#form_modal_current_task').attr('action', 'pp-machine-3.php');
+        }
+        else if (radio_checked==6){
+            $('#form_modal_current_task').attr('action', 'pp-machine-list-task.php');
+        }
+        else if (radio_checked==7){
+            $('#form_modal_current_task').attr('action', './update/touch-reset.php?dashboard=1&id_mc='+id_machine);
+        }
+        if (radio_checked!=2) {
+            $('#form_modal_current_task').submit();
+        }
+    });
+
+    $('#modal_next_button_go').click(function (){
+        var radio_checked = $("input[name='radioNextTask']:checked").val();
+        $('#next_selected_radio').val(radio_checked);
+
+        if (radio_checked==1){
+            $('#form_modal_next_task').attr('action', 'pp-machine-list-task.php');
+        }else if (radio_checked==3){
+            $('#form_modal_next_task').attr('action', 'pp-machine-3.php');
+        }else if (radio_checked==4){
+            $('#form_modal_next_task').attr('action', 'pp-machine-3.php');
+        }else if (radio_checked==5){
+            $('#form_modal_next_task').attr('action', 'pp-machine-3.php');
+        }else if (radio_checked==6){
+            $('#form_modal_next_task').attr('action', 'pp-machine-list-task.php');
+        }
+        $('#form_modal_next_task').submit();
     });
 
     var currentTaskModal = document.getElementById('currentTaskModal');
 
     currentTaskModal.addEventListener('hide.bs.modal', function (event) {
-        // $('input[name=radioCurrentTask]:checked').prop('checked', false);
-        // $('#modal_button_save').hide();
-        // $('#modal_button_change').show();
-        // $('#modal_qty_per_tray').attr('disabled', false);
+        $('input[name=radioCurrentTask]:checked').prop('checked', false);
+        $('#modal_button_save').hide();
+        $('#modal_button_change').show();
+        $('#modal_qty_per_tray').attr('disabled', true);
         $('#modal_id_machine').text('');
         $('#modal_item_no').text('');
         $('#modal_operation').text('');
@@ -39,8 +119,8 @@ var sort_dir=1; // 0 = high to low, 1 = low to high
     });
 
     currentTaskModal.addEventListener('show.bs.modal', function (event) {
-        var id_machine = $(event.relatedTarget).parent().parent().find('.id_machine').text();
-        var item_no = $(event.relatedTarget).parent().parent().find('.item_no').text();
+        id_machine = $(event.relatedTarget).parent().parent().find('.id_machine').text();
+        item_no = $(event.relatedTarget).parent().parent().find('.item_no').text();
         var modal_id_machine = currentTaskModal.querySelector('#modal_id_machine');
         var modal_item_no = currentTaskModal.querySelector('#modal_item_no');
         var modalTitle = currentTaskModal.querySelector('.modal-title');
@@ -48,26 +128,78 @@ var sort_dir=1; // 0 = high to low, 1 = low to high
         modal_id_machine.textContent = id_machine;
         modal_item_no.textContent = item_no.replace('✍','');
 
-        $.ajax({
-            url: "ajax/pp-modal-get.php",
-            type: "GET",
-            data: {
-                id_mc: id_machine
-            },
-            context: this,
-            cache: false,
-            success: function(dataResult){
-                var data = JSON.parse(dataResult);
-                $('#modal_operation').text(data.operation);
-                $('#modal_date_due').text(data.date_due);
-                $('#modal_qty_per_tray').val(data.qty_per_tray);
-                $('#modal_qty_order').text(data.qty_order);
-                $('#modal_id_task').text(data.id_task);
-                $('#modal_id_job').text(data.id_job);
-                $('#modal_last_update').text(data.last_update);
-            }
-        });
+        if (item_no!='') {
+            $('#radioChangeOp').attr('disabled', false);
+            $('#radioResetActivity').attr('disabled', false);
+            $('#radioComplete').attr('disabled', false);
+            $('#radioRemove').attr('disabled', false);
+            $('#radioNextQueue').attr('disabled', true);
+            $('#radioNewTask').attr('disabled', true);
+            $('#modal_button_go').attr('disabled', true);
+            $('#modal_button_change').attr('disabled', false);
+
+            $.ajax({
+                url: "ajax/pp-modal-get.php",
+                type: "GET",
+                data: {
+                    id_mc: id_machine
+                },
+                context: this,
+                cache: false,
+                success: function(dataResult){
+                    var data = JSON.parse(dataResult);
+                    id_job = data.id_job;
+                    operation = data.operation;
+                    id_task = data.id_task;
+                    $('#modal_operation').text(data.operation);
+                    $('#modal_date_due').text(data.date_due);
+                    $('#modal_qty_per_tray').val(data.qty_per_tray);
+                    $('#modal_qty_order').text(data.qty_order);
+                    $('#modal_id_task').text(data.id_task);
+                    $('#modal_id_job').text(data.id_job);
+                    $('#modal_last_update').text(data.last_update);
+                }
+            });
+        }
+        else{
+            $('#modal_button_change').attr('disabled', true);
+            $('#radioChangeOp').attr('disabled', true);
+            $('#radioResetActivity').attr('disabled', true);
+            $('#radioComplete').attr('disabled', true);
+            $('#radioRemove').attr('disabled', true);
+            $('#radioNextQueue').attr('disabled', false);
+            $('#radioNewTask').attr('disabled', false);
+            $('#modal_button_go').attr('disabled', true);
+        }
     });
+
+    $('#modal_button_change').click(function (){
+            $('#modal_qty_per_tray').prop('disabled', false);
+            $('#modal_button_change').hide();
+            $('#modal_button_save').show();
+        });
+
+    $('#modal_button_save').click(function (){
+            var qty_per_tray = $('#modal_qty_per_tray').val();
+
+            $.ajax({
+                url: "ajax/pp-machine-change-tray.php",
+                type: "GET",
+                data: {
+                    qty_per_tray: qty_per_tray,
+                    id_task: id_task
+                },
+                context: this,
+                cache: false,
+                success: function(dataResult){
+                    var dataResult = JSON.parse(dataResult);
+                    $('.id_machine:contains(' + id_machine + ')').parent().find('.qty_per_tray').text(qty_per_tray);
+                    $('#modal_qty_per_tray').prop('disabled', true);
+                    $('#modal_button_save').hide();
+                    $('#modal_button_change').show();
+                }
+            });
+        });
 });
 
 // STARTS and Resets the loop
@@ -133,7 +265,7 @@ function loadData() {
                     }
                     row = row + "<td class='id_machine'>" + item.id_mc + "</td>" +
                         "<td class=\"text-nowrap item_no\">" + html_btn_current_modal + item.item_no + "</td>" +
-                        "<td>" + item.operation + "</td>" +
+                        "<td class=\"operation\">" + item.operation + "</td>" +
                         "<td>" + item.op_color + "/" + item.op_side + "</td>" +
                         "<td>" + item.date_due + "</td>" +
                         "<td>" + item.qty_per_tray + "</td>" +
@@ -161,5 +293,4 @@ function loadData() {
             });
         }
     });
-
 }
