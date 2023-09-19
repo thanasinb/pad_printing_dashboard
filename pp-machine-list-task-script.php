@@ -111,7 +111,7 @@ while($row_planning_other = $result_planning_others->fetch_assoc()){
 require 'update/terminate.php';
 ?>
 <div>
-<form id="form_post" action="pp-machine.php" method="post">
+<form id="form_post" action="pp-machine-3.php" method="post">
     <input type="hidden" id="selected_radio" name="selected_radio" value="<?php echo $selected_radio; ?>">
     <input type="hidden" id="hidden_operation_new" name="operation_new" value="0">
     <input type="hidden" id="hidden_id_machine" name="id_machine" value="<?php echo $_POST["id_mc"]; ?>">
