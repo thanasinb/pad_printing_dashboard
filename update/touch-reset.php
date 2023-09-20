@@ -89,6 +89,6 @@ $data_json = json_encode(array("code"=>"OK", "message"=>"OK"), JSON_UNESCAPED_UN
 print_r($data_json);
 
 if(strcmp($_GET['dashboard'],'1')==0){
-    header("Location: ../pp-machine.php");
+    header("Location: ../pp-machine-3.php");
     die();
 }
