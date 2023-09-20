@@ -96,7 +96,14 @@ foreach ($array_machine_queue as $mq){
             if ($data_activity_time['run_time_actual']==null) {
                 $data_activity_time['run_time_actual'] = '0.00';
             }
-            $array_dashboard[] = array_merge($mq, $data_activity_sum, $data_activity_time, array('rework'=>$rework));
+
+            $sql = "SELECT date_eff, shif, SUM(no_pulse2)+SUM(no_pulse3) AS qty_shif FROM activity WHERE id_task=" . $mq['id_task'] . " AND id_machine='" . $mq["id_mc"] . "' AND id_staff='" . $mq['id_staff'] . "' GROUP BY date_eff, shif UNION 
+                    SELECT date_eff, shif, SUM(no_pulse2)+SUM(no_pulse3) AS qty_shif FROM activity_rework WHERE id_task=" . $mq['id_task'] . " AND id_machine='" . $mq["id_mc"] . "' AND id_staff='" . $mq['id_staff'] . "' GROUP BY date_eff, shif UNION
+                    SELECT date_eff, shif, SUM(no_pulse2)+SUM(no_pulse3) AS qty_shif FROM activity_downtime WHERE id_task=" . $mq['id_task'] . " AND id_machine='" . $mq["id_mc"] . "' AND id_staff='" . $mq['id_staff'] . "' GROUP BY date_eff, shif
+                    ORDER BY date_eff DESC";
+            $data_qty_shif = $conn->query($sql)->fetch_assoc();
+
+            $array_dashboard[] = array_merge($mq, $data_activity_sum, $data_activity_time, $data_qty_shif, array('rework'=>$rework));
         }
         // ELSE THE MACHINE IS NOT OCCUPIED
         else{
@@ -112,12 +119,12 @@ foreach ($array_machine_queue as $mq){
             $mq['qty_order'] = intval($mq['qty_order']);
             $mq['qty_accum']=$data_activity_sum['qty_process']+$data_activity_sum['qty_manual']+$mq['qty_comp'];
             $mq['percent']=round(($mq['qty_accum']/$mq['qty_order'])*100,0);
-            $array_dashboard[] = array_merge($mq, $data_activity_sum, array('run_time_actual'=>0.00, 'est_sec'=>-1, 'status_work'=>0, 'rework'=>$rework));
+            $array_dashboard[] = array_merge($mq, $data_activity_sum, array('run_time_actual'=>0.00, 'est_sec'=>-1, 'status_work'=>0, 'qty_shif'=>0, 'rework'=>$rework));
         }
     }
     // ELSE THE MACHINE DOES NOT HAVE A TASK ASSIGNED
     else{
-        $array_dashboard[] = array_merge($mq, array('percent'=>-2, 'est_sec'=>-2, 'status_work'=>0, 'rework'=>$rework));
+        $array_dashboard[] = array_merge($mq, array('percent'=>-2, 'est_sec'=>-2, 'status_work'=>0, 'qty_shif'=>0, 'rework'=>$rework));
     }
 }
 
