@@ -97,9 +97,9 @@ foreach ($array_machine_queue as $mq){
                 $data_activity_time['run_time_actual'] = '0.00';
             }
 
-            $sql = "SELECT date_eff, shif, SUM(no_pulse2)+SUM(no_pulse3) AS qty_shif FROM activity WHERE id_task=" . $mq['id_task'] . " AND id_machine='" . $mq["id_mc"] . "' AND id_staff='" . $mq['id_staff'] . "' GROUP BY date_eff, shif UNION 
-                    SELECT date_eff, shif, SUM(no_pulse2)+SUM(no_pulse3) AS qty_shif FROM activity_rework WHERE id_task=" . $mq['id_task'] . " AND id_machine='" . $mq["id_mc"] . "' AND id_staff='" . $mq['id_staff'] . "' GROUP BY date_eff, shif UNION
-                    SELECT date_eff, shif, SUM(no_pulse2)+SUM(no_pulse3) AS qty_shif FROM activity_downtime WHERE id_task=" . $mq['id_task'] . " AND id_machine='" . $mq["id_mc"] . "' AND id_staff='" . $mq['id_staff'] . "' GROUP BY date_eff, shif
+            $sql = "SELECT date_eff, shif, SUM(no_pulse2)+SUM(no_pulse3) AS qty_shif FROM activity WHERE id_task=" . $mq['id_task'] . " AND id_machine='" . $mq["id_mc"] . "' GROUP BY date_eff, shif UNION 
+                    SELECT date_eff, shif, SUM(no_pulse2)+SUM(no_pulse3) AS qty_shif FROM activity_rework WHERE id_task=" . $mq['id_task'] . " AND id_machine='" . $mq["id_mc"] . "' GROUP BY date_eff, shif UNION
+                    SELECT date_eff, shif, SUM(no_pulse2)+SUM(no_pulse3) AS qty_shif FROM activity_downtime WHERE id_task=" . $mq['id_task'] . " AND id_machine='" . $mq["id_mc"] . "' GROUP BY date_eff, shif
                     ORDER BY date_eff DESC";
             $data_qty_shif = $conn->query($sql)->fetch_assoc();
 
