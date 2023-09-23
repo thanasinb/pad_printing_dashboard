@@ -105,8 +105,7 @@ foreach ($array_machine_queue as $mq){
             $array_dashboard[] = array_merge($mq, array('run_time_actual'=>0.00,
                                                         'est_sec'=>-1,
                                                         'status_work'=>0,
-                                                        'rework'=>$rework,
-                                                        'qty_shif'=>0));
+                                                        'rework'=>$rework));
         }
     }
     // ELSE THE MACHINE DOES NOT HAVE A TASK ASSIGNED
