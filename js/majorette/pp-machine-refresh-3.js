@@ -277,7 +277,7 @@ function loadData() {
                         "<td>" + item.op_color + "/" + item.op_side + "</td>" +
                         "<td>" + item.date_due + "</td>" +
                         "<td>" + item.qty_per_tray + "</td>";
-                    row = row + "<td>" + item.qty_shif + "</td>";
+                    row = row + "<td>" + item.qty_shif.toLocaleString('en-US') + "</td>";
                     row = row + "<td>" + item.qty_accum.toLocaleString('en-US') + "/" + item.qty_order.toLocaleString('en-US') + "</td>" +
                         "<td><div class=\"progress\">";
                     if (item.qty_order - item.qty_accum <= 500) {
