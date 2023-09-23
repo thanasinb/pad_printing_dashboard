@@ -262,7 +262,7 @@ function loadData() {
                         row = row + "<td class=\"bg-blue\"></td>";
                     }else if(item.status_work==1){
                         if(item.rework=='y'){
-                            row = row + "<td style=\"color: white\" class=\"bg-green\">" + item.id_staff + " R/W</td>";
+                            row = row + "<td style=\"color: white\" class=\"bg-green\">" + item.id_staff + "<br>R/W</td>";
                         }else{
                             row = row + "<td style=\"color: white\" class=\"bg-green\">" + item.id_staff + "</td>";
                         }
