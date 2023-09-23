@@ -86,6 +86,6 @@ if(empty($data_activity)) {
 }
 
 require 'terminate.php';
-header("Location: ../pp-machine.php");
+header("Location: ../pp-machine-3.php");
 die();
 

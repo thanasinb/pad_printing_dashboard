@@ -30,7 +30,7 @@
                 </a>
                 <div class="collapse" id="collapseMachines" data-bs-parent="#accordionSidenav">
                     <nav class="sidenav-menu-nested nav accordion" id="accordionSidenavPages">
-                        <a class="nav-link" href="pp-machine.php">Machine List</a>
+                        <a class="nav-link" href="pp-machine-3.php">Machine List</a>
                         <a class="nav-link" href="pp-machine-add.php">Add new Machine</a>
                     </nav>
                 </div>
