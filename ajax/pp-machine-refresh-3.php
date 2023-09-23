@@ -62,12 +62,11 @@ foreach ($array_machine_queue as $mq){
         $mq['est_time'] = date('d-m-y H:i:s', $date_in_sec + $mq['est_sec']);
         $mq['date_due'] = date("d-m-y", strtotime($mq['date_due']));
 
+        // GET QTY FROM THE CURRENT SHIF, TASK, AND MACHINE
+        $mq['qty_shif'] = get_qty_shif($conn, $mq['id_task'], $mq['id_mc']);
+
         // IF THE MACHINE IS OCCUPIED
         if($mq['id_staff']!=null){
-
-            // GET QTY FROM THE CURRENT SHIF, TASK, AND MACHINE
-            $mq['qty_shif'] = get_qty_shif($conn, $mq['id_task'], $mq['id_mc']);
-
             $sql = "SELECT id_staff, status_work, total_work, run_time_actual FROM activity
             WHERE status_work<" . STATUS_CLOSED . " AND id_task=" . $mq['id_task'] . " AND id_machine='" . $mq["id_mc"] . "'";
             $data_activity_time = $conn->query($sql)->fetch_assoc();
@@ -106,8 +105,7 @@ foreach ($array_machine_queue as $mq){
             $array_dashboard[] = array_merge($mq, array('run_time_actual'=>0.00,
                                                         'est_sec'=>-1,
                                                         'status_work'=>0,
-                                                        'rework'=>$rework,
-                                                        'qty_shif'=>0));
+                                                        'rework'=>$rework));
         }
     }
     // ELSE THE MACHINE DOES NOT HAVE A TASK ASSIGNED
