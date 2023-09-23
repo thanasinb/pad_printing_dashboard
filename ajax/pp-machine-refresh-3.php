@@ -4,6 +4,9 @@ ini_set('display_errors', 0);
 error_reporting(E_ERROR | E_WARNING | E_PARSE);
 require '../update/establish.php';
 require '../const-status.php';
+require '../update/lib_get_qty_shif.php';
+require '../update/lib_get_qty_process_manual.php';
+
 
 $sql = "SELECT 
             machine.id_mc, 
@@ -36,16 +39,14 @@ foreach ($array_machine_queue as $mq){
     // IF THE MACHINE HAS A TASK ASSIGNED
     if ($mq['id_task']!=null){
         $mq['run_time_std'] = number_format((floatval($mq['run_time_std'])*3600), 2);
-        $sql = "SELECT SUM(no_pulse2) AS qty_process, SUM(no_pulse3) AS qty_manual FROM activity
-                WHERE status_work<" . STATUS_UPDATED . "
-                AND id_task=" . $mq['id_task'];
-        $data_activity_sum = $conn->query($sql)->fetch_assoc();
-        $data_activity_sum['qty_process'] = intval($data_activity_sum['qty_process']);
-        $data_activity_sum['qty_manual'] = intval($data_activity_sum['qty_manual']);
+
+        // GET QTY FROM EVERY SHIF FROM THE SPECIFIC TASK, FOR CALCULATING PERCENTAGE
+        list($qty_process, $qty_manual) = get_qty_process_manual($conn, $mq['id_task']);
+
         $mq['qty_comp'] = intval($mq['qty_comp']);
         $mq['qty_open'] = intval($mq['qty_open']);
         $mq['qty_order'] = intval($mq['qty_order']);
-        $mq['qty_accum']=$data_activity_sum['qty_process']+$data_activity_sum['qty_manual']+$mq['qty_comp'];
+        $mq['qty_accum']= $qty_process + $qty_manual + $mq['qty_comp'];
         $mq['percent']=round(($mq['qty_accum']/$mq['qty_order'])*100,0);
         if ($mq['qty_accum']>$mq['qty_order']){
             $mq['est_sec']=-$mq['percent'];
@@ -63,20 +64,23 @@ foreach ($array_machine_queue as $mq){
 
         // IF THE MACHINE IS OCCUPIED
         if($mq['id_staff']!=null){
-            $sql = "SELECT id_staff, status_work, total_work, run_time_actual, (no_pulse2 + no_pulse3) AS qty_shif FROM activity 
+
+            // GET QTY FROM THE CURRENT SHIF, TASK, AND MACHINE
+            $mq['qty_shif'] = get_qty_shif($conn, $mq['id_task'], $mq['id_mc']);
+
+            $sql = "SELECT id_staff, status_work, total_work, run_time_actual FROM activity
             WHERE status_work<" . STATUS_CLOSED . " AND id_task=" . $mq['id_task'] . " AND id_machine='" . $mq["id_mc"] . "'";
             $data_activity_time = $conn->query($sql)->fetch_assoc();
             if ($data_activity_time['status_work']==null)
             {
-                $sql = "SELECT id_staff, status_work, total_work, run_time_actual, (no_pulse2 + no_pulse3) AS qty_shif FROM activity_rework 
+                $sql = "SELECT id_staff, status_work, total_work, run_time_actual FROM activity_rework
                 WHERE status_work<" . STATUS_CLOSED . " AND id_task=" . $mq['id_task'] . " AND id_machine='" . $mq["id_mc"] . "'";
                 $data_rework_time = $conn->query($sql)->fetch_assoc();
 
-                // NOT BACKFLUSH
+                // NOT BACKFLUSH NOR REWORK -> DOWNTIME
                 if($data_rework_time['status_work']==null){
-                    // DOWNTIME
-                    $sql = "SELECT activity_downtime.id_staff, activity_downtime.status_downtime, code_downtime.code_downtime, (no_pulse2 + no_pulse3) AS qty_shif FROM activity_downtime 
-                    INNER JOIN code_downtime ON activity_downtime.id_downtime=code_downtime.id_downtime 
+                    $sql = "SELECT activity_downtime.id_staff, status_downtime, code_downtime.code_downtime FROM activity_downtime
+                    INNER JOIN code_downtime ON activity_downtime.id_downtime=code_downtime.id_downtime
                     WHERE status_downtime<" . STATUS_CLOSED . " AND id_task=" . $mq['id_task'] . " AND id_machine='" . $mq["id_mc"] . "'";
                     $data_activity_downtime = $conn->query($sql)->fetch_assoc();
                     if (strcmp($data_activity_downtime['status_downtime'], '2') != 0){
@@ -86,7 +90,6 @@ foreach ($array_machine_queue as $mq){
                     }
                     $data_activity_time['id_staff'] = $data_activity_downtime['id_staff'];
                     $data_activity_time['code_downtime'] = $data_activity_downtime['code_downtime'];
-                    $data_activity_time['qty_shif'] = intval($data_activity_downtime['qty_shif']);
                 }else{
                     // REWORK
                     $data_activity_time=$data_rework_time;
@@ -96,23 +99,15 @@ foreach ($array_machine_queue as $mq){
             if ($data_activity_time['run_time_actual']==null) {
                 $data_activity_time['run_time_actual'] = '0.00';
             }
-            $array_dashboard[] = array_merge($mq, $data_activity_sum, $data_activity_time, array('rework'=>$rework));
+            $array_dashboard[] = array_merge($mq, $data_activity_time, array('rework'=>$rework));
         }
         // ELSE THE MACHINE IS NOT OCCUPIED
         else{
-            $sql = "SELECT SUM(no_pulse2) AS qty_process, SUM(no_pulse3) AS qty_manual FROM activity
-                WHERE status_work<" . STATUS_UPDATED . "
-                AND id_task=" . $mq['id_task'];
-            $data_activity_sum = $conn->query($sql)->fetch_assoc();
-            $data_activity_sum['qty_process'] = intval($data_activity_sum['qty_process']);
-            $data_activity_sum['qty_manual'] = intval($data_activity_sum['qty_manual']);
-            $data_activity_sum['qty_shif'] = 0;
-            $mq['qty_comp'] = intval($mq['qty_comp']);
-            $mq['qty_open'] = intval($mq['qty_open']);
-            $mq['qty_order'] = intval($mq['qty_order']);
-            $mq['qty_accum']=$data_activity_sum['qty_process']+$data_activity_sum['qty_manual']+$mq['qty_comp'];
-            $mq['percent']=round(($mq['qty_accum']/$mq['qty_order'])*100,0);
-            $array_dashboard[] = array_merge($mq, $data_activity_sum, array('run_time_actual'=>0.00, 'est_sec'=>-1, 'status_work'=>0, 'rework'=>$rework));
+            $array_dashboard[] = array_merge($mq, array('run_time_actual'=>0.00,
+                                                        'est_sec'=>-1,
+                                                        'status_work'=>0,
+                                                        'rework'=>$rework,
+                                                        'qty_shif'=>0));
         }
     }
     // ELSE THE MACHINE DOES NOT HAVE A TASK ASSIGNED
