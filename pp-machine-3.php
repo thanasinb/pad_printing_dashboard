@@ -130,7 +130,7 @@
                             </div>
                             <div class="card-body">
                                 <div class="form-check">
-                                    <input class="form-check-input" type="checkbox" name="checkbox_hide_unassigned_machines" id="checkbox_hide_unassigned_machines">
+                                    <input class="form-check-input" type="checkbox" name="checkbox_hide_unassigned_machines" id="checkbox_hide_unassigned_machines" checked>
                                     <label class="form-check-label" for="checkbox_hide_unassigned_machines">
                                         Hide unassigned machines (ซ่อนเครื่องไม่มีงาน)
                                     </label>
