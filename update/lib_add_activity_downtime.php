@@ -18,6 +18,7 @@ function add_activity_downtime($conn, $table, $id_task, $id_machine, $id_staff, 
         id_downtime, 
         status_downtime, 
         time_start, 
+        time_previous, 
         multiplier) 
         VALUES (";
         $sql = $sql . $id_task . ",";
@@ -27,6 +28,7 @@ function add_activity_downtime($conn, $table, $id_task, $id_machine, $id_staff, 
         $sql = $sql . "'" . $date_eff . "',";
         $sql = $sql . $data_id_downtime['id_downtime'] . ",";
         $sql = $sql . "1,";
+        $sql = $sql . "CURRENT_TIMESTAMP(),";
         $sql = $sql . "CURRENT_TIMESTAMP(),";
         $sql = $sql . $multiplier;
         $sql = $sql . ")";
