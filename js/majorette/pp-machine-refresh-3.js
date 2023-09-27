@@ -288,22 +288,26 @@ function loadData() {
                     row = row + "role=\"progressbar\" style=\"width: " + item.percent + "%\" aria-valuenow=\"" +
                         item.percent + "\" aria-valuemin=\"0\" aria-valuemax=\"100\">" +
                         item.percent + "%</div></div></td>";
-                    if(item.run_time_tray>item.run_time_std || item.run_time_actual>item.run_time_std){
+                    var float_run_time_tray, float_run_time_actual, float_run_time_std;
+                    float_run_time_tray = parseFloat(item.run_time_tray).toFixed(2);
+                    float_run_time_actual = parseFloat(item.run_time_actual).toFixed(2);
+                    float_run_time_std = parseFloat(item.run_time_std).toFixed(2);
+                    if(float_run_time_tray>float_run_time_std || float_run_time_actual>float_run_time_std){
                         row = row + "<td><span style=\"color: red\" class='blink_me'>&#9873; </span>";
                     }else{
                         row = row + "<td>";
                     }
-                    if(item.run_time_tray>item.run_time_std){
-                        row = row + "<span style=\"color: red\">" + parseFloat(item.run_time_tray).toFixed(2) + "</span>/";
+                    if(float_run_time_tray>float_run_time_std){
+                        row = row + "<span style=\"color: red\">" + float_run_time_tray + "</span>/";
                     }else {
-                        row = row + parseFloat(item.run_time_tray).toFixed(2) + "/";
+                        row = row + float_run_time_tray + "/";
                     }
-                    if(item.run_time_actual>item.run_time_std) {
-                        row = row + "<span style=\"color: red\">" + parseFloat(item.run_time_actual).toFixed(2) + "</span>/";
+                    if(float_run_time_actual>float_run_time_std) {
+                        row = row + "<span style=\"color: red\">" + float_run_time_actual + "</span>/";
                     }else {
-                        row = row + parseFloat(item.run_time_actual).toFixed(2) + "/";
+                        row = row + float_run_time_actual + "/";
                     }
-                    row = row + item.run_time_std + "</td><td>" + item.run_time_open + "</td>";
+                    row = row + float_run_time_std + "</td><td>" + item.run_time_open + "</td>";
                     // row = row + "<td>" + item.est_time + "</td>";
                     row = row + "<td>&#9997;</td><td></td></tr>";
                 }
