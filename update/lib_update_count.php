@@ -9,7 +9,7 @@ function update_count($conn, $is_quit, $table, $status_work, $id_activity, $no_s
         $status_work_text = 'status_work=';
     }
 
-    $sql = "SELECT id_task, time_start, total_work, total_food, total_toilet, no_pulse1, no_pulse2, no_pulse3, 
+    $sql = "SELECT id_task, time_start, time_previous, total_work, total_food, total_toilet, no_pulse1, no_pulse2, no_pulse3, 
        CURRENT_TIMESTAMP() AS time_current FROM " . $table . " WHERE " . $id_activity_text . "=" . $id_activity;
     $result = $conn->query($sql);
     $data_activity = $result->fetch_assoc();
@@ -29,18 +29,26 @@ WHERE planning.id_task=" . $data_activity['id_task'];
     $time_current = strtotime($data_activity["time_current"]);
     $time_total_second = $time_current - $time_start - $total_break;
     $time_total =  gmdate('H:i:s', $time_total_second);
+    $time_previous = strtotime($data_activity["time_previous"]);
+    $time_tray_second = $time_current - $time_previous;
+
+    $no_pulse2_current = $no_pulse2 * intval($data_planning['qty_per_pulse2']);
 
     $no_pulse1 = floatval($data_activity['no_pulse1']) + ($no_pulse1 * floatval($multiplier));
-    $no_pulse2 = intval($data_activity['no_pulse2']) + ($no_pulse2 * intval($data_planning['qty_per_pulse2']));
+    $no_pulse2 = intval($data_activity['no_pulse2']) + $no_pulse2_current;
     $no_pulse3 = $no_pulse3 + intval($data_activity['no_pulse3']) ;
 
     $count_accum = $no_pulse2 + $no_pulse3;
 
-    if($count_accum==0){
+    $count_accum_tray =  $no_pulse2_current + $no_pulse3;
+
+    if($count_accum==0 or $count_accum_tray==0){
         $run_time_actual=0.0;
+        $run_time_tray=0.0;
     }else{
         $count_accum = floatval($count_accum);
         $run_time_actual = round($time_total_second/$count_accum, 2);
+        $run_time_tray = round($time_tray_second/$count_accum_tray, 2);
     }
 
     $sql = "UPDATE " . $table . " SET ";
@@ -48,7 +56,9 @@ WHERE planning.id_task=" . $data_activity['id_task'];
     if ($is_quit){
         $sql = $sql . "time_close='" . $data_activity["time_current"] . "',";
     }
+    $sql = $sql . "time_previous=CURRENT_TIMESTAMP(),";
     $sql = $sql . "total_work='" . $time_total . "',";
+    $sql = $sql . "run_time_tray=" . $run_time_tray . ",";
     $sql = $sql . "run_time_actual=" . $run_time_actual . ",";
     $sql = $sql . "no_send=" . $no_send . ",";
     $sql = $sql . "no_pulse1=" . $no_pulse1 . ",";
@@ -71,7 +81,8 @@ WHERE planning.id_task=" . $data_activity['id_task'];
         'total_toilet' => $data_activity["total_toilet"],
         'time_total_second' => $time_total_second,
         'time_work' => $time_total,
-        'run_time_actual' => $run_time_actual
+        'run_time_actual' => $run_time_actual,
+        'run_time_tray' => $run_time_tray
     ), JSON_UNESCAPED_UNICODE);
 
     return $data_json;

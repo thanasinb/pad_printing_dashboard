@@ -288,13 +288,26 @@ function loadData() {
                     row = row + "role=\"progressbar\" style=\"width: " + item.percent + "%\" aria-valuenow=\"" +
                         item.percent + "\" aria-valuemin=\"0\" aria-valuemax=\"100\">" +
                         item.percent + "%</div></div></td>";
-                    if(item.run_time_actual>item.run_time_std) {
-                        row = row + "<td style=\"color: red\"><p class=\"blink_me\">&#9873; " +
-                            parseFloat(item.run_time_actual).toFixed(2) + "/" + item.run_time_std + "</p></td>";
-                    }else {
-                        row = row + "<td><p>" + parseFloat(item.run_time_actual).toFixed(2) + "/" + item.run_time_std + "</p></td>";
+                    var float_run_time_tray, float_run_time_actual, float_run_time_std;
+                    float_run_time_tray = parseInt(parseFloat(item.run_time_tray).toFixed(2)*100);
+                    float_run_time_actual = parseInt(parseFloat(item.run_time_actual).toFixed(2)*100);
+                    float_run_time_std = parseInt(parseFloat(item.run_time_std).toFixed(2)*100);
+                    if(float_run_time_tray>float_run_time_std || float_run_time_actual>float_run_time_std){
+                        row = row + "<td><span style=\"color: red\" class='blink_me'>&#9873; </span>";
+                    }else{
+                        row = row + "<td>";
                     }
-                    row = row + "<td>" + item.run_time_open + "</td>";
+                    if(float_run_time_tray>float_run_time_std){
+                        row = row + "<span style=\"color: red\">" + item.run_time_tray + "</span>/";
+                    }else {
+                        row = row + item.run_time_tray + "/";
+                    }
+                    if(float_run_time_actual>float_run_time_std) {
+                        row = row + "<span style=\"color: red\">" + item.run_time_actual + "</span>/";
+                    }else {
+                        row = row + item.run_time_actual + "/";
+                    }
+                    row = row + item.run_time_std + "</td><td>" + item.run_time_open + "</td>";
                     // row = row + "<td>" + item.est_time + "</td>";
                     row = row + "<td>&#9997;</td><td></td></tr>";
                 }

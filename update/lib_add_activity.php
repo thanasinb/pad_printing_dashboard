@@ -8,6 +8,7 @@ function add_activity($conn, $table, $id_task, $id_machine, $id_staff, $shif, $d
     date_eff, 
     status_work, 
     time_start, 
+    time_previous, 
     multiplier) VALUES (";
     $sql = $sql . $id_task . ",";
     $sql = $sql . "'" . $id_machine . "',";
@@ -15,6 +16,7 @@ function add_activity($conn, $table, $id_task, $id_machine, $id_staff, $shif, $d
     $sql = $sql . "'" . $shif . "',";
     $sql = $sql . "'" . $date_eff . "',";
     $sql = $sql . "1,";
+    $sql = $sql . "CURRENT_TIMESTAMP(),";
     $sql = $sql . "CURRENT_TIMESTAMP(),";
     $sql = $sql . $multiplier;
     $sql = $sql . ")";
