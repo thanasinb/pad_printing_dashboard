@@ -67,12 +67,12 @@ foreach ($array_machine_queue as $mq){
 
         // IF THE MACHINE IS OCCUPIED
         if($mq['id_staff']!=null){
-            $sql = "SELECT id_staff, status_work, total_work, run_time_actual FROM activity
+            $sql = "SELECT id_staff, status_work, total_work, run_time_actual, run_time_tray FROM activity
             WHERE status_work<" . STATUS_CLOSED . " AND id_task=" . $mq['id_task'] . " AND id_machine='" . $mq["id_mc"] . "'";
             $data_activity_time = $conn->query($sql)->fetch_assoc();
             if ($data_activity_time['status_work']==null)
             {
-                $sql = "SELECT id_staff, status_work, total_work, run_time_actual FROM activity_rework
+                $sql = "SELECT id_staff, status_work, total_work, run_time_actual, run_time_tray FROM activity_rework
                 WHERE status_work<" . STATUS_CLOSED . " AND id_task=" . $mq['id_task'] . " AND id_machine='" . $mq["id_mc"] . "'";
                 $data_rework_time = $conn->query($sql)->fetch_assoc();
 
@@ -97,12 +97,14 @@ foreach ($array_machine_queue as $mq){
             }
             if ($data_activity_time['run_time_actual']==null) {
                 $data_activity_time['run_time_actual'] = '0.00';
+                $data_activity_time['run_time_tray'] = '0.00';
             }
             $array_dashboard[] = array_merge($mq, $data_activity_time, array('rework'=>$rework));
         }
         // ELSE THE MACHINE IS NOT OCCUPIED
         else{
             $array_dashboard[] = array_merge($mq, array('run_time_actual'=>0.00,
+                                                        'run_time_tray'=>0.00,
                                                         'est_sec'=>-1,
                                                         'status_work'=>0,
                                                         'rework'=>$rework));
