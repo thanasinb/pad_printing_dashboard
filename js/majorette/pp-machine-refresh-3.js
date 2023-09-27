@@ -289,25 +289,25 @@ function loadData() {
                         item.percent + "\" aria-valuemin=\"0\" aria-valuemax=\"100\">" +
                         item.percent + "%</div></div></td>";
                     var float_run_time_tray, float_run_time_actual, float_run_time_std;
-                    float_run_time_tray = parseFloat(item.run_time_tray).toFixed(2);
-                    float_run_time_actual = parseFloat(item.run_time_actual).toFixed(2);
-                    float_run_time_std = parseFloat(item.run_time_std).toFixed(2);
+                    float_run_time_tray = parseInt(parseFloat(item.run_time_tray).toFixed(2)*100);
+                    float_run_time_actual = parseInt(parseFloat(item.run_time_actual).toFixed(2)*100);
+                    float_run_time_std = parseInt(parseFloat(item.run_time_std).toFixed(2)*100);
                     if(float_run_time_tray>float_run_time_std || float_run_time_actual>float_run_time_std){
                         row = row + "<td><span style=\"color: red\" class='blink_me'>&#9873; </span>";
                     }else{
                         row = row + "<td>";
                     }
                     if(float_run_time_tray>float_run_time_std){
-                        row = row + "<span style=\"color: red\">" + float_run_time_tray + "</span>/";
+                        row = row + "<span style=\"color: red\">" + item.run_time_tray + "</span>/";
                     }else {
-                        row = row + float_run_time_tray + "/";
+                        row = row + item.run_time_tray + "/";
                     }
                     if(float_run_time_actual>float_run_time_std) {
-                        row = row + "<span style=\"color: red\">" + float_run_time_actual + "</span>/";
+                        row = row + "<span style=\"color: red\">" + item.run_time_actual + "</span>/";
                     }else {
-                        row = row + float_run_time_actual + "/";
+                        row = row + item.run_time_actual + "/";
                     }
-                    row = row + float_run_time_std + "</td><td>" + item.run_time_open + "</td>";
+                    row = row + item.run_time_std + "</td><td>" + item.run_time_open + "</td>";
                     // row = row + "<td>" + item.est_time + "</td>";
                     row = row + "<td>&#9997;</td><td></td></tr>";
                 }
