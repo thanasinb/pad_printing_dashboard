@@ -33,6 +33,7 @@ WHERE planning.id_task=" . $data_activity['id_task'];
     $time_tray_second = $time_current - $time_previous;
 
     $no_pulse2_current = $no_pulse2 * intval($data_planning['qty_per_pulse2']);
+    $no_pulse3_current = $no_pulse3;
 
     $no_pulse1 = floatval($data_activity['no_pulse1']) + ($no_pulse1 * floatval($multiplier));
     $no_pulse2 = intval($data_activity['no_pulse2']) + $no_pulse2_current;
@@ -40,7 +41,7 @@ WHERE planning.id_task=" . $data_activity['id_task'];
 
     $count_accum = $no_pulse2 + $no_pulse3;
 
-    $count_accum_tray =  $no_pulse2_current + $no_pulse3;
+    $count_accum_tray =  $no_pulse2_current + $no_pulse3_current;
 
     if($count_accum==0 or $count_accum_tray==0){
         $run_time_actual=0.0;

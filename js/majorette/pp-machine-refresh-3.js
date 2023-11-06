@@ -35,8 +35,8 @@ $(document).ready(function(){
         $('#dash_open').html("Open<br>run time<br><i class=\"fas fa-arrow-down\" style=\"opacity: 0.3\"></i>");
     });
     $('#dash_cycle').click(function () {
-        // sort_key='est_sec';
-        // sort_dir=1;
+        sort_key='flag_cycle_time';
+        sort_dir=0;
         $('#dash_percent').html("Progress (%)<br><i class=\"fas fa-arrow-down\" style=\"opacity: 0.3\"></i>");
         $('#dash_machine').html("M/C<br><i class=\"fas fa-arrow-down\" style=\"opacity: 0.3\"></i>");
         $('#dash_cycle').html("Cycle time<br>Tray/Shif/Std<br><i class=\"fas fa-arrow-down\" style=\"opacity: 1\"></i>");

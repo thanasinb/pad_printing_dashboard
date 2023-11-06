@@ -6,6 +6,7 @@ require '../update/establish.php';
 require '../const-status.php';
 require '../update/lib_get_qty_shif.php';
 require '../update/lib_get_qty_process_manual.php';
+require '../update/lib_flag_cycle_time.php';
 
 
 $sql = "SELECT 
@@ -36,6 +37,7 @@ $date = new DateTime();
 $date_in_sec = $date->getTimestamp();
 
 foreach ($array_machine_queue as $mq){
+    $mq['flag_cycle_time']=0;
     // IF THE MACHINE HAS A TASK ASSIGNED
     if ($mq['id_task']!=null){
         $mq['run_time_std'] = number_format((floatval($mq['run_time_std'])*3600), 2);
@@ -93,7 +95,10 @@ foreach ($array_machine_queue as $mq){
                     // REWORK
                     $data_activity_time=$data_rework_time;
                     $rework='y';
+                    $mq['flag_cycle_time']=flag_cycle_time($data_activity_time['run_time_tray'], $data_activity_time['run_time_actual'], $mq['run_time_std']);
                 }
+            }else{
+                $mq['flag_cycle_time']=flag_cycle_time($data_activity_time['run_time_tray'], $data_activity_time['run_time_actual'], $mq['run_time_std']);
             }
             if ($data_activity_time['run_time_actual']==null) {
                 $data_activity_time['run_time_actual'] = '0.00';
@@ -105,7 +110,7 @@ foreach ($array_machine_queue as $mq){
         else{
             $array_dashboard[] = array_merge($mq, array('run_time_actual'=>0.00,
                                                         'run_time_tray'=>0.00,
-                                                        'est_sec'=>-1,
+//                                                        'est_sec'=>-1,
                                                         'status_work'=>0,
                                                         'rework'=>$rework));
         }
