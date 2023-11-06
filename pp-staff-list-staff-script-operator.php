@@ -2,7 +2,7 @@
 ini_set('display_errors', 0);
 error_reporting(E_ERROR | E_WARNING | E_PARSE);
 require 'update/establish.php';
-$sql = "SELECT * FROM staff WHERE id_role IN (1, 3, 4, 5, 6, 7, 9, 10) ORDER BY id_role ASC, id_staff ASC";
+$sql = "SELECT * FROM staff WHERE id_role IN (SELECT id_role FROM role WHERE role_group=1) AND active=1 ORDER BY id_role ASC, id_staff ASC";
 
 
 $result_staff = $conn->query($sql);
