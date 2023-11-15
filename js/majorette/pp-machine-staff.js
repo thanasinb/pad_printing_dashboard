@@ -35,43 +35,36 @@ $(document).ready(function(){
                 prefix:prefix,
                 id_role:roles,
                 id_shif:shift,
-                site:site,
+                site:site
             },
             context: this,
             cache: false,
             success: function(dataResult){
-                // alert(dataResult);
                 var dataResult = JSON.parse(dataResult);
-                // $('#modal_staff_id').text(dataResult.id_staff);
-                // $('#input_rfid').val(dataResult.id_rfid);
-                // alert($(this).html());
-                // document.getElementById("button_save_rfid").textContent = "hello";
-                // $(this).parent().find('#button_save_rfid').hide();
-                // $(this).parent().find('#button_rfid').show();
-                $('#input_staff_id').text(id_staff);
-                $('#input_staff_id').prop('disabled', true);
-                $('#input_rfid').val(id_rfid);
-                $('#input_rfid').prop('disabled', true);
-                $('#prefix_name').val(prefix);
-                $('#prefix_name').prop('disabled', true);
-                $('#input_name').text(name);
-                $('#input_name').prop('disabled', true);
-                $('#input_last').text(last);
-                $('#input_last').prop('disabled', true);
-                $('#role').val(roles);
-                $('#role').prop('disabled', true);
-                $('#shift').val(shift);
-                $('#shift').prop('disabled', true);
-                $('#input_site').val(site);
-                $('#input_site').prop('disabled', true);
-                // $('.id_staff:contains(' + id_staff + ')').next('.rfid').text(id_rfid);
-                // $('.id_staff:contains(' + id_staff + ')').next('.name_first').text(name);
-                // $('.id_staff:contains(' + id_staff + ')').next('.name_last').text(last);
-                // $('.id_staff:contains(' + id_staff + ')').next('.prefix').text(prefix);
-                // $('.id_staff:contains(' + id_staff + ')').next('.role').text(roles);
-                // $('.id_staff:contains(' + id_staff + ')').next('.shift').text(shift);
-                $('#button_save_rfid').hide();
-                $('#button_rfid').show();
+                if (dataResult.statusCode == 200){
+                    $('#input_staff_id').text(id_staff);
+                    $('#input_staff_id').prop('disabled', true);
+                    $('#input_rfid').val(id_rfid);
+                    $('#input_rfid').prop('disabled', true);
+                    $('#prefix_name').val(prefix);
+                    $('#prefix_name').prop('disabled', true);
+                    $('#input_name').text(name);
+                    $('#input_name').prop('disabled', true);
+                    $('#input_last').text(last);
+                    $('#input_last').prop('disabled', true);
+                    $('#role').val(roles);
+                    $('#role').prop('disabled', true);
+                    $('#shift').val(shift);
+                    $('#shift').prop('disabled', true);
+                    $('#input_site').val(site);
+                    $('#input_site').prop('disabled', true);
+                    $('#button_save_rfid').hide();
+                    $('#button_rfid').show();
+                    alert("Success!");
+
+                }else if (dataResult.statusCode == 30) {
+                    alert("Error: Duplicate active RFID");
+                }
             }
         });
 
