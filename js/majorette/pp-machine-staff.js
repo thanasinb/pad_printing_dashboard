@@ -156,7 +156,7 @@ $(document).ready(function(){
         });
     });
 
-    $('.staff_delete').click(function (){
+    $('body').on('click', '.staff_delete', function(event){
         var id_staff = $(this).parent().parent().find('.id_staff').html();
         $.ajax({
             url: "ajax/pp-staff-delete.php",

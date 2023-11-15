@@ -41,7 +41,8 @@ while($data_staff = $result_staff->fetch_assoc()) {
         echo "Engineering";
     echo "</td>";
     echo "<td class='shif' >" . $data_staff['id_shif'] . "</td>";
-    echo "<td>" . "<div class='avatar avatar-xl me-3 bg-gray-200'><img class='avatar-img img-fluid' src='./images/staffs/" . $data_staff['staff_img'] . "'  alt=' ' /></div>" . "</td>";
+    echo "<td></td>";
+//    echo "<td>" . "<div class='avatar avatar-xl me-3 bg-gray-200'><img class='avatar-img img-fluid' src='./images/staffs/" . $data_staff['staff_img'] . "'  alt=' ' /></div>" . "</td>";
     echo "<td>";
     echo "<button name='staff_edit' type='submit' class='btn btn-datatable btn-icon text-black me-2 staff_edit'>";
     echo "<i class='far fa-edit fs-6'></i></button>";

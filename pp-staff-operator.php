@@ -22,9 +22,9 @@
         <link rel="stylesheet" href="css/majorette.css">
         <script src="js/jquery/jquery.min.js"></script>
         <script src="js/jquery/jquery-ui.min.js"></script>
-        <script src="js/reorder-columns/jquery.dragtable.js"></script>
-        <script src="js/reorder-columns/bootstrap-table.min.js"></script>
-        <script src="js/reorder-columns/bootstrap-table-reorder-columns.js"></script>
+<!--        <script src="js/reorder-columns/jquery.dragtable.js"></script>-->
+<!--        <script src="js/reorder-columns/bootstrap-table.min.js"></script>-->
+<!--        <script src="js/reorder-columns/bootstrap-table-reorder-columns.js"></script>-->
 <!--        <script src="js/majorette/pp-dragtable.js"></script>-->
 <!--        <script type="text/javascript" src="js/datetimepicker4/moment.min.js"></script>-->
 <!--        <script type="text/javascript" src="js/datetimepicker4/tempusdominus-bootstrap-4.min.js"></script>-->
