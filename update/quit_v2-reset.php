@@ -86,6 +86,9 @@ if(empty($data_activity)) {
 }
 
 require 'terminate.php';
-header("Location: ../pp-machine-3.php");
-die();
+
+if(strcmp($_GET['dashboard'],'1')==0){
+    header("Location: ../pp-machine-3.php");
+    die();
+}
 
