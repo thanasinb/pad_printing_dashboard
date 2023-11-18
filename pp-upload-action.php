@@ -131,7 +131,8 @@ if($error_code==0){
 
         $list_planning = $list_planning . "(" . $id_job . "," . $operation . "),";
 
-        $sql_select = "SELECT id_task FROM planning WHERE id_job='" . $id_job . "' AND operation = '" . $operation . "'";
+        $sql_select = "SELECT id_task FROM planning WHERE id_job='" . $id_job . "' AND 
+            operation = '" . $operation . "' AND status_backup=0";
 
         $query_planning = $conn->query($sql_select);
         $data_planning = $query_planning->fetch_assoc();
@@ -150,7 +151,8 @@ if($error_code==0){
         else{
             $sql_update = "UPDATE planning SET ";
             $sql_update = $sql_update . "qty_order=" . $qty_order . ", ";
-            $sql_update = $sql_update . "datetime_update='" . date('Y-m-d H:i:s') . "' ";
+            $sql_update = $sql_update . "datetime_update='" . date('Y-m-d H:i:s') . "', ";
+            $sql_update = $sql_update . "op_des='" . $op_description . "' ";
             $sql_update = $sql_update . "WHERE id_task=" . $data_planning['id_task'] . " ";
             $sql_update = $sql_update . "AND qty_order <> " . $qty_order . " ";
             $conn->query($sql_update);

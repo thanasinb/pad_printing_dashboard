@@ -4,7 +4,7 @@ $error_code=0;
 
 require 'update/establish.php';
 
-$sql = "SELECT id_staff FROM staff WHERE id_staff='" . $_POST['id_staff'] . "' OR id_rfid='" . $_POST['id_staff'] . "'";
+$sql = "SELECT id_staff FROM staff WHERE (id_staff='" . $_POST['id_staff'] . "' OR id_rfid='" . $_POST['id_rfid'] . "') AND active=1";
 $query_staff = $conn->query($sql);
 $data_staff = $query_staff->fetch_assoc();
 
