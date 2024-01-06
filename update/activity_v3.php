@@ -19,11 +19,11 @@ if(empty($data_machine_queue['id_staff'])){
         $table = 'activity';
         $data_staff = get_staff_by_id($conn, $_GET['id_staff']);
         list($shif, $date_eff) = get_shif($conn, $_GET['id_staff'], $data_staff['team']);
-        $data_planning = get_planning($conn, $_GET['id_task']);
+        $data_planning = get_planning($conn, $data_machine_queue['id_task']);
         $data_json = add_activity(
             $conn,
             $table,
-            $_GET['id_task'],
+            $data_machine_queue['id_task'],
             $_GET['id_mc'],
             $_GET['id_staff'],
             $shif,
@@ -36,11 +36,11 @@ if(empty($data_machine_queue['id_staff'])){
         $table = 'activity_rework';
         $data_staff = get_staff_by_id($conn, $_GET['id_staff']);
         list($shif, $date_eff) = get_shif($conn, $_GET['id_staff'], $data_staff['team']);
-        $data_planning = get_planning($conn, $_GET['id_task']);
+        $data_planning = get_planning($conn, $data_machine_queue['id_task']);
         $data_json = add_activity(
             $conn,
             $table,
-            $_GET['id_task'],
+            $data_machine_queue['id_task'],
             $_GET['id_mc'],
             $_GET['id_staff'],
             $shif,
@@ -53,11 +53,11 @@ if(empty($data_machine_queue['id_staff'])){
         $table = 'activity_downtime';
         $data_staff = get_staff_by_id($conn, $_GET['id_staff']);
         list($shif, $date_eff) = get_shif($conn, $_GET['id_staff'], $data_staff['team']);
-        $data_planning = get_planning($conn, $_GET['id_task']);
+        $data_planning = get_planning($conn, $data_machine_queue['id_task']);
         $data_json = add_activity_downtime(
             $conn,
             $table,
-            $_GET['id_task'],
+            $data_machine_queue['id_task'],
             $_GET['id_mc'],
             $_GET['id_staff'],
             $shif,
