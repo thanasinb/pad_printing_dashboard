@@ -10,7 +10,7 @@ $sql = "SELECT id_activity, id_task, shif, date_eff, time_start, CURRENT_TIMESTA
                     AS time_current, total_food, total_toilet, no_send 
                     FROM activity WHERE status_work<3 
                     AND id_machine = '" . $_GET["id_mc"] . "' 
-                    AND id_staff=(SELECT id_staff FROM staff WHERE id_rfid = '" . $_GET["id_rfid"] . "')";
+                    AND id_staff=(SELECT id_staff FROM staff WHERE id_rfid = '" . $_GET["id_rfid"] . "' AND active=1)";
 $result = $conn->query($sql);
 $data_activity = $result->fetch_assoc();
 if(empty($data_activity)) {
