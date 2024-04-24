@@ -51,7 +51,7 @@
                                             <div class="col-md-6">
                                                 <label class="small mb-1" for="prefix">Prefix</label>
                                                 <select class="form-control" id="prefix" name="prefix" required="required">
-                                                    <option value="0"></option>
+                                                    <option value=""></option>
                                                     <option value="1">นาย</option>
                                                     <option value="2">นาง</option>
                                                     <option value="3">นางสาว</option>
@@ -72,7 +72,7 @@
                                             <div class="col-md-6">
                                                 <label class="small mb-1" for="id_role">Role</label>
                                                 <select class="form-control" id="id_role" name="id_role" required="required">
-                                                    <option value="0"></option>
+                                                    <option value=""></option>
                                                     <option value="1">Operator</option>
                                                     <option value="2">Technician</option>
                                                 </select>
@@ -81,7 +81,7 @@
                                                 <label class="small mb-1" for="id_shif">Team</label>
 <!--                                                <input class="form-control" id="id_shif" name="id_shif" type="text" required="required">-->
                                                 <select class="form-control" id="id_shif" name="id_shif" required="required">
-                                                    <option value="0"></option>
+                                                    <option value=""></option>
                                                     <option value="A">A</option>
                                                     <option value="B">B</option>
                                                     <option value="C">C</option>
