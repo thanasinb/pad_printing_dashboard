@@ -41,7 +41,7 @@ function get_shif($conn, $id_staff, $team){
             $shif = "N" . $team_no;
         }else{
             // WITH OT, NUMBER AFTER 'N'
-            $shif = $team_no . "N";
+            $shif = "N" . $team_no;
         }
         $date_eff = date('Y-m-d',strtotime("-1 days"));
 
@@ -49,13 +49,13 @@ function get_shif($conn, $id_staff, $team){
     }elseif ($today_07_00<$time_current AND $time_current<$today_15_45){
         $shif = "D" . $team_no;
     }elseif ($today_15_45<$time_current AND $time_current<$today_19_00){
-        $shif = $team_no . "D";
+        $shif = "D" . $team_no;
         $sql = "UPDATE activity SET shif='" . $shif . "' WHERE id_staff='" . $id_staff . "'" .
             " AND (time_start BETWEEN '" . date("Y-m-d H:i:s", $today_07_00 - $shif_offset_second) . "' AND '" . date("Y-m-d H:i:s", $today_15_45) . "')";
         $conn->query($sql);
 //        echo $sql;
     }elseif ($today_19_00<$time_current AND $time_current<$today_23_00){
-        $shif = $team_no . "N";
+        $shif = "N" . $team_no;
     }elseif ($today_23_00<$time_current AND $time_current<$tomorrow_00_00){
         $sql = "SELECT id_activity FROM activity WHERE id_staff='" . $id_staff . "'" .
             " AND (time_start BETWEEN '" . date("Y-m-d H:i:s", $today_19_00 - $shif_offset_second) . "' AND '" . date("Y-m-d H:i:s", $today_23_00) . "')";
@@ -64,7 +64,7 @@ function get_shif($conn, $id_staff, $team){
         if (empty($data_activity)){
             $shif = "N" . $team_no;
         }else{
-            $shif = $team_no . "N";
+            $shif = "N" . $team_no;
         }
     }
     return array($shif, $date_eff);

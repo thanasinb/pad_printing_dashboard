@@ -30,13 +30,13 @@ $sql = "SELECT
 
 $array_machine_queue = $conn->query($sql)->fetch_all(MYSQLI_ASSOC);
 
-$rework='n';
 $array_dashboard=array();
 date_default_timezone_set('Asia/Bangkok');
 $date = new DateTime();
 $date_in_sec = $date->getTimestamp();
 
 foreach ($array_machine_queue as $mq){
+    $rework='n';
     $mq['flag_cycle_time']=0;
     // IF THE MACHINE HAS A TASK ASSIGNED
     if ($mq['id_task']!=null){

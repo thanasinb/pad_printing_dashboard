@@ -22,7 +22,8 @@ if(!empty($data_activity)){
     "&no_send=" . $data_activity['no_send'] .
     "&no_pulse1=" . $data_activity['no_pulse1'] .
     "&no_pulse2=" . $data_activity['no_pulse2'] .
-    "&no_pulse3=" . $data_activity['no_pulse3']);
+    "&no_pulse3=" . $data_activity['no_pulse3'] .
+    "&dashboard=" . $_GET['dashboard']);
     die();
 }
 
@@ -47,7 +48,8 @@ if(!empty($data_downtime)){
         "&no_send=" . $data_downtime['no_send'] .
         "&no_pulse1=" . $data_downtime['no_pulse1'] .
         "&no_pulse2=" . $data_downtime['no_pulse2'] .
-        "&no_pulse3=" . $data_downtime['no_pulse3']);
+        "&no_pulse3=" . $data_downtime['no_pulse3'] .
+        "&dashboard=" . $_GET['dashboard']);
     die();
 //    https://bunnam.com/projects/majorette_pp/update/quit_dt.php?id_rfid=0014084240&id_job=6174159&operation=540&id_mc=02-02
 }
@@ -73,7 +75,8 @@ if(!empty($data_activity_rework)){
         "&no_send=" . $data_activity_rework['no_send'] .
         "&no_pulse1=" . $data_activity_rework['no_pulse1'] .
         "&no_pulse2=" . $data_activity_rework['no_pulse2'] .
-        "&no_pulse3=" . $data_activity_rework['no_pulse3']);
+        "&no_pulse3=" . $data_activity_rework['no_pulse3'] .
+        "&dashboard=" . $_GET['dashboard']);
     die();
 }
 
