@@ -1,0 +1,43 @@
+<?php
+?>
+<link href="css/center.css" rel="stylesheet">
+<nav class="topnav navbar navbar-expand shadow justify-content-between justify-content-sm-start navbar-light bg-white" id="sidenavAccordion">
+    <button class="btn btn-icon btn-transparent-dark order-1 order-lg-0 me-2 ms-lg-4 me-lg-0" id="sidebarToggle"><i data-feather="arrow-left"></i></button>
+    <script>
+        // เลือกปุ่มด้วย ID ของปุ่ม sidebarToggle
+        const sidebarToggle = document.getElementById('sidebarToggle');
+
+        // เพิ่ม event listener เมื่อคลิกที่ปุ่ม
+        sidebarToggle.addEventListener('click', function() {
+            // นำผู้ใช้ไปยังหน้า pp-homepage.php
+            window.location.href = 'pp-homepage.php';
+        });
+    </script>
+
+
+    <a class="navbar-brand" style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);">Majorette</a>
+
+
+    <!-- Navbar Items-->
+    <ul class="navbar-nav align-items-center ms-auto">
+
+        <!-- User Dropdown-->
+        <li class="nav-item dropdown no-caret dropdown-user me-3 me-lg-4">
+            <a class="btn btn-icon btn-transparent-dark dropdown-toggle" id="navbarDropdownUserImage" href="javascript:void(0);" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><img class="img-fluid" src="assets/img/illustrations/profiles/profile-user.png" /></a>
+            <div class="dropdown-menu dropdown-menu-end border-0 shadow animated--fade-in-up" aria-labelledby="navbarDropdownUserImage">
+                <h6 class="dropdown-header d-flex align-items-center">
+                    <img class="dropdown-user-img" src="assets/img/illustrations/profiles/profile-user.png" />
+                    <div class="dropdown-user-details">
+                        <div class="dropdown-user-details-name">Valerie Luna</div>
+                        <div class="dropdown-user-details-email">vluna@aol.com</div>
+                    </div>
+                </h6>
+                <div class="dropdown-divider"></div>
+                <a class="dropdown-item" href="pp-login.php">
+                    <div class="dropdown-item-icon"><i data-feather="log-in"></i></div>
+                    Login
+                </a>
+            </div>
+        </li>
+    </ul>
+</nav>

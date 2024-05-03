@@ -1,15 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
-  <component name="PublishConfigData" autoUpload="Always" serverName="bunnamco" remoteFilesAllowedToDisappearOnAutoupload="false" showDifferentInSync="false" showNewOnSourceInSync="false">
+  <component name="PublishConfigData" serverName="bunnamco" remoteFilesAllowedToDisappearOnAutoupload="false" confirmBeforeUploading="false" showDifferentInSync="false" showNewOnSourceInSync="false">
+    <option name="confirmBeforeUploading" value="false" />
     <serverData>
       <paths name="bunnamco">
         <serverdata>
           <mappings>
-            <mapping deploy="/domains/bunnam.com/public_html/projects/majorette_pp" local="$PROJECT_DIR$" web="/projects/majorette_pp" />
+            <mapping deploy="/" local="$PROJECT_DIR$" web="/projects/mjrqr" />
           </mappings>
+          <excludedPaths>
+            <excludedPath path="/domains/bunnam.com/public_html/projects/majorette_pp/pp_qrcode.php" />
+          </excludedPaths>
         </serverdata>
       </paths>
     </serverData>
-    <option name="myAutoUpload" value="ALWAYS" />
   </component>
 </project>
