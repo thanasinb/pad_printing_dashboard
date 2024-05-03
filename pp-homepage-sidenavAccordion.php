@@ -43,7 +43,7 @@
     </script>
 
 
-    <a class="navbar-brand pe-3 ps-4 ps-lg-15" >Majorette</a>
+    <a class="navbar-brand" style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);">Majorette</a>
 
     <!-- Navbar Items-->
     <ul class="navbar-nav align-items-center ms-auto">

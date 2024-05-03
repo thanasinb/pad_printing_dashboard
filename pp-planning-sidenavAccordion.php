@@ -1,5 +1,31 @@
 <?php
+require 'update/establish.php';
+// ตรวจสอบว่ามีการล็อกอินแล้วหรือไม่
+if (isset($_SESSION['username'])) {
+    $username = $_SESSION['username']; // รับชื่อผู้ใช้จาก session
+
+    // คำสั่ง SQL สำหรับดึงชื่อผู้ใช้จากฐานข้อมูล
+    $sql = "SELECT staff.name_first
+                FROM login
+                INNER JOIN staff ON login.id_staff = staff.id_staff
+                WHERE login.username = '$username'";
+    $result = $conn->query($sql);
+
+    // ตรวจสอบผลลัพธ์
+    if ($result->num_rows > 0) {
+        // แสดงชื่อผู้ใช้
+        while($row = $result->fetch_assoc()) {
+            $name = $row["name_first"];
+            echo '<div class="dropdown-user-details-name">' . $name . '</div>';
+        }
+    } else {
+        $name = "Welcome"; // กำหนดค่า $name เป็น "Welcome" ในกรณีที่ไม่มีการล็อกอิน
+    }
+} else {
+    $name = "Welcome"; // กำหนดค่า $name เป็น "Welcome" ในกรณีที่ไม่มีการล็อกอิน
+}
 ?>
+
 <nav class="topnav navbar navbar-expand shadow justify-content-between justify-content-sm-start navbar-light bg-white" id="sidenavAccordion">
     <!-- Sidenav Toggle Button-->
     <button class="btn btn-icon btn-transparent-dark order-1 order-lg-0 me-2 ms-lg-2 me-lg-0" id="sidebarToggle"><i data-feather="menu"></i></button>
@@ -158,21 +184,23 @@
                 <h6 class="dropdown-header d-flex align-items-center">
                     <img class="dropdown-user-img" src="assets/img/illustrations/profiles/profile-1.png" />
                     <div class="dropdown-user-details">
-                        <div class="dropdown-user-details-name">Valerie Luna</div>
-                        <div class="dropdown-user-details-email">vluna@aol.com</div>
+                        <div class="dropdown-user-details-name"><?php echo $name; ?></div>
                     </div>
                 </h6>
                 <div class="dropdown-divider"></div>
-                <a class="dropdown-item" href="#!">
+                <a class="dropdown-item" href="pp-account.php">
                     <div class="dropdown-item-icon"><i data-feather="settings"></i></div>
                     Account
                 </a>
-                <a class="dropdown-item" href="#!">
+
+                <script src="js/logoutpopup.js"></script>
+                <a class="dropdown-item" href="pp-homepage.php"onclick="confirmLogout()">
                     <div class="dropdown-item-icon"><i data-feather="log-out"></i></div>
                     Logout
                 </a>
             </div>
         </li>
+
     </ul>
 </nav>
 

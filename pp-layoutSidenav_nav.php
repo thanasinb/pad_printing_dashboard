@@ -31,6 +31,7 @@
                 <div class="collapse" id="collapseMachines" data-bs-parent="#accordionSidenav">
                     <nav class="sidenav-menu-nested nav accordion" id="accordionSidenavPages">
                         <a class="nav-link" href="pp-machine-3.php">Machine List</a>
+                        <a class="nav-link" href="pp-machine-statistic.php">Machine statistic</a>
                         <a class="nav-link" href="pp-machine-add.php">Add new Machine</a>
                     </nav>
                 </div>
@@ -42,6 +43,7 @@
                 <div class="collapse" id="collapseStaffs" data-bs-parent="#accordionSidenav">
                     <nav class="sidenav-menu-nested nav accordion" id="accordionSidenavPages">
                         <a class="nav-link" href="pp-staff-operator.php">Operator List</a>
+                        <a class="nav-link" href="pp-op-statistic.php">Operator Statistic</a>
                         <a class="nav-link" href="pp-staff-technician.php">Technician List</a>
                         <a class="nav-link" href="pp-staff-upload.php">Import Excel</a>
                         <a class="nav-link" href="pp-staff-add.php">Add Staff</a>
@@ -67,6 +69,29 @@
                     <nav class="sidenav-menu-nested nav accordion" id="accordionSidenavPages">
                         <a class="nav-link" href="pp-setting-dt.php">Downtime List</a>
                         <a class="nav-link" href="pp-setting-dt-add.php">Add Downtime</a>
+                    </nav>
+                </div>
+                <a class="nav-link collapsed" href="javascript:void(0);" data-bs-toggle="collapse" data-bs-target="#collapseQrcode" aria-expanded="false" aria-controls="collapseQrcode">
+                    <div class="nav-link-icon"><i class="fas fa-qrcode"></i></div>
+                    Qrcode
+                    <div class="sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
+                </a>
+                <div class="collapse" id="collapseQrcode" data-bs-parent="#accordionSidenav">
+                    <nav class="sidenav-menu-nested nav accordion" id="accordionSidenavPages">
+                        <a class="nav-link" href="pp-setting-qr.php">Add Qrcode</a>
+                        <a class="nav-link" href="pp-setting-qrlist.php">List Qrcode</a>
+                    </nav>
+                </div>
+
+                <a class="nav-link collapsed" href="javascript:void(0);" data-bs-toggle="collapse" data-bs-target="#collapseAccount" aria-expanded="false" aria-controls="collapseAccount">
+                    <div class="nav-link-icon"><i class="fas fa-user"></i></div>
+                    Account
+                    <div class="sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
+                </a>
+                <div class="collapse" id="collapseAccount" data-bs-parent="#accordionSidenav">
+                    <nav class="sidenav-menu-nested nav accordion" id="accordionSidenavPages">
+                        <a class="nav-link" href="pp-account.php">Edit account</a>
+
                     </nav>
                 </div>
             </div>

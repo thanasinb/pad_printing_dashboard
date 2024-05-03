@@ -1,4 +1,6 @@
 <?php
+session_start();
+
 // เชื่อมต่อกับไฟล์เชื่อมต่อฐานข้อมูล
 require 'update/establish.php';
 
@@ -15,22 +17,26 @@ if(isset($_POST['username']) && isset($_POST['password'])) {
     $result = $conn->query($sql);
 
     // ตรวจสอบว่ามีข้อมูลผู้ใช้ในฐานข้อมูลหรือไม่
-    if($result->num_rows > 0) {
-        // พบข้อมูลผู้ใช้ที่ตรงกับ username และ password
-        // ส่งผู้ใช้ไปยังหน้า pp-machine-3.php
-        header("Location: ./pp-machine-3.php");
-        exit();
-    } else {
-        // ไม่พบข้อมูลผู้ใช้หรือ username/password ไม่ตรง
-        // ส่งผู้ใช้กลับไปยังหน้า pp-login.php พร้อมส่งข้อความผิดพลาด
-        header("Location: ./pp-login.php?error=password_incorrect");
-        exit();
-    }
+// ตรวจสอบว่ามีข้อมูลผู้ใช้ในฐานข้อมูลหรือไม่
+if($result->num_rows > 0) {
+    // พบข้อมูลผู้ใช้ที่ตรงกับ username และ password
+    // เก็บข้อมูล username ใน Session
+    $_SESSION['username'] = $username;
+
+    // ส่งผู้ใช้ไปยังหน้า pp-machine-3.php
+    header("Location: pp-machine-3.php");
+    exit();
+} else {
+    // ไม่พบข้อมูลผู้ใช้หรือ username/password ไม่ตรง
+    // ส่งผู้ใช้กลับไปยังหน้า pp-login.php พร้อมส่งข้อความผิดพลาด
+    header("Location: pp-login.php?error=password_incorrect");
+    exit();
 }
 
-// ปิดการเชื่อมต่อกับฐานข้อมูล
-require 'update/terminate.php';
+    require 'update/terminate.php';
+}
 ?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
