@@ -11,7 +11,12 @@ if(isset($_POST['username']) && isset($_POST['password'])) {
     $password = $_POST['password'];
 
     // คำสั่ง SQL สำหรับเลือกข้อมูลผู้ใช้จากฐานข้อมูล
-    $sql = "SELECT * FROM login WHERE username='$username' AND password='$password'";
+    $sql = "SELECT login.*, role.*
+        FROM login
+        INNER JOIN staff ON login.id_staff = staff.id_staff
+        INNER JOIN role ON staff.id_role = role.id_role
+        WHERE login.username='$username' AND login.password='$password' AND (role.role_group = 2 OR role.role_group = 3)
+        ";
 
     // ทำการคิวรีฐานข้อมูล
     $result = $conn->query($sql);

@@ -1,3 +1,6 @@
+<?php
+require 'pp-session-start.php'
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -51,6 +54,10 @@
             margin-top: 20px;
 
         }
+        #saveBtn{
+            margin-top: 20px;
+
+        }
 
         #qrcode {
             margin-top: 20px;
@@ -75,10 +82,40 @@
             <button onclick="generateQRCode()" class="btn btn-primary">Generate QR Code</button>
             <div id="qrcode"></div>
             <div id="qrValue"></div>
-            <button id="downloadBtn" onclick="downloadQRCode()" class="btn btn-success">Download QR Code</button>
-            <button id="printBtn" onclick="openPrintDialog()" class="btn btn-info">Print QR Code</button>
+            <button id="downloadBtn" onclick="downloadQRCode()" class="btn btn-success btn-block">Download QR Code</button>
 
+            <button id="printBtn" onclick="openPrintDialog()" class="btn btn-info btn-block">Print QR Code</button>
 
+            <button id="saveBtn" onclick="saveQRCode()" class="btn btn-primary btn-block">Save QR Code</button>
+
+            <script>function saveQRCode() {
+                    const qrCodeValueContainer = document.getElementById('qrValue');
+                    const qrCodeValue = qrCodeValueContainer.textContent.replace('QR Code Value: ', '').trim();
+
+                    // ดึง URL ของภาพ QR Code ที่สร้างขึ้นมา
+                    const qrCodeImagePath = document.querySelector('#qrcode canvas').toDataURL('image/png');
+
+                    // AJAX request เพื่อส่งข้อมูล QR Code ไปบันทึกในฐานข้อมูล
+                    const xhr = new XMLHttpRequest();
+                    const url = 'save_qr_code.php';
+                    const params = `qr_code_value=${qrCodeValue}&qr_code_image=${qrCodeImagePath}`;
+
+                    xhr.open('POST', url, true);
+                    xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
+
+                    xhr.onreadystatechange = function() {
+                        if (xhr.readyState === XMLHttpRequest.DONE) {
+                            if (xhr.status === 200) {
+                                alert('QR Code and data saved successfully!');
+                            } else {
+                                alert('Failed to save QR Code and data. Please try again.');
+                            }
+                        }
+                    };
+
+                    xhr.send(params);
+                }
+            </script>
         </div>
             </main>
 

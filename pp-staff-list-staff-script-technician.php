@@ -2,7 +2,15 @@
 ini_set('display_errors', 0);
 error_reporting(E_ERROR | E_WARNING | E_PARSE);
 require 'update/establish.php';
-$sql = "SELECT * FROM staff WHERE id_role IN (SELECT id_role FROM role WHERE role_group=2) AND active=1 ORDER BY id_role ASC, id_staff ASC";
+$sql = "SELECT *
+        FROM staff
+        WHERE id_role IN (
+            SELECT id_role
+            FROM role
+            WHERE role_group IN (2, 3)  -- เลือก role_group เท่ากับ 2 หรือ 3
+        )
+        AND active = 1
+        ORDER BY id_role ASC, id_staff ASC";
 $result_staff = $conn->query($sql);
 
 while($data_staff = $result_staff->fetch_assoc()) {
@@ -21,10 +29,12 @@ while($data_staff = $result_staff->fetch_assoc()) {
 
     echo "<td class='role'>";
     $id_role = intval($data_staff['id_role']);
-    if ($id_role==2)
-        echo "Technician";
-    elseif ($id_role==8)
-        echo "Senior Technician";
+    if ($id_role==6)
+        echo "Foreman";
+    elseif ($id_role==9)
+        echo "Manager";
+    elseif ($id_role==10)
+        echo "Engineer";
     echo "</td>";
     echo "<td class='shif' >" . $data_staff['id_shif'] . "</td>";
     echo "<td></td>";

@@ -1,5 +1,8 @@
+<?php
+require 'pp-session-start.php'
+?>
 <!DOCTYPE html>
-<html lang="en">ggg
+<html lang="en">
 <head>
     <meta charset="utf-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
@@ -27,7 +30,6 @@
 <div id="layoutSidenav">
     <?php require 'pp-layoutSidenav_nav.php'; ?>
     <div id="layoutSidenav_content">
-
             <main>
                 <header class="page-header page-header-compact page-header-light border-bottom bg-white mb-4">
                     <div class="container-xl px-4">
@@ -60,14 +62,19 @@
                                 <div class="card-header">Profile Picture</div>
                                 <div class="card-body text-center">
                                     <!-- Profile picture image-->
-                                    <img class="img-account-profile rounded-circle mb-2" src="/projects/mjrqr/assets/img/illustrations/profiles/profile-1.png" alt="" />
+                                    <img id="previewImage" class="img-account-profile rounded-circle mb-2" src="/projects/mjrqr/assets/img/illustrations/profiles/profile-1.png" alt="" />
                                     <!-- Profile picture help block-->
                                     <div class="small font-italic text-muted mb-4">JPG or PNG no larger than 5 MB</div>
                                     <!-- Profile picture upload button-->
-                                    <button class="btn btn-primary" type="button">Upload new image</button>
+                                    <script src="upload.js"></script>
+                                    <label for="imageFile" class="btn btn-primary">
+                                        Upload new image
+                                        <input type="file" id="imageFile" style="display: none;" accept="image/png, image/jpeg" onchange="previewFile()">
+                                    </label>
                                 </div>
                             </div>
                         </div>
+
                         <div class="col-xl-8">
                             <!-- Account details card-->
                             <div class="card mb-4">

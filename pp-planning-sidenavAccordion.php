@@ -1,29 +1,5 @@
 <?php
-require 'update/establish.php';
-// ตรวจสอบว่ามีการล็อกอินแล้วหรือไม่
-if (isset($_SESSION['username'])) {
-    $username = $_SESSION['username']; // รับชื่อผู้ใช้จาก session
-
-    // คำสั่ง SQL สำหรับดึงชื่อผู้ใช้จากฐานข้อมูล
-    $sql = "SELECT staff.name_first
-                FROM login
-                INNER JOIN staff ON login.id_staff = staff.id_staff
-                WHERE login.username = '$username'";
-    $result = $conn->query($sql);
-
-    // ตรวจสอบผลลัพธ์
-    if ($result->num_rows > 0) {
-        // แสดงชื่อผู้ใช้
-        while($row = $result->fetch_assoc()) {
-            $name = $row["name_first"];
-            echo '<div class="dropdown-user-details-name">' . $name . '</div>';
-        }
-    } else {
-        $name = "Welcome"; // กำหนดค่า $name เป็น "Welcome" ในกรณีที่ไม่มีการล็อกอิน
-    }
-} else {
-    $name = "Welcome"; // กำหนดค่า $name เป็น "Welcome" ในกรณีที่ไม่มีการล็อกอิน
-}
+require 'pp-session.php'
 ?>
 
 <nav class="topnav navbar navbar-expand shadow justify-content-between justify-content-sm-start navbar-light bg-white" id="sidenavAccordion">
@@ -33,7 +9,7 @@ if (isset($_SESSION['username'])) {
     <!-- * * Tip * * You can use text or an image for your navbar brand.-->
     <!-- * * * * * * When using an image, we recommend the SVG format.-->
     <!-- * * * * * * Dimensions: Maximum height: 32px, maximum width: 240px-->
-    <a class="navbar-brand pe-3 ps-4 ps-lg-2" href="master/index.html">SB Admin Pro</a>
+    <a class="navbar-brand pe-3 ps-4 ps-lg-2" href="pp-machine-3.php">Majorette</a>
     <!-- Navbar Search Input-->
     <!-- * * Note: * * Visible only on and above the lg breakpoint-->
     <form class="form-inline me-auto d-none d-lg-block me-3">
@@ -184,7 +160,7 @@ if (isset($_SESSION['username'])) {
                 <h6 class="dropdown-header d-flex align-items-center">
                     <img class="dropdown-user-img" src="assets/img/illustrations/profiles/profile-1.png" />
                     <div class="dropdown-user-details">
-                        <div class="dropdown-user-details-name"><?php echo $name; ?></div>
+                        <div class="dropdown-user-details-name"><?php echo $name,"   ",$surname;?></div>
                     </div>
                 </h6>
                 <div class="dropdown-divider"></div>

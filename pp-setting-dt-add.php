@@ -1,3 +1,8 @@
+<?php
+
+require 'pp-session-start.php'
+
+?>
 <!DOCTYPE html>
 <html lang="en">
     <head>
@@ -6,7 +11,7 @@
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
         <meta name="description" content="" />
         <meta name="author" content="" />
-        <title>Dashboard - SB Admin Pro</title>
+        <title>Add New Downtime</title>
         <link href="css/simple-datatables@latest/dist/style.css" rel="stylesheet" />
         <link href="css/litepicker/dist/css/litepicker.css" rel="stylesheet" />
         <link href="css/styles.css" rel="stylesheet" />

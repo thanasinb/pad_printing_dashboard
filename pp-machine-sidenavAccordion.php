@@ -1,5 +1,6 @@
 <?php
-require 'pp-login2.php';
+require 'pp-session.php'
+
 ?>
 <nav class="topnav navbar navbar-expand shadow justify-content-between justify-content-sm-start navbar-light bg-white" id="sidenavAccordion">
     <!-- Sidenav Toggle Button-->
@@ -9,7 +10,23 @@ require 'pp-login2.php';
 
     <form class="form-inline me-auto d-none d-lg-block me-3">
         <div class="input-group input-group-joined input-group-solid">
-            <input class="form-control pe-0" type="search" placeholder="Search" aria-label="Search" />
+            <input class="form-control pe-0" id="menuSearchInput" type="search" placeholder="Search" aria-label="Search" />
+            <script>
+                $(document).ready(function() {
+                    $('#menuSearchInput').on('keyup', function() {
+                        var searchText = $(this).val().toLowerCase();
+                        $('.sidenav-menu a.nav-link').each(function() {
+                            var menuItemText = $(this).text().toLowerCase();
+                            if (menuItemText.includes(searchText)) {
+                                $(this).show();
+                            } else {
+                                $(this).hide();
+                            }
+                        });
+                    });
+                });
+            </script>
+
             <div class="input-group-text"><i data-feather="search"></i></div>
         </div>
     </form>
@@ -155,7 +172,7 @@ require 'pp-login2.php';
                 <h6 class="dropdown-header d-flex align-items-center">
                     <img class="dropdown-user-img" src="assets/img/illustrations/profiles/profile-1.png" />
                     <div class="dropdown-user-details">
-                        <div class="dropdown-user-details-name"><?php echo $name; ?></div>
+                        <div class="dropdown-user-details-name"><?php echo $name,"   ",$surname;?></div>
                     </div>
                 </h6>
                 <div class="dropdown-divider"></div>
