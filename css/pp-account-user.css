@@ -1,0 +1,5 @@
+.readonly-input {
+    cursor: not-allowed; /* เปลี่ยนรูปแบบเคอร์เซอร์ */
+    border: none;
+    background-color: transparent;
+}

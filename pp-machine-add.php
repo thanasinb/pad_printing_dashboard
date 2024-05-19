@@ -17,7 +17,9 @@ require 'pp-session.php'
         <link rel="icon" type="image/x-icon" href="assets/img/favicon.png" />
         <script data-search-pseudo-elements defer src="js/font-awesome/5.15.3/js/all.min.js"></script>
         <script src="js/feather-icons/4.28.0/feather.min.js"></script>
-<!--        <script src="js/majorette/pp-machine-add.js"></script>-->
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+        <!--        <script src="js/majorette/pp-machine-add.js"></script>-->
     </head>
     <body class="nav-fixed">
     <?php require 'pp-setting-sidenavAccordion.php'; ?>

@@ -185,7 +185,7 @@ require 'pp-session.php';
                     Account
                 </a>
 
-                <a class="dropdown-item" href="pp-homepage.php" onclick="confirmLogout()">
+                <a class="dropdown-item" href="pp-logout.php" onclick="confirmLogout()">
                     <div class="dropdown-item-icon"><i data-feather="log-out"></i></div>
                     Logout
                 </a>

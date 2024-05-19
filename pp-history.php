@@ -1,17 +1,16 @@
 <?php
-require 'pp-session-start.php';
-
+require 'pp-session-start.php'
 ?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="utf-8" />
     <meta charset="utf-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
     <meta name="description" content="" />
     <meta name="author" content="" />
-    <title>User List</title>
+    <title>History List</title>
     <link href="css/simple-datatables@latest/dist/style.css" rel="stylesheet" />
     <link href="css/litepicker/dist/css/litepicker.css" rel="stylesheet" />
     <link href="css/styles.css" rel="stylesheet" />
@@ -23,11 +22,23 @@ require 'pp-session-start.php';
     <link rel="stylesheet" href="css/majorette.css">
     <script src="js/jquery/jquery.min.js"></script>
     <script src="js/jquery/jquery-ui.min.js"></script>
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+    <!-- time -->
+    <script type="text/javascript" src="js/majorette/pp-time-stamp.js"></script>
+
+    <!--        <script src="js/reorder-columns/jquery.dragtable.js"></script>-->
+    <!--        <script src="js/reorder-columns/bootstrap-table.min.js"></script>-->
+    <!--        <script src="js/reorder-columns/bootstrap-table-reorder-columns.js"></script>-->
+    <!--        <script src="js/majorette/pp-dragtable.js"></script>-->
+    <!--        <script type="text/javascript" src="js/datetimepicker4/moment.min.js"></script>-->
+    <!--        <script type="text/javascript" src="js/datetimepicker4/tempusdominus-bootstrap-4.min.js"></script>-->
+    <!--        <link rel="stylesheet" href="css/datetimepicker4/tempusdominus-bootstrap-4.min.css" />-->
+    <script type="text/javascript" src="js/majorette/pp-machine-staff.js"></script>
+    <!--        <script type="text/javascript" src="js/majorette/pp-machine-currentTaskModal.js"></script>-->
+    <!--        <script type="text/javascript" src="js/majorette/pp-machine-refresh.js"></script>-->
 </head>
 <body class="nav-fixed">
 <?php require 'pp-setting-sidenavAccordion.php'; ?>
-<?php require 'pp-session.php'; ?>
 <div id="layoutSidenav">
     <?php require 'pp-layoutSidenav_nav.php'; ?>
 
@@ -43,7 +54,7 @@ require 'pp-session-start.php';
                 <!-- Example DataTable for Dashboard Demo-->
                 <div class="card mb-4 w-100" id="table-machine">
                     <div class="card-header bg-red fw-bold text-white fs-4 d-flex justify-content-between">
-                        <div>QR code List</div>
+                        <div>History List</div>
                         <div>
                             <span id="hours"></span> :
                             <span id="minutes"></span> :
@@ -54,15 +65,17 @@ require 'pp-session-start.php';
                     <div class="card-body">
                         <table id="datatablesSimple" class="table table-striped" style="width: 100%; white-space: nowrap">
                             <thead class="text-black" style="background-color: #ffea07">
-                            <?php require'pp-setting-qr-table-head.php' ?>
-                            </thead>
-
-                        
-                            <tbody id="table_body">
                             <?php
-                            require 'pp-setting-qr-script.php';
-
+                            // เรียกใช้ไฟล์ pp-setting-qr-table-head.php เพื่อแสดงหัวตาราง
+                            require_once 'pp-history-table-head.php';
                             ?>
+                            </thead>
+                            <tbody id="table_body">
+
+                            <?php
+                            require 'pp-history-script.php';
+                            ?>
+
                             </tbody>
                         </table>
                     </div>
@@ -72,13 +85,14 @@ require 'pp-session-start.php';
         </main>
     </div>
 </div>
+
+
+<script src="js/majorette/pp-time-stamp.js"></script> <!-- อ้างอิงไฟล์ pp-time-stamp.js -->
 <script src="js/bootstrap@5.0.1/dist/js/bootstrap.bundle.min.js"></script>
 <script src="js/scripts.js"></script>
 <script src="js/simple-datatables@latest" type="text/javascript"></script>
 <script src="js/datatables/datatables-staff.js"></script>
 <script src="js/litepicker/dist/bundle.js"></script>
 <script src="js/litepicker.js"></script>
-<script src="js/majorette/pp-time-stamp.js"></script> <!-- อ้างอิงไฟล์ pp-time-stamp.js -->
-
 </body>
 </html>

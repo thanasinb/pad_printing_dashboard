@@ -1,8 +1,11 @@
 <?php
 require 'pp-session.php';
-require 'pp-session-start.php'
+
 ?>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
 <nav class="topnav navbar navbar-expand shadow justify-content-between justify-content-sm-start navbar-light bg-white" id="sidenavAccordion">
+
     <!-- Sidenav Toggle Button-->
     <button class="btn btn-icon btn-transparent-dark order-1 order-lg-0 me-2 ms-lg-2 me-lg-0" id="sidebarToggle"><i data-feather="menu"></i></button>
     <!-- Navbar Brand-->
@@ -185,7 +188,7 @@ require 'pp-session-start.php'
                     Account
                 </a>
 
-                <a class="dropdown-item" href="pp-homepage.php" onclick="confirmLogout()">
+                <a class="dropdown-item" href="pp-logout.php" onclick="confirmLogout()">
                     <div class="dropdown-item-icon"><i data-feather="log-out"></i></div>
                     Logout
                 </a>

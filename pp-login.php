@@ -5,42 +5,48 @@ session_start();
 require 'update/establish.php';
 
 // ตรวจสอบว่ามีการส่งข้อมูล username และ password มาหรือไม่
-if(isset($_POST['username']) && isset($_POST['password'])) {
+if (isset($_POST['username']) && isset($_POST['password'])) {
     // รับค่า username และ password จากฟอร์ม
     $username = $_POST['username'];
     $password = $_POST['password'];
 
     // คำสั่ง SQL สำหรับเลือกข้อมูลผู้ใช้จากฐานข้อมูล
     $sql = "SELECT login.*, role.*
-        FROM login
-        INNER JOIN staff ON login.id_staff = staff.id_staff
-        INNER JOIN role ON staff.id_role = role.id_role
-        WHERE login.username='$username' AND login.password='$password' AND (role.role_group = 2 OR role.role_group = 3)
-        ";
+            FROM login
+            INNER JOIN staff ON login.id_staff = staff.id_staff
+            INNER JOIN role ON staff.id_role = role.id_role
+            WHERE login.username='$username' AND login.password='$password' AND (role.role_group = 2 OR role.role_group = 3)";
 
     // ทำการคิวรีฐานข้อมูล
     $result = $conn->query($sql);
 
     // ตรวจสอบว่ามีข้อมูลผู้ใช้ในฐานข้อมูลหรือไม่
-// ตรวจสอบว่ามีข้อมูลผู้ใช้ในฐานข้อมูลหรือไม่
-if($result->num_rows > 0) {
-    // พบข้อมูลผู้ใช้ที่ตรงกับ username และ password
-    // เก็บข้อมูล username ใน Session
-    $_SESSION['username'] = $username;
+    if ($result->num_rows > 0) {
+        // พบข้อมูลผู้ใช้ที่ตรงกับ username และ password
+        // เก็บข้อมูล username ใน Session
+        $_SESSION['username'] = $username;
 
-    // ส่งผู้ใช้ไปยังหน้า pp-machine-3.php
-    header("Location: pp-machine-3.php");
-    exit();
-} else {
-    // ไม่พบข้อมูลผู้ใช้หรือ username/password ไม่ตรง
-    // ส่งผู้ใช้กลับไปยังหน้า pp-login.php พร้อมส่งข้อความผิดพลาด
-    header("Location: pp-login.php?error=password_incorrect");
-    exit();
+        // เพิ่มรายการประวัติการเข้าสู่ระบบลงในฐานข้อมูล history
+        $login_user = $_SESSION['username'];
+        $history_sql = "INSERT INTO history (username, action, date_time)
+                        VALUES ('$login_user', 'Login', NOW())";
+        $conn->query($history_sql);
+
+        // ส่งผู้ใช้ไปยังหน้า pp-machine-3.php
+        header("Location: pp-machine-3.php");
+        exit();
+    } else {
+        // ไม่พบข้อมูลผู้ใช้หรือ username/password ไม่ตรง
+        // ส่งผู้ใช้กลับไปยังหน้า pp-login.php พร้อมส่งข้อความผิดพลาด
+        header("Location: pp-login.php?error=password_incorrect");
+        exit();
+    }
 }
 
-    require 'update/terminate.php';
-}
+// ปิดการเชื่อมต่อกับฐานข้อมูล
+require 'update/terminate.php';
 ?>
+
 
 <!DOCTYPE html>
 <html lang="en">

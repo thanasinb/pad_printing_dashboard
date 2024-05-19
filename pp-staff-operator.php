@@ -159,8 +159,8 @@ require 'pp-session.php';
     </div>
         <script src="js/bootstrap@5.0.1/dist/js/bootstrap.bundle.min.js"></script>
         <script src="js/scripts.js"></script>
-        <script src="js/simple-datatables@latest" type="text/javascript"></script>
-        <script src="js/datatables/datatables-staff.js"></script>
+    <script src="js/simple-datatables@latest" type="text/javascript"></script>
+    <script src="js/datatables/datatables-staff.js"></script>
         <script src="js/litepicker/dist/bundle.js"></script>
         <script src="js/litepicker.js"></script>
     </body>

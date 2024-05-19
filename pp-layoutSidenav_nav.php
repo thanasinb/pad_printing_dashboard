@@ -1,6 +1,7 @@
 <?php
 
 ?>
+
 <div id="layoutSidenav_nav">
     <nav class="sidenav shadow-right sidenav-light">
         <div class="sidenav-menu">
@@ -94,6 +95,18 @@
                     <nav class="sidenav-menu-nested nav accordion" id="accordionSidenavPages">
                         <a class="nav-link" href="pp-account.php">Edit Account</a>
                         <a class="nav-link" href="pp-account-user.php">Edit User Account</a>
+
+                    </nav>
+                </div>
+                <a class="nav-link collapsed" href="javascript:void(0);" data-bs-toggle="collapse" data-bs-target="#collapseHistory" aria-expanded="false" aria-controls="collapseHistory">
+                    <div class="nav-link-icon"><i class="fas fa-history"></i></div>
+                    History
+                    <div class="sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
+                </a>
+                <div class="collapse" id="collapseHistory" data-bs-parent="#accordionSidenav">
+                    <nav class="sidenav-menu-nested nav accordion" id="accordionSidenavPages">
+                        <a class="nav-link" href="pp-history.php">History List</a>
+
 
                     </nav>
                 </div>
