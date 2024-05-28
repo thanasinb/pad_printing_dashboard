@@ -1,39 +1,9 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="utf-8" />
-    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
-    <meta name="description" content="" />
-    <meta name="author" content="" />
-    <title>QR CODE For Task</title>
-    <link href="css/simple-datatables@latest/dist/style.css" rel="stylesheet" />
-    <link href="css/litepicker/dist/css/litepicker.css" rel="stylesheet" />
-    <link href="css/styles.css" rel="stylesheet" />
-    <link rel="icon" type="image/x-icon" href="assets/img/favicon.png" />
-    <script data-search-pseudo-elements defer src="js/font-awesome/5.15.3/js/all.min.js"></script>
-    <script src="js/feather-icons/4.28.0/feather.min.js"></script>
-    <!--        <link rel="stylesheet" href="css/reorder-columns/dragtable.css">-->
-    <!--        <link rel="stylesheet" href="css/reorder-columns/bootstrap-table.min.css">-->
-    <link rel="stylesheet" href="css/majorette.css">
-    <script src="js/jquery/jquery.min.js"></script>
-    <script src="js/jquery/jquery-ui.min.js"></script>
-    <!--        <script src="js/reorder-columns/jquery.dragtable.js"></script>-->
-    <!--        <script src="js/reorder-columns/bootstrap-table.min.js"></script>-->
-    <!--        <script src="js/reorder-columns/bootstrap-table-reorder-columns.js"></script>-->
-    <!--        <script src="js/majorette/pp-dragtable.js"></script>-->
-    <!--        <script type="text/javascript" src="js/datetimepicker4/moment.min.js"></script>-->
-    <!--        <script type="text/javascript" src="js/datetimepicker4/tempusdominus-bootstrap-4.min.js"></script>-->
-    <!--        <link rel="stylesheet" href="css/datetimepicker4/tempusdominus-bootstrap-4.min.css" />-->
-    <?php
-    //        require 'js/majorette/date_picker.php'
-    ?>
-    <!--        <script type="text/javascript" src="js/majorette/pp-machine-assign-date.js"></script>-->
-    <!--        <script type="text/javascript" src="js/majorette/pp-machine-multiplier.js"></script>-->
-    <!--        <script type="text/javascript" src="js/majorette/pp-machine-currentTaskModal.js"></script>-->
-    <script type="text/javascript" src="js/majorette/pp-machine-refresh-3.js"></script>
-    <script type="text/javascript" src="js/majorette/pp-machine-clock.js"></script>
-    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Generate QR Code</title>
 
     <style>
         body {
@@ -64,16 +34,17 @@
 
         h1 {
             color: #333;
-            font-size: 36px;
+            font-size: 28px;
             font-weight: bold;
-            margin-bottom: 30px;
-            text-align: center;
+            margin-bottom: 20px;
         }
 
         button {
             padding: 14px 24px;
             font-size: 18px;
             cursor: pointer;
+            background-color: #0070c9;
+            color: #fff;
             border: none;
             border-radius: 6px;
             margin-top: 20px;
@@ -85,8 +56,7 @@
         }
 
         button:hover {
-            background-color: #0070c9;
-            color: #fff;
+            background-color: #004d99;
         }
 
         #qrcode {
@@ -98,57 +68,68 @@
             font-size: 18px;
             color: #666;
         }
-    </style>
-</head>
-<body class="nav-fixed">
-<?php require 'pp-machine-sidenavAccordion.php'; ?>
-<div id="layoutSidenav">
-    <?php require 'pp-layoutSidenav_nav.php'; ?>
-    <div id="layoutSidenav_content">
 
-<div id="qrcodeContainer" class="container">
+        #downloadBtn, #printBtn, #anotherPageBtn {
+            margin-top: 20px;
+            padding: 14px 24px;
+            font-size: 18px;
+            cursor: pointer;
+            background-color: #0070c9;
+            color: #fff;
+            border: none;
+            border-radius: 6px;
+            transition: background-color 0.3s ease;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            white-space: nowrap;
+        }
+
+        #downloadBtn:hover, #printBtn:hover, #anotherPageBtn:hover {
+            background-color: #004d99;
+        }
+    </style>
+
+
+</head>
+<body>
+<div id="qrcodeContainer">
     <h1>Generate QR Code</h1>
-    <button onclick="generateQRCode()" class="btn btn-primary">Generate QR Code</button>
+    <button onclick="generateQRCode()">Generate QR Code</button>
     <div id="qrcode"></div>
     <div id="qrValue"></div>
-    <button id="downloadBtn" onclick="downloadQRCode()" class="btn btn-success">Download QR Code</button>
-    <button id="printBtn" onclick="openPrintDialog()" class="btn btn-info">Print QR Code</button>
-    <!-- เพิ่มปุ่ม Go to Machine3 -->
-    <button id="goToMachine3Btn" onclick="goToMachine3()" class="btn btn-warning">Go to Homepage</button>
-
+    <button id="downloadBtn" onclick="downloadQRCode()">Download QR Code</button>
+    <button id="printBtn" onclick="openPrintDialog()">Print QR Code</button>
+    <button id="changePageBtn" onclick="changePage()">Go to Another Page</button>
 </div>
 
 <!-- Include QR Code library -->
 <script src="https://cdn.rawgit.com/davidshimjs/qrcodejs/gh-pages/qrcode.min.js"></script>
-<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
-<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-
 <script>
     let qrcodeInstance = null;
 
     function generateQRCode() {
         let qrCodeValue = '';
 
-        // Generate random letters A-Z
+        // สร้างตัวอักษร A-Z
         for (let i = 0; i < 2; i++) {
             const randomChar = String.fromCharCode(65 + Math.floor(Math.random() * 26)); // 65 is ASCII for 'A'
             qrCodeValue += randomChar;
         }
 
-        // Append 3 random digits
+        // เพิ่มตัวเลข 3 หลัก
         for (let i = 0; i < 3; i++) {
             const randomDigit = Math.floor(Math.random() * 10); // 0-9
             qrCodeValue += randomDigit;
         }
 
         const qrcodeContainer = document.getElementById('qrcode');
-        qrcodeContainer.innerHTML = ''; // Clear previous content before generating new QR Code
+        qrcodeContainer.innerHTML = ''; // เคลียร์เนื้อหาของ qrcodeContainer ก่อนที่จะสร้าง QR Code ใหม่
 
         qrcodeInstance = new QRCode(qrcodeContainer, {
             text: qrCodeValue,
-            width: 200, // Set width of QR Code (200 pixels)
-            height: 200, // Set height of QR Code (200 pixels)
+            width: 200, // กำหนดความกว้างของ QR Code (200 pixels)
+            height: 200, // กำหนดความสูงของ QR Code (200 pixels)
         });
 
         const downloadBtn = document.getElementById('downloadBtn');
@@ -176,19 +157,10 @@
         window.print();
     }
 
-
-    function goToMachine3() {
-        window.location.href = 'pp-machine-3.php'; // เปลี่ยน URL เป็นที่ต้องการ
+    function changePage() {
+        // Redirect to another page (example: Google homepage)
+        window.location.href = 'https://www.google.com';
     }
 </script>
-<script src="js/bootstrap@5.0.1/dist/js/bootstrap.bundle.min.js"></script>
-<script src="js/scripts.js"></script>
-<!--        <script src="js/Chart.js/2.9.4/Chart.min.js"></script>-->
-<!--        <script src="assets/demo/chart-area-demo.js"></script>-->
-<!--        <script src="assets/demo/chart-bar-demo.js"></script>-->
-<script src="js/simple-datatables@latest" type="text/javascript"></script>
-<script src="js/datatables/datatables-simple-demo.js"></script>
-<script src="js/litepicker/dist/bundle.js"></script>
-<script src="js/litepicker.js"></script>
 </body>
 </html>

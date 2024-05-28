@@ -1,4 +1,7 @@
 <?php
+
+require 'pp-session-start.php';
+
     ini_set('display_errors', 0);
     error_reporting(E_ERROR | E_WARNING | E_PARSE);
 ?>
@@ -97,6 +100,7 @@
                     </table>
                 </div>
                 <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
                     <button type="button" id="modal_button_save" class="btn btn-primary">Save</button>
                 </div>
             </div>
@@ -119,6 +123,7 @@
                     </table>
                 </div>
                 <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
                     <button type="button" id="modal_button_delete" class="btn btn-primary">Delete</button>
                 </div>
             </div>

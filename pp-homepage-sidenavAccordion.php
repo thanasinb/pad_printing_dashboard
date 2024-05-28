@@ -41,34 +41,9 @@
             window.location.href = 'pp-login.php';
         });
     </script>
-    <?php
-    require 'update/establish.php';
-    // ตรวจสอบว่ามีการล็อกอินแล้วหรือไม่
-    if (isset($_SESSION['username'])) {
-        $username = $_SESSION['username']; // รับชื่อผู้ใช้จาก session
-
-        // คำสั่ง SQL สำหรับดึงชื่อผู้ใช้จากฐานข้อมูล
-        $sql = "SELECT staff.name_first
-                FROM login
-                INNER JOIN staff ON login.id_staff = staff.id_staff
-                WHERE login.username = '$username'";
-        $result = $conn->query($sql);
-
-        // ตรวจสอบผลลัพธ์
-        if ($result->num_rows > 0) {
-            // แสดงชื่อผู้ใช้
-            while($row = $result->fetch_assoc()) {
-                $name = $row["name_first"];
-                echo '<div class="dropdown-user-details-name">' . $name . '</div>';
-            }
-        }$name = "Welcome";
-    }
-    ?>
-
 
 
     <a class="navbar-brand" style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);">Majorette</a>
-
 
     <!-- Navbar Items-->
     <ul class="navbar-nav align-items-center ms-auto">
@@ -80,8 +55,8 @@
                 <h6 class="dropdown-header d-flex align-items-center">
                     <img class="dropdown-user-img" src="assets/img/illustrations/profiles/profile-user.png" />
                     <div class="dropdown-user-details">
-                        <div class="dropdown-user-details-name"><?php echo $name; ?></div>
-
+                        <div class="dropdown-user-details-name">Valerie Luna</div>
+                        <div class="dropdown-user-details-email">vluna@aol.com</div>
                     </div>
                 </h6>
                 <div class="dropdown-divider"></div>

@@ -1,18 +1,34 @@
 <?php
+require 'pp-session.php'
+
 ?>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
 <nav class="topnav navbar navbar-expand shadow justify-content-between justify-content-sm-start navbar-light bg-white" id="sidenavAccordion">
     <!-- Sidenav Toggle Button-->
     <button class="btn btn-icon btn-transparent-dark order-1 order-lg-0 me-2 ms-lg-2 me-lg-0" id="sidebarToggle"><i data-feather="menu"></i></button>
-    <!-- Navbar Brand-->
-    <!-- * * Tip * * You can use text or an image for your navbar brand.-->
-    <!-- * * * * * * When using an image, we recommend the SVG format.-->
-    <!-- * * * * * * Dimensions: Maximum height: 32px, maximum width: 240px-->
-    <a class="navbar-brand pe-3 ps-4 ps-lg-2" href="master/index.html">Majorette</a>
-    <!-- Navbar Search Input-->
-    <!-- * * Note: * * Visible only on and above the lg breakpoint-->
+
+    <a class="navbar-brand pe-3 ps-4 ps-lg-2" href="pp-machine-3.php">Majorette</a>
+
     <form class="form-inline me-auto d-none d-lg-block me-3">
         <div class="input-group input-group-joined input-group-solid">
-            <input class="form-control pe-0" type="search" placeholder="Search" aria-label="Search" />
+            <input class="form-control pe-0" id="menuSearchInput" type="search" placeholder="Search" aria-label="Search" />
+            <script>
+                $(document).ready(function() {
+                    $('#menuSearchInput').on('keyup', function() {
+                        var searchText = $(this).val().toLowerCase();
+                        $('.sidenav-menu a.nav-link').each(function() {
+                            var menuItemText = $(this).text().toLowerCase();
+                            if (menuItemText.includes(searchText)) {
+                                $(this).show();
+                            } else {
+                                $(this).hide();
+                            }
+                        });
+                    });
+                });
+            </script>
+
             <div class="input-group-text"><i data-feather="search"></i></div>
         </div>
     </form>
@@ -158,19 +174,21 @@
                 <h6 class="dropdown-header d-flex align-items-center">
                     <img class="dropdown-user-img" src="assets/img/illustrations/profiles/profile-1.png" />
                     <div class="dropdown-user-details">
-                        <div class="dropdown-user-details-name">Valerie Luna</div>
-                        <div class="dropdown-user-details-email">vluna@aol.com</div>
+                        <div class="dropdown-user-details-name"><?php echo $name,"   ",$surname;?></div>
                     </div>
                 </h6>
                 <div class="dropdown-divider"></div>
-                <a class="dropdown-item" href="#!">
+                <a class="dropdown-item" href="pp-account.php">
                     <div class="dropdown-item-icon"><i data-feather="settings"></i></div>
                     Account
                 </a>
-                <a class="dropdown-item" href="#!">
+
+                <a class="dropdown-item" href="pp-login2.php" onclick="confirmLogout()">
                     <div class="dropdown-item-icon"><i data-feather="log-out"></i></div>
                     Logout
                 </a>
+                <script src="js/logoutpopup.js"></script>
+
             </div>
         </li>
     </ul>

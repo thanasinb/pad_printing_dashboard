@@ -1,10 +1,27 @@
 <?php
 session_start();
 
-// ลบ session ออกจากระบบ
+// Include the database connection file
+require 'update/establish.php';
+
+if (isset($_SESSION['username'])) {
+    $username = $_SESSION['username'];
+
+    // Record the logout action in the history table
+    $logout_time = date('Y-m-d H:i:s');
+    $action = "logout";
+
+    $stmt = $conn->prepare("INSERT INTO history (username, action, date_time) VALUES (?, ?, ?)");
+    $stmt->bind_param("sss", $username, $action, $logout_time);
+    $stmt->execute();
+    $stmt->close();
+}
+
+// Unset and destroy the session
+session_unset();
 session_destroy();
 
-// ลิ้งก์ไปยังหน้า login.php หรือหน้าที่ต้องการให้ผู้ใช้ล็อกอินใหม่
+// Redirect to the homepage or login page
 header("Location: pp-homepage.php");
 exit();
 ?>

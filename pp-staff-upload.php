@@ -1,4 +1,5 @@
 <?php
+require 'pp-session-start.php';
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -8,7 +9,7 @@
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
         <meta name="description" content="" />
         <meta name="author" content="" />
-        <title>Job overview by Machine</title>
+        <title>Upload Staff File</title>
         <link href="css/simple-datatables@latest/dist/style.css" rel="stylesheet" />
         <link href="css/litepicker/dist/css/litepicker.css" rel="stylesheet" />
         <link href="css/styles.css" rel="stylesheet" />

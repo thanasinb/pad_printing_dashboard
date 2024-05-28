@@ -1,27 +1,30 @@
 $(document).ready(function() {
-    $('input').on('keyup', isValid);
-    $('select').on('change', isValid);
+    $('input[required]').on('keyup', checkFormValidity);
+    $('select[required]').on('change', checkFormValidity);
+
+    // Initial check to ensure the button state is correct on page load
+    checkFormValidity();
 });
-function isValid() {
-    // alert($('#id_shif').val()=="");
-    let requiredInputs = $('input[required]');
-    let emptyField = false;
-    $.each(requiredInputs, function() {
-        if( $(this).val().trim().length == 0 ) {
-            emptyField = true;
-            return false;
+
+function checkFormValidity() {
+    let isFormValid = true;
+
+    // Check all required input fields
+    $('input[required]').each(function() {
+        if ($(this).val().trim().length === 0) {
+            isFormValid = false;
+            return false; // Break the loop if an empty field is found
         }
     });
-    let requiredSelect = $('select[required]');
-    $.each(requiredSelect, function() {
-        if( $(this).val().trim().length == 0 ) {
-            emptyField = true;
-            return false;
+
+    // Check all required select fields
+    $('select[required]').each(function() {
+        if ($(this).val().trim().length === 0) {
+            isFormValid = false;
+            return false; // Break the loop if an empty field is found
         }
     });
-    if(!emptyField) {
-        $('#submit_button').attr('disabled', false);
-    }else{
-        $('#submit_button').attr('disabled', true);
-    }
+
+    // Enable or disable the submit button based on form validity
+    $('#submit_button').attr('disabled', !isFormValid);
 }

@@ -1,189 +1,170 @@
 $(document).ready(function(){
     $('#button_save_rfid').hide();
-    $('#staff_modal').on('hide.bs.modal',function(){
-        $('#input_staff_id').prop('disabled', true);
-        $('#input_rfid').prop('disabled', true);
-        $('#prefix_name').prop('disabled', true);
-        $('#input_name').prop('disabled', true);
-        $('#input_last').prop('disabled', true);
-        $('#shift').prop('disabled', true);
-        $('#role').prop('disabled', true);
-        $('#input_site').prop('disabled', true);
-        $('#button_save_rfid').hide();
-        $('#button_rfid').show();
+
+    // Reset modal fields when it's closed
+    $('#staff_modal').on('hide.bs.modal', function(){
+        resetModalFields();
     });
 
+    // Handle save button click
     $('#button_save_rfid').click(function () {
-        // alert($('#input_rfid').val() + $('#modal_staff_id').text());
         var id_staff = $('#input_staff_id').val();
         var id_rfid = $('#input_rfid').val();
-        var prefix= $('#prefix_name').val();
-        var name= $('#input_name').val();
-        var last= $('#input_last').val();
-        var roles= $('#role').val();
-        var shift= $('#shift').val();
-        var site= $('#input_site').val();
-        // alert(id_staff+id_rfid);
+        var prefix = $('#prefix_name').val();
+        var name = $('#input_name').val();
+        var last = $('#input_last').val();
+        var role_group = $('#id_role_group').val();
+        var role = $('#id_role').val();
+        var shift = $('#shift').val();
+        var site = $('#input_site').val();
+
         $.ajax({
             url: "ajax/pp-staff-change-rfid.php",
             type: "GET",
             data: {
                 id_staff: id_staff,
                 id_rfid: id_rfid,
-                name_first:name,
-                name_last:last,
-                prefix:prefix,
-                id_role:roles,
-                id_shif:shift,
-                site:site
+                name_first: name,
+                name_last: last,
+                prefix: prefix,
+                id_role: role,
+                id_role_group: role_group,
+                id_shift: shift,
+                site: site
             },
-            context: this,
             cache: false,
             success: function(dataResult){
                 var dataResult = JSON.parse(dataResult);
                 if (dataResult.statusCode == 200){
-                    $('#input_staff_id').text(id_staff);
-                    $('#input_staff_id').prop('disabled', true);
-                    $('#input_rfid').val(id_rfid);
-                    $('#input_rfid').prop('disabled', true);
-                    $('#prefix_name').val(prefix);
-                    $('#prefix_name').prop('disabled', true);
-                    $('#input_name').text(name);
-                    $('#input_name').prop('disabled', true);
-                    $('#input_last').text(last);
-                    $('#input_last').prop('disabled', true);
-                    $('#role').val(roles);
-                    $('#role').prop('disabled', true);
-                    $('#shift').val(shift);
-                    $('#shift').prop('disabled', true);
-                    $('#input_site').val(site);
-                    $('#input_site').prop('disabled', true);
-                    $('#button_save_rfid').hide();
-                    $('#button_rfid').show();
                     alert("Success!");
-
-                }else if (dataResult.statusCode == 30) {
+                    resetModalFields();
+                } else if (dataResult.statusCode == 30) {
                     alert("Error: Duplicate active RFID");
                 }
             }
         });
-
     });
 
+    // Handle edit button click
     $('body').on('click', '.staff_edit', function(event){
-        // $('.staff_edit').click(function (){
-        // alert('edit');
-        // alert($(this).parent().find('.id_staff').text());
-        // alert($(this).parent().parent().find('.id_staff').html());
+        var selectedRow = $(this).parent().parent();
+        var id_staff = selectedRow.find('.id_staff').html();
+        var id_rfid = selectedRow.find('.rfid').html();
+        var prefix = selectedRow.find('.prefix').html();
+        var role_group = selectedRow.find('.role_group').html();
+        var role = selectedRow.find('.role').html();
+        var shift = selectedRow.find('.shift').html();
 
-        var id_staff = $(this).parent().parent().find('.id_staff').html();
-        var id_rfid = $(this).parent().parent().find('.rfid').html();
-        var prefix = $(this).parent().parent().find('.prefix').html();
-        //var name_first = $(this).parent().parent().find('.name_first').html();
-        //var name_last = $(this).parent().parent().find('.name_last').html();
-        var role = $(this).parent().parent().find('.role').html();
-        var shif = $(this).parent().parent().find('.shif').html();
-
-        var prefix_val;
-        if (prefix==='นาย'){
-            prefix_val=1;
-        }else if(prefix==='นาง'){
-            prefix_val=2;
-        }else if(prefix==='นางสาว'){
-            prefix_val=3;
-        }
-        var role_val;
-        if (role==='Operator'){
-            role_val=1;
-        }else if(role==='Technician'){
-            role_val=2;
-        }else if(role==='Production Support'){
-            role_val=3;
-        }else if(role==='Instructor'){
-            role_val=4;
-        }else if(role==='Senior Instructor'){
-            role_val=5;
-        }else if(role==='Foreman'){
-            role_val=6;
-        }else if(role==='Leader'){
-            role_val=7;
-        }else if(role==='Senior Technician'){
-            role_val=8;
-        }else if(role==='Manager'){
-            role_val=9;
-        }else if(role==='Engineering'){
-            role_val=10;
-        }
-        //alert(prefix + prefix_val + role + role_val+ shif);
+        var prefix_val = getPrefixVal(prefix);
+        var role_group_val = getRoleGroupVal(role_group);
+        var role_val = getRoleVal(role);
 
         $('#input_staff_id').val(id_staff);
         $('#input_rfid').val(id_rfid);
         $('#prefix_name').val(prefix_val);
-        //$('#input_name').val(name_first);
-        //$('#input_last').val(name_last);
-        $('#role').val(role_val);
-        $('#shift').val(shif);
+        $('#id_role_group').val(role_group_val);
+        $('#id_role').val(role_val);
+        $('#shift').val(shift);
 
-        $('#staff_modal').modal('show');
-        // $('#modal_span_staff_id').text(id_staff);
         $.ajax({
-         url: "ajax/pp-staff-load.php",
-        type: "GET",
-        data: {
-         id_staff: id_staff
-         },
-        context: this,
-        cache: false,
-        success: function(dataResult){
-        // alert(dataResult);
-         var dataResult = JSON.parse(dataResult);
-        // $('#input_staff_id').text(dataResult.id_staff);
-        //$('#input_rfid').val(dataResult.id_rfid);
-        //$('#modal_prefix').text(dataResult.prefix);
-         $('#input_name').val(dataResult.name_first);
-        $('#input_last').val(dataResult.name_last);
-        $('#input_site').val(dataResult.site);
-        // $('#modal_role').text(dataResult.role);
-        //$('#modal_shif').text(dataResult.id_shif);
-         }
-        });
-    });
-
-    $('body').on('click', '.staff_delete', function(event){
-        var id_staff = $(this).parent().parent().find('.id_staff').html();
-        $.ajax({
-            url: "ajax/pp-staff-delete.php",
+            url: "ajax/pp-staff-load.php",
             type: "GET",
-            data: {
-                id_staff  : id_staff
-            },
-            context: this,
+            data: { id_staff: id_staff },
             cache: false,
             success: function(dataResult){
                 var dataResult = JSON.parse(dataResult);
-                $('.row_staff:contains(' + id_staff + ')').remove();
+                $('#input_name').val(dataResult.name_first);
+                $('#input_last').val(dataResult.name_last);
+                $('#input_site').val(dataResult.site);
             }
+        });
+
+        $('#staff_modal').modal('show');
+    });
+
+    // เมื่อคลิกที่ปุ่ม "ลบ" ในรายการพนักงาน
+    $('.staff_delete').click(function(){
+        // เปิด Modal ยืนยันการลบ
+        $('#confirmDeleteModal').modal('show');
+
+        // รับรหัสพนักงานที่ต้องการลบ
+        var id_staff = $(this).closest('.row_staff').find('.id_staff').text();
+
+        // เมื่อคลิกที่ปุ่ม "ยืนยันการลบ"
+        $('#confirmDeleteButton').click(function(){
+            // ส่งคำร้องขอลบข้อมูลไปยังเซิร์ฟเวอร์
+            $.ajax({
+                url: 'ajax/pp-staff-delete.php',
+                type: 'GET',
+                data: { id_staff: id_staff },
+                success: function(response){
+                    // ปิด Modal หลังจากลบข้อมูลสำเร็จ
+                    $('#confirmDeleteModal').modal('hide');
+                    // ดำเนินการอื่นๆ ที่ต้องการหลังจากลบข้อมูล
+                }
+            });
         });
     });
 
+
+    // Handle change button click to enable fields
     $('#button_rfid').click(function (){
-        $('#input_staff_id').prop('disabled', false);
-        // $('#input_staff_id').focus();
-        $('#input_rfid').prop('disabled', false);
-        // $('#input_rfid').focus();
-        $('#prefix_name').prop('disabled', false);
-        // $('#prefix_name').focus();
-        $('#input_name').prop('disabled', false);
-        // $('#input_name').focus();
-        $('#input_last').prop('disabled', false);
-        // $('#input_last').focus();
-        $('#role').prop('disabled', false);
-        // $('#role').focus();
-        $('#shift').prop('disabled', false);
-        // $('#shift').focus();
-        $('#input_site').prop('disabled', false);
+        enableFields();
         $('#button_rfid').hide();
         $('#button_save_rfid').show();
     });
 
+    function resetModalFields() {
+        $('#input_staff_id').prop('disabled', true).val('');
+        $('#input_rfid').prop('disabled', true).val('');
+        $('#prefix_name').prop('disabled', true).val('');
+        $('#input_name').prop('disabled', true).val('');
+        $('#input_last').prop('disabled', true).val('');
+        $('#id_role_group').prop('disabled', true).val('');
+        $('#id_role').prop('disabled', true).val('');
+        $('#shift').prop('disabled', true).val('');
+        $('#input_site').prop('disabled', true).val('');
+        $('#button_save_rfid').hide();
+        $('#button_rfid').show();
+    }
+
+    function enableFields() {
+        $('#input_staff_id').prop('disabled', false);
+        $('#input_rfid').prop('disabled', false);
+        $('#prefix_name').prop('disabled', false);
+        $('#input_name').prop('disabled', false);
+        $('#input_last').prop('disabled', false);
+        $('#id_role_group').prop('disabled', false);
+        $('#id_role').prop('disabled', false);
+        $('#shift').prop('disabled', false);
+        $('#input_site').prop('disabled', false);
+    }
+
+    function getPrefixVal(prefix) {
+        if (prefix === 'นาย') return 1;
+        if (prefix === 'นาง') return 2;
+        if (prefix === 'นางสาว') return 3;
+        return '';
+    }
+
+    function getRoleGroupVal(role_group) {
+        if (role_group === 'Operator') return 1;
+        if (role_group === 'Foreman') return 2;
+        if (role_group === 'Admin') return 3;
+        return '';
+    }
+
+    function getRoleVal(role) {
+        if (role === 'Operator') return 1;
+        if (role === 'Technician') return 2;
+        if (role === 'Production Support') return 3;
+        if (role === 'Instructor') return 4;
+        if (role === 'Senior Instructor') return 5;
+        if (role === 'Foreman') return 6;
+        if (role === 'Leader') return 7;
+        if (role === 'Senior Technician') return 8;
+        if (role === 'Manager') return 9;
+        if (role === 'Engineering') return 10;
+        return '';
+    }
 });

@@ -8,7 +8,6 @@
       <sourceFolder url="file://$MODULE_DIR$/PhpSpreadsheet/infra" isTestSource="true" packagePrefix="PhpOffice\PhpSpreadsheetInfra\" />
       <sourceFolder url="file://$MODULE_DIR$/PhpSpreadsheet/src/PhpSpreadsheet" isTestSource="false" packagePrefix="PhpOffice\PhpSpreadsheet\" />
       <sourceFolder url="file://$MODULE_DIR$/PhpSpreadsheet/tests/PhpSpreadsheetTests" isTestSource="true" packagePrefix="PhpOffice\PhpSpreadsheetTests\" />
-      <sourceFolder url="file://$MODULE_DIR$/simplexls/tests" isTestSource="true" />
       <excludeFolder url="file://$MODULE_DIR$/simplexls/vendor/composer" />
     </content>
     <orderEntry type="inheritedJdk" />

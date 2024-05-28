@@ -1,3 +1,53 @@
+<?php
+session_start();
+
+// เชื่อมต่อกับไฟล์เชื่อมต่อฐานข้อมูล
+require 'update/establish.php';
+
+// ตรวจสอบว่ามีการส่งข้อมูล username และ password มาหรือไม่
+if (isset($_POST['username']) && isset($_POST['password'])) {
+    // รับค่า username และ password จากฟอร์ม
+    $username = $_POST['username'];
+    $password = $_POST['password'];
+
+    // คำสั่ง SQL สำหรับเลือกข้อมูลผู้ใช้จากฐานข้อมูล
+    $sql = "SELECT login.*, role.*
+            FROM login
+            INNER JOIN staff ON login.id_staff = staff.id_staff
+            INNER JOIN role ON staff.id_role = role.id_role
+            WHERE login.username='$username' AND login.password='$password' AND (role.role_group = 2 OR role.role_group = 3)";
+
+    // ทำการคิวรีฐานข้อมูล
+    $result = $conn->query($sql);
+
+    // ตรวจสอบว่ามีข้อมูลผู้ใช้ในฐานข้อมูลหรือไม่
+    if ($result->num_rows > 0) {
+        // พบข้อมูลผู้ใช้ที่ตรงกับ username และ password
+        // เก็บข้อมูล username ใน Session
+        $_SESSION['username'] = $username;
+
+        // เพิ่มรายการประวัติการเข้าสู่ระบบลงในฐานข้อมูล history
+        $login_user = $_SESSION['username'];
+        $history_sql = "INSERT INTO history (username, action, date_time)
+                        VALUES ('$login_user', 'Login', NOW())";
+        $conn->query($history_sql);
+
+        // ส่งผู้ใช้ไปยังหน้า pp-machine-3.php
+        header("Location: pp-machine-3.php");
+        exit();
+    } else {
+        // ไม่พบข้อมูลผู้ใช้หรือ username/password ไม่ตรง
+        // ส่งผู้ใช้กลับไปยังหน้า pp-login.php พร้อมส่งข้อความผิดพลาด
+        header("Location: pp-login.php?error=password_incorrect");
+        exit();
+    }
+}
+
+// ปิดการเชื่อมต่อกับฐานข้อมูล
+require 'update/terminate.php';
+?>
+
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -6,7 +56,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
     <meta name="description" content="" />
     <meta name="author" content="" />
-    <title>Add downtime</title>
+    <title>Login Homepage</title>
     <link href="css/simple-datatables@latest/dist/style.css" rel="stylesheet" />
     <link href="css/litepicker/dist/css/litepicker.css" rel="stylesheet" />
     <link href="css/styles.css" rel="stylesheet" />
@@ -16,72 +66,41 @@
     <script src="js/jquery/jquery.min.js"></script>
     <script src="js/jquery/jquery-ui.min.js"></script>
     <script src="js/majorette/pp-setting-dt-add.js"></script>
+
+
 </head>
 <body class="nav-fixed">
-<?php require 'pp-staff-sidenavAccordion.php'; ?>
-<div id="layoutSidenav">
-    <?php require 'pp-layoutSidenav_nav.php'; ?>
-    <div id="layoutSidenav_content">
-        <main>
-            <header class="page-header page-header-dark pb-5">
-                <div class="container-xl px-4">
-                    <div class="page-header-content pt-4">
-                    </div>
-                </div>
-            </header>
-            <!-- Main page content-->
-            <div class="container-xl px-4 mt-n10">
-                <div class="col-xl-6">
-                    <div class="card mb-4">
-                        <div class="card-header">Login</div>
-                        <div class="card-body">
-                            <form method="post" action="pp-setting-dt-add-action.php" enctype="multipart/form-data">
-                                <!-- Form Group (username)-->
-                                <div class="row gx-3 mb-3">
-                                    <div class="col-md-6">
-                                        <label class="small mb-1" for="box_code">Box code</label>
-                                        <input class="form-control" id="box_code" name="box_code" type="text" maxlength="3" required="required">
-                                    </div>
-                                    <div class="col-md-6">
-                                        <label class="small mb-1" for="downtime_code">Downtime code</label>
-                                        <input class="form-control" id="downtime_code" name="downtime_code" type="text" maxlength="8" required="required">
-                                    </div>
-                                </div>
-                                <div class="row gx-3 mb-3">
-                                    <div class="col-md-12">
-                                        <label class="small mb-1" for="description_eng">Description English</label>
-                                        <input class="form-control" id="description_eng" name="description_eng" type="text" maxlength="50" required="required">
-                                    </div>
-                                </div>
-                                <div class="row gx-3 mb-3">
-                                    <div class="col-md-12">
-                                        <label class="small mb-1" for="description_tha">Description Thai</label>
-                                        <input class="form-control" id="description_tha" name="description_tha" type="text" maxlength="50">
-                                    </div>
-                                </div>
-                                <!-- Save changes button-->
-                                <button id="submit_button" class="btn btn-blue" type="submit" disabled>Add</button>
-                                <br><br>
-                                <?php
+<?php require 'pp-login-sidenavAccordion.php'; ?>
 
-                                ini_set('display_errors', 0);
-                                error_reporting(E_ERROR | E_WARNING | E_PARSE);
-
-                                if ($_GET['error_code']!=null){
-                                    if ($_GET['error_code'])
-                                        echo "Add downtime error! Code: " . $_GET['error_code'];
-                                    else
-                                        echo "Add downtime successfully! Code: " . $_GET['error_code'];
-                                }
-                                ?>
-                            </form>
+<div class="container mt-15">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-header text-center">Login</div>
+                <div class="card-body">
+                    <?php
+                    // ตรวจสอบว่ามีข้อความผิดพลาดที่ส่งมาจาก pp-login.php หรือไม่
+                    if(isset($_GET['error']) && $_GET['error'] == 'password_incorrect') {
+                        echo '<div class="alert alert-danger" role="alert">รหัสผ่านผิด!</div>';
+                    }
+                    ?>
+                    <form id="loginForm" action="" method="POST">
+                        <div class="mb-3">
+                            <label for="username" class="form-label">Username</label>
+                            <input type="text" class="form-control" id="username" name="username" required>
                         </div>
-                    </div>
+                        <div class="mb-3">
+                            <label for="password" class="form-label">Password</label>
+                            <input type="password" class="form-control" id="password" name="password" required>
+                        </div>
+                        <button type="submit" class="btn btn-primary">Login</button>
+                    </form>
                 </div>
             </div>
-        </main>
+        </div>
     </div>
 </div>
+
 <script src="js/bootstrap@5.0.1/dist/js/bootstrap.bundle.min.js"></script>
 <script src="js/scripts.js"></script>
 <script src="js/simple-datatables@latest" type="text/javascript"></script>
