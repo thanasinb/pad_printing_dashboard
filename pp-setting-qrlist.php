@@ -79,6 +79,8 @@ require 'pp-session-start.php';
 <script src="js/litepicker/dist/bundle.js"></script>
 <script src="js/litepicker.js"></script>
 <script src="js/majorette/pp-time-stamp.js"></script> <!-- อ้างอิงไฟล์ pp-time-stamp.js -->
+<script type="text/javascript" src="js/majorette/pp-session.js"></script>
+
 
 </body>
 </html>

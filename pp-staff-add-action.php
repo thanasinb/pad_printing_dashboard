@@ -38,13 +38,14 @@ if(empty($data_staff)) {
     }
 
     if ($uploadOk==1){
-        $sql = "INSERT INTO staff (id_staff, id_rfid, prefix, name_first, name_last, id_role, id_shif, staff_img) VALUES ";
+        $sql = "INSERT INTO staff (id_staff, id_rfid, prefix, name_first, name_last, id_role,role_group ,id_shif, staff_img) VALUES ";
         $sql = $sql . "('" . $_POST['id_staff'] . "',";
         $sql = $sql . "'" . $_POST['id_rfid'] . "',";
         $sql = $sql . $_POST['prefix'] . ",";
         $sql = $sql . "'" . $_POST['name_first'] . "',";
         $sql = $sql . "'" . $_POST['name_last'] . "',";
         $sql = $sql . $_POST['id_role'] . ",";
+        $sql = $sql . $_POST['role_group'] . ",";
         $sql = $sql . "'" . $_POST['id_shif'] . "',";
         $sql = $sql . "'" . $_POST['id_staff'] . "." . $extension . "')";
 //        echo $sql;

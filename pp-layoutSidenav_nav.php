@@ -32,9 +32,9 @@
                 </a>
                 <div class="collapse" id="collapseMachines" data-bs-parent="#accordionSidenav">
                     <nav class="sidenav-menu-nested nav accordion" id="accordionSidenavPages">
-                        <a class="nav-link" href="pp-machine-3.php">Machine List</a>
-                        <a class="nav-link" href="pp-machine-statistic.php">Machine Statistic</a>
-                        <a class="nav-link" href="pp-machine-add.php">Add new Machine</a>
+                        <a class="nav-link" href="pp-machine-3.php"><i class="fas fa-list" style="opacity: 0.5; margin-right: 6px;"></i>Machine List</a>
+                        <a class="nav-link" href="pp-machine-statistic.php"><i class="fas fa-chart-bar" style="opacity: 0.5; margin-right: 6px;"></i>Machine Statistic</a>
+                        <a class="nav-link" href="pp-machine-add.php"><i class="fas fa-plus" style="opacity: 0.5; margin-right: 6px;"></i>Add new Machine</a>
                     </nav>
                 </div>
                 <a class="nav-link collapsed" href="javascript:void(0);" data-bs-toggle="collapse" data-bs-target="#collapseStaffs" aria-expanded="false" aria-controls="collapseStaffs">
@@ -44,11 +44,11 @@
                 </a>
                 <div class="collapse" id="collapseStaffs" data-bs-parent="#accordionSidenav">
                     <nav class="sidenav-menu-nested nav accordion" id="accordionSidenavPages">
-                        <a class="nav-link" href="pp-staff-operator.php">Operator List</a>
-                        <a class="nav-link" href="pp-op-statistic.php">Operator Statistic</a>
-                        <a class="nav-link" href="pp-staff-technician.php">Technician List</a>
-                        <a class="nav-link" href="pp-staff-upload.php">Import Excel</a>
-                        <a class="nav-link" href="pp-staff-add.php">Add Staff</a>
+                        <a class="nav-link" href="pp-staff-operator.php"><i class="fas fa-list" style="opacity: 0.5; margin-right: 6px;"></i>Operator List</a>
+                        <a class="nav-link" href="pp-staff-technician.php"><i class="fas fa-list" style="opacity: 0.5; margin-right: 6px;"></i>Technician List</a>
+                        <a class="nav-link" href="pp-op-statistic.php"><i class="fas fa-chart-bar" style="opacity: 0.5; margin-right: 6px;"></i>Operator Statistic</a>
+                        <a class="nav-link" href="pp-staff-add.php"><i class="fas fa-plus" style="opacity: 0.5; margin-right: 6px;"></i>Add Staff</a>
+                        <a class="nav-link" href="pp-staff-upload.php"><i class="fas fa-file-import" style="opacity: 0.5; margin-right: 6px;"></i>Import Excel</a>
                     </nav>
                 </div>
                 <a class="nav-link collapsed" href="javascript:void(0);" data-bs-toggle="collapse" data-bs-target="#collapseJobs" aria-expanded="false" aria-controls="collapseJobs">
@@ -58,9 +58,9 @@
                 </a>
                 <div class="collapse" id="collapseJobs" data-bs-parent="#accordionSidenav">
                     <nav class="sidenav-menu-nested nav accordion" id="accordionSidenavPages">
-                        <a class="nav-link" href="pp-job-add.php">Add New Jobs</a>
-                        <a class="nav-link" href="pp-upload.php">Upload Jobs</a>
-                        <a class="nav-link" href="pp-export.php">Export Jobs</a>
+                        <a class="nav-link" href="pp-job-add.php"><i class="fas fa-plus" style="opacity: 0.5; margin-right: 6px;"></i>Add New Jobs</a>
+                        <a class="nav-link" href="pp-upload.php"><i class="fas fa-upload" style="opacity: 0.5; margin-right: 6px;"></i>Upload Jobs</a>
+                        <a class="nav-link" href="pp-export.php"><i class="fas fa-file-export" style="opacity: 0.5; margin-right: 6px;"></i>Export Jobs</a>
                     </nav>
                 </div>
                 <a class="nav-link collapsed" href="javascript:void(0);" data-bs-toggle="collapse" data-bs-target="#collapseDowntime" aria-expanded="false" aria-controls="collapseDowntime">
@@ -70,8 +70,8 @@
                 </a>
                 <div class="collapse" id="collapseDowntime" data-bs-parent="#accordionSidenav">
                     <nav class="sidenav-menu-nested nav accordion" id="accordionSidenavPages">
-                        <a class="nav-link" href="pp-setting-dt.php">Downtime List</a>
-                        <a class="nav-link" href="pp-setting-dt-add.php">Add Downtime</a>
+                        <a class="nav-link" href="pp-setting-dt.php"><i class="fas fa-list" style="opacity: 0.5; margin-right: 6px;"></i>Downtime List</a>
+                        <a class="nav-link" href="pp-setting-dt-add.php"><i class="fas fa-plus" style="opacity: 0.5; margin-right: 6px;"></i>Add Downtime</a>
                     </nav>
                 </div>
                 <a class="nav-link collapsed" href="javascript:void(0);" data-bs-toggle="collapse" data-bs-target="#collapseQrcode" aria-expanded="false" aria-controls="collapseQrcode">
@@ -81,8 +81,8 @@
                 </a>
                 <div class="collapse" id="collapseQrcode" data-bs-parent="#accordionSidenav">
                     <nav class="sidenav-menu-nested nav accordion" id="accordionSidenavPages">
-                        <a class="nav-link" href="pp-setting-qr.php">Add QR code</a>
-                        <a class="nav-link" href="pp-setting-qrlist.php">QR code List</a>
+                        <a class="nav-link" href="pp-setting-qrlist.php"><i class="fas fa-list" style="opacity: 0.5; margin-right: 6px;"></i>QR code List</a>
+                        <a class="nav-link" href="pp-setting-qr.php"><i class="fas fa-plus" style="opacity: 0.5; margin-right: 6px;"></i>Add QR code</a>
                     </nav>
                 </div>
 
@@ -93,9 +93,8 @@
                 </a>
                 <div class="collapse" id="collapseAccount" data-bs-parent="#accordionSidenav">
                     <nav class="sidenav-menu-nested nav accordion" id="accordionSidenavPages">
-                        <a class="nav-link" href="pp-account.php">Edit Account</a>
-                        <a class="nav-link" href="pp-account-user.php">Edit User Account</a>
-
+                        <a class="nav-link" href="pp-account-user.php"><i class="fas fa-list" style="opacity: 0.5; margin-right: 6px;"></i>  User Account List </a>
+                        <a class="nav-link" href="pp-account.php"> <i class="fas fa-edit" style="opacity: 0.5; margin-right: 6px;"></i>  Edit Account  </a>
                     </nav>
                 </div>
                 <a class="nav-link collapsed" href="javascript:void(0);" data-bs-toggle="collapse" data-bs-target="#collapseHistory" aria-expanded="false" aria-controls="collapseHistory">
@@ -105,11 +104,20 @@
                 </a>
                 <div class="collapse" id="collapseHistory" data-bs-parent="#accordionSidenav">
                     <nav class="sidenav-menu-nested nav accordion" id="accordionSidenavPages">
-                        <a class="nav-link" href="pp-history.php">History List</a>
-
-
+                        <a class="nav-link" href="pp-history.php"><i class="fas fa-history" style="opacity: 0.5; margin-right: 6px;"></i>  History List</a>
                     </nav>
                 </div>
+                <a class="nav-link collapsed" href="javascript:void(0);" data-bs-toggle="collapse" data-bs-target="#collapseTray" aria-expanded="false" aria-controls="collapseTray">
+                    <div class="nav-link-icon"><i class="fas fa-utensils"></i></div> <!-- เปลี่ยนไอคอนเป็น utensils -->
+                    Special Tray
+                    <div class="sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
+                </a>
+                <div class="collapse" id="collapseTray" data-bs-parent="#accordionSidenav">
+                    <nav class="sidenav-menu-nested nav accordion" id="accordionSidenavPages">
+                        <a class="nav-link" href="pp-special-tray.php">Special Tray List</a>
+                    </nav>
+                </div>
+
             </div>
         </div>
         <!-- Sidenav Footer-->

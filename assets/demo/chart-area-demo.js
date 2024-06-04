@@ -34,18 +34,14 @@ var myLineChart = new Chart(ctx, {
     type: "line",
     data: {
         labels: [
-            "Jan",
-            "Feb",
-            "Mar",
-            "Apr",
-            "May",
-            "Jun",
-            "Jul",
-            "Aug",
-            "Sep",
-            "Oct",
-            "Nov",
-            "Dec"
+            // "02-00",
+            // "02-00",
+            // "02-00",
+            // "02-00",
+            // "02-01",
+            // "02-02",
+            // "02-03", ตอนแรกเป็นเดือน แต่เปลี่ยนแล้วในหน้าเว็บก็ไม่เปลี่ยน
+
         ],
         datasets: [{
             label: "Earnings",

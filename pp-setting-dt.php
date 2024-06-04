@@ -1,4 +1,4 @@
-<?php
+  <?php
 
 require 'pp-session-start.php';
 
@@ -40,7 +40,7 @@ require 'pp-session-start.php';
                     <!-- Main page content-->
                     <div class="container-fluid px-4 mt-n10">
                         <!-- Example DataTable for Dashboard Demo-->
-                        <div class="card mb-4 w-100" id="table-machine">
+                        <div class="card mb-4 w-200" id="table-machine">
                             <div class="card-header bg-red fw-bold text-white fs-4">Downtime Code Setup</div>
                             <div class="card-body">
                                 <table id="datatablesSimple" class="table table-striped">
@@ -136,5 +136,7 @@ require 'pp-session-start.php';
         <script src="js/datatables/datatables-simple-demo.js"></script>
         <script src="js/litepicker/dist/bundle.js"></script>
         <script src="js/litepicker.js"></script>
+    <script type="text/javascript" src="js/majorette/pp-session.js"></script>
+
     </body>
 </html>

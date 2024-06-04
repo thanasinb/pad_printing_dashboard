@@ -16,70 +16,139 @@ require 'pp-session-start.php'
     <link rel="icon" type="image/x-icon" href="assets/img/favicon.png" />
     <script data-search-pseudo-elements defer src="js/font-awesome/5.15.3/js/all.min.js"></script>
     <script src="js/feather-icons/4.28.0/feather.min.js"></script>
+    <link rel="stylesheet" href="css/reorder-columns/dragtable.css">
+    <link rel="stylesheet" href="css/reorder-columns/bootstrap-table.min.css">
     <link rel="stylesheet" href="css/majorette.css">
     <script src="js/jquery/jquery.min.js"></script>
     <script src="js/jquery/jquery-ui.min.js"></script>
-
-    <!--  Generate QR code   -->
     <script type="text/javascript" src="js/majorette/pp-generate-qr.js"></script>
-
+    <script type="text/javascript" src="js/majorette/pp-setting-dt.js"></script>
+    <script type="text/javascript" src="js/majorette/pp-machine-refresh-3.js"></script>
+    <script type="text/javascript" src="js/majorette/pp-machine-clock.js"></script>
 
     <style>
-        #quantity {
-            max-width: 400px;
-            margin: 0 auto;
-            padding: 20px;
-            border: 1px solid #ccc;
-            border-radius: 5px;
-            background-color: #f9f9f9;
+        @media print {
+            body * {
+                visibility: hidden;
+            }
+            #printableArea, #printableArea * {
+                visibility: visible;
+            }
+            #printableArea {
+                position: absolute;
+                left: 0;
+                top: 0;
+                display: grid;
+                grid-template-columns: repeat(6, 1fr); /* 3 columns */
+                gap: 10px;
+                padding: 20px;
+            }
+            .qrcode-item {
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                page-break-inside: avoid;
+                break-inside: avoid;
+            }
+            .qr-code-value {
+                font-family: 'Arial', sans-serif;
+                font-size: 12px;
+                color: #333;
+                text-align: center;
+                margin-top: 10px;
+            }
         }
-
-        #qrcodeContainer {
+        .qrcode-container {
             display: flex;
-            justify-content: center;
-            align-items: stretch;
             flex-direction: column;
-            padding: 40px;
+            align-items: center;
+            padding: 35px;
             background-color: #fff;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
             border-radius: 8px;
-            width: 80%;
-            max-width: 400px;
+            width: 100%;
+            max-width: 1000px;
+            margin: 20px auto;
         }
 
-        .qrcode-item {
-            display: inline-block;
-            margin: 10px 0;
+        .qrcode-display {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(100px, 1fr)); /* ใช้ auto-fit เพื่อให้กริดยืดหยุ่น */
+            gap: 10px;
+            width: calc(100% - 40px); /* ให้ครอบคลุมความกว้างทั้งหมดของ qrcode-container */
+            align-items: center;
+            padding: 25px;
+            margin: 20px 10px;
         }
-
 
         h1 {
             color: #333;
             font-size: 36px;
             font-weight: bold;
-            margin-bottom: 10px;
-            margin-top: 30px;
             text-align: center;
+            margin-bottom: 20px; /* Increased margin for better spacing */
         }
-        #downloadBtn{
-            margin-top: 20px;
-        }
-        #printBtn{
-            margin-top: 20px;
-        }
-        #saveBtn{
-            margin-top: 20px;
+
+        #quantity {
+            width: 100%;
+            max-width: 120px;
+            margin: 10px 0;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            background-color: #f9f9f9;
+            text-align: center;
         }
 
         #qrcode {
             margin-top: 20px;
+            padding: 10px;
         }
 
         #qrValue {
+            align-content: center;
             margin-top: 20px;
-            /*padding: 10px;*/
-            font-size: 18px;
+            font-size: 5px;
             color: #666;
+        }
+        .form-control {
+            width: 580px; /* กำหนดความกว้างตามที่คุณต้องการ */
+            padding: 10px; /* เพิ่ม padding เพื่อความสวยงาม */
+            font-size: 16px; /* ปรับขนาดตัวอักษร */
+            text-align: center; /* จัดข้อความให้อยู่ตรงกลาง */
+            margin: 10px auto; /* จัดการ margin ให้อยู่ตรงกลาง */
+            display: block;
+            box-sizing: border-box;/* เพื่อให้ margin ทำงานได้ตามต้องการ */
+        }
+        .button-row {
+            width: 100%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            /*padding: 20px;*/
+        }
+        .btnn {
+            margin-top: 10px;
+            width: 120px; /* กำหนดความกว้าง */
+            height: 35px; /* กำหนดความสูง */
+            border: none;
+            color: white;
+            cursor: pointer;
+            font-size: 16px;
+            border-radius: 5px;
+            text-align: center;
+        }
+        .btn-gen {
+            background-color: #dfdb00;
+        }
+        .btn-download {
+            background-color: #1e7e1e;
+        }
+        .btn-print {
+            background-color: #0c9dcd;
+        }
+        .btn-save {
+            background-color: #1b1bac;
         }
     </style>
 </head>
@@ -88,21 +157,30 @@ require 'pp-session-start.php'
 <div id="layoutSidenav">
     <?php require 'pp-layoutSidenav_nav.php'; ?>
     <div id="layoutSidenav_content">
-        <h1>Generate QR Code</h1>
-        <div id="qrcodeContainer" class="container">
-            <label for="quantity">จำนวนที่ต้องการสร้าง:</label>
-            <input type="number" id="quantity" name="quantity" min="1" max="100" value="1" class="form-control">
-            <button onclick="generateQRCode()" class="btn btn-primary">Generate QR Code</button>
-            <div id="qrcode"></div>
-            <div id="qrValue"></div>
-            <button id="downloadBtn" onclick="downloadQRCode()" class="btn btn-success btn-block">Download QR Code</button>
-            <button id="printBtn" onclick="openPrintDialog()" class="btn btn-info btn-block">Print QR Code</button>
-            <button id="saveBtn" onclick="saveQRCode()" class="btn btn-primary btn-block">Save QR Code</button>
-
-        </div>
-
+        <main>
+            <div class="container-xl justify-content-center align-items-center px-2">
+                <h1>Generate QR Code</h1>
+                <div id="qrcode-container" class="qrcode-container">
+                    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+                    <label for="quantity">จำนวนที่ต้องการ</label>
+                    <input type="number" id="quantity" name="quantity" min="1" max="50" value="1" class="form-control">
+                    <button onclick="generateQRCode()" class="btnn btn-gen">Generate</button>
+                    <div id="qrcode" class="qrcode-display"></div>
+                    <div id="qrValue"></div>
+                    <div class="button-row">
+                        <button id="downloadBtn" onclick="downloadQRCode()" class="btnn btn-download">Download</button>
+                        <button id="printBtn" onclick="printQRCode()" class="btnn btn-print">Print</button>
+                        <button id="saveBtn" onclick="saveQRCode()" class="btnn btn-save">Save</button>
+                    </div>
+<!--                    <button id="downloadBtn" onclick="downloadQRCode()" class="btn btn-success">Download QR Code</button>-->
+<!--                    <button id="printBtn" onclick="printQRCode()" class="btn btn-info">Print QR Code</button>-->
+<!--                    <button id="saveBtn" onclick="saveQRCode()" class="btn btn-primary">Save QR Code</button>-->
+                </div>
+            </div>
+        </main>
     </div>
 </div>
+
 <script src="https://cdn.rawgit.com/davidshimjs/qrcodejs/gh-pages/qrcode.min.js"></script>
 <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
@@ -113,5 +191,7 @@ require 'pp-session-start.php'
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 <script src="js/litepicker/dist/bundle.js"></script>
 <script src="js/litepicker.js"></script>
+<script type="text/javascript" src="js/majorette/pp-session.js"></script>
+
 </body>
 </html>

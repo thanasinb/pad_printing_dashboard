@@ -70,9 +70,17 @@ $(document).ready(function() {
             },
             context: this,
             cache: false,
-            success: function(dataResult){
-                var dataResult = JSON.parse(dataResult);
-                location.reload();
+            success: function(response) {
+                var dataResult = JSON.parse(response);
+                if (dataResult.statusCode === 200) {
+                    alert('User deleted successfully');
+                    location.reload();
+                } else {
+                    alert('Failed to delete user: ' + dataResult.message);
+                }
+            },
+            error: function(err) {
+                alert('Failed to delete user.');
             }
         });
     });

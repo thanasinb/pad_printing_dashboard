@@ -34,7 +34,7 @@ require 'pp-session.php'
                         </div>
                     </header>
                     <!-- Main page content-->
-                    <div class="container-xl px-4 mt-n10">
+                    <div class="container-xl d-flex justify-content-center align-items-center px-4 mt-n10">
                         <div class="col-xl-6">
                             <div class="card mb-4">
                                 <div class="card-header">Add New Machine</div>
@@ -82,5 +82,7 @@ require 'pp-session.php'
         <script src="js/datatables/datatables-simple-demo.js"></script>
         <script src="js/litepicker/dist/bundle.js"></script>
         <script src="js/litepicker.js"></script>
+    <script type="text/javascript" src="js/majorette/pp-session.js"></script>
+
     </body>
 </html>

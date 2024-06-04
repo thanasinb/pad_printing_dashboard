@@ -39,12 +39,23 @@ while($data_staff = $result_staff->fetch_assoc()) {
     echo "<td class='shif' >" . $data_staff['id_shif'] . "</td>";
     echo "<td></td>";
 //    echo "<td>" . "<div class='avatar avatar-xl me-3 bg-gray-200'><img class='avatar-img img-fluid' src='./images/staffs/" . $data_staff['staff_img'] . "'  alt=' ' /></div>" . "</td>";
-    echo "<td>";
-    echo "<button name='staff_edit' type='submit' class='btn btn-datatable btn-icon text-black me-2 staff_edit'>";
-    echo "<i class='far fa-edit fs-6'></i></button>";
-    echo "<button name='staff_delete' type='submit' class='btn btn-datatable btn-icon text-black me-2 staff_delete'>";
-    echo "<i class='fas fa-trash'></i></button>";
-    echo "</td>";
+     echo '<td class="text-center">
+                    <button type="button"
+                            class="btn btn-datatable btn-icon text-black me-2 staff_edit"
+                            data-id_staff="' . $data_staff['id_staff'] . '"
+                            data-bs-toggle="modal"
+                            data-bs-target="#staff_modal">
+                        <i class="far fa-edit fs-6"></i>
+                    </button>
+                    <button type="button"
+                            class="btn btn-datatable btn-icon text-black me-2 staff_delete"
+                            data-id_staff="' . $data_staff['id_staff'] . '"
+                            data-bs-toggle="modal"
+                            data-bs-target="#delete_user_modal">
+                        <i class="fas fa-trash"></i>
+                    </button>
+                  </td>';
+
     echo "</tr>";
 
 }

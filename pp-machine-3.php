@@ -1,12 +1,6 @@
 <?php
-session_start();
+require 'pp-session-start.php';
 
-// ตรวจสอบ Session ว่ามีผู้ใช้ล็อกอินหรือไม่
-if (!isset($_SESSION['username'])) {
-    // ถ้ายังไม่ล็อกอิน ให้เปลี่ยนเส้นทางไปยังหน้า pp-login.php
-    header("Location: ./pp-login.php");
-    exit(); // จบการทำงานของสคริปต์
-}
 ini_set('display_errors', 0);
 error_reporting(E_ERROR | E_WARNING | E_PARSE);
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
@@ -409,5 +403,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 <script src="js/datatables/datatables-simple-demo.js"></script>
 <script src="js/litepicker/dist/bundle.js"></script>
 <script src="js/litepicker.js"></script>
+<script type="text/javascript" src="js/majorette/pp-session.js"></script>
+
 </body>
 </html>

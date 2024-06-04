@@ -84,5 +84,7 @@ require 'pp-session-start.php'
         <script src="js/datatables/datatables-simple-demo.js"></script>
         <script src="js/litepicker/dist/bundle.js"></script>
         <script src="js/litepicker.js"></script>
+    <script type="text/javascript" src="js/majorette/pp-session.js"></script>
+
     </body>
 </html>

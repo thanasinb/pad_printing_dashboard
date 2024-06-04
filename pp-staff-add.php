@@ -1,6 +1,6 @@
 <?php
 require 'pp-session-start.php';
-?>>
+?>
 <!DOCTYPE html>
 <html lang="en">
     <head>
@@ -26,14 +26,15 @@ require 'pp-session-start.php';
             <?php require 'pp-layoutSidenav_nav.php'; ?>
             <div id="layoutSidenav_content">
                 <main>
-                    <header class="page-header page-header-dark pb-5">
+                    <header class="page-header page-header-dark pb-2">
                         <div class="container-xl px-4">
                             <div class="page-header-content pt-4">
                             </div>
                         </div>
                     </header>
                     <!-- Main page content-->
-                    <div class="container-xl px-4 mt-n10">
+                    <div class="container-xl d-flex justify-content-center align-items-center px-2 mt-n15" style="height: 100vh;" >
+
                         <div class="col-xl-6">
                             <div class="card mb-4">
                                 <div class="card-header">Add New Staff</div>
@@ -72,25 +73,73 @@ require 'pp-session-start.php';
                                             </div>
                                         </div>
                                         <div class="row gx-3 mb-3">
-                                            <div class="col-md-6">
+                                            <div class="col-md-4">
+                                                <label class="small mb-1" for="id_role_group">Role Group</label>
+                                                <select class="form-control" id="id_role_group" name="role_group" required="required">
+                                                    <option value="" disabled selected>Select Role group</option>
+                                                    <option value="1">Operator</option>
+                                                    <option value="2">Foreman</option>
+                                                    <option value="3">Admin</option>
+                                                </select>
+                                            </div>
+                                            <div class="col-md-4">
                                                 <label class="small mb-1" for="id_role">Role</label>
                                                 <select class="form-control" id="id_role" name="id_role" required="required">
                                                     <option value=""></option>
-                                                    <option value="1">Operator</option>
-                                                    <option value="2">Technician</option>
                                                 </select>
                                             </div>
-                                            <div class="col-md-6">
+                                            <div class="col-md-4">
                                                 <label class="small mb-1" for="id_shif">Team</label>
-<!--                                                <input class="form-control" id="id_shif" name="id_shif" type="text" required="required">-->
                                                 <select class="form-control" id="id_shif" name="id_shif" required="required">
-                                                    <option value=""></option>
+                                                    <option value="" disabled selected>Select Team</option>
                                                     <option value="A">A</option>
                                                     <option value="B">B</option>
                                                     <option value="C">C</option>
                                                 </select>
                                             </div>
                                         </div>
+                                        <script>
+                                            document.getElementById('id_role_group').addEventListener('change', function() {
+                                                const roleGroup = this.value;
+                                                const roleSelect = document.getElementById('id_role');
+                                                roleSelect.innerHTML = ''; // Clear previous options
+
+                                                let options = [];
+                                                if (roleGroup === '1') {
+                                                    options = [
+                                                        { value: '1', text: 'Operator' },
+                                                        { value: '2', text: 'Technician' },
+                                                        { value: '3', text: 'Production Support' },
+                                                        { value: '4', text: 'Instructor' },
+                                                        { value: '5', text: 'Senior Instructor' },
+                                                        { value: '7', text: 'Leader' },
+                                                        { value: '8', text: 'Senior Technician' }
+                                                    ];
+                                                } else if (roleGroup === '2') {
+                                                    options = [
+                                                        { value: '', text: 'Foreman' }
+
+                                                    ];
+                                                } else if (roleGroup === '3') {
+                                                    options = [
+                                                        { value: '9', text: 'Manager' },
+                                                        { value: '10', text: 'Engineer' }
+                                                    ];
+                                                }
+
+                                                options.forEach(option => {
+                                                    const opt = document.createElement('option');
+                                                    opt.value = option.value;
+                                                    opt.textContent = option.text;
+                                                    roleSelect.appendChild(opt);
+                                                });
+                                            });
+                                        </script>
+                                        <style>
+                                            select.form-control {
+                                                appearance: auto; /* Ensures dropdown arrow is visible on all browsers */
+                                            }
+                                        </style>
                                         <div class="row gx-3 mb-3">
                                             <div class="col-md-12">
                                                 Select picture to upload:
@@ -116,6 +165,7 @@ require 'pp-session-start.php';
                             </div>
                         </div>
                     </div>
+
                 </main>
             </div>
         </div>
@@ -128,5 +178,7 @@ require 'pp-session-start.php';
         <script src="js/datatables/datatables-simple-demo.js"></script>
         <script src="js/litepicker/dist/bundle.js"></script>
         <script src="js/litepicker.js"></script>
+    <script type="text/javascript" src="js/majorette/pp-session.js"></script>
+
     </body>
 </html>

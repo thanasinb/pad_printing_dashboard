@@ -1,7 +1,9 @@
 <?php
+require 'pp-session-start.php';
+require 'pp-session.php';
     ini_set('display_errors', 0);
     error_reporting(E_ERROR | E_WARNING | E_PARSE);
-require 'pp-session-start.php';
+
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -154,11 +156,37 @@ require 'pp-session-start.php';
             </div>
         </div>
     </div>
+     <!-- Modal for deleting user -->
+        <div class="modal fade" id="delete_user_modal" tabindex="-1" role="dialog" aria-labelledby="delete_user_modal_label" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="delete_user_modal_label">Staff Delete</h5>
+                        <button class="btn-close" type="button" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <table id="modal_table" class="table table-striped">
+                            <tr>
+                                <td>Confirm delete Staff of Id staff: </td>
+                                <td id="modal_delete_user"></td>
+                                <td></td>
+                            </tr>
+                        </table>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                        <button type="button" id="modal_button_delete" class="btn btn-primary">Delete</button>
+                    </div>
+                </div>
+            </div>
+        </div>
         <script src="js/bootstrap@5.0.1/dist/js/bootstrap.bundle.min.js"></script>
         <script src="js/scripts.js"></script>
         <script src="js/simple-datatables@latest" type="text/javascript"></script>
         <script src="js/datatables/datatables-staff.js"></script>
         <script src="js/litepicker/dist/bundle.js"></script>
         <script src="js/litepicker.js"></script>
+    <script type="text/javascript" src="js/majorette/pp-session.js"></script>
+
     </body>
 </html>

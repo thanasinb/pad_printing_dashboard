@@ -30,7 +30,7 @@ require 'pp-session-start.php'
                         </div>
                     </header>
                     <!-- Main page content-->
-                    <div class="container-xl px-4 mt-n10">
+                    <div class="container-xl d-flex justify-content-center align-items-center px-4 mt-n10">
                         <!-- Example DataTable for Dashboard Demo-->
                         <div class="col-xl-9">
                             <div class="card mb-4">
@@ -122,5 +122,7 @@ require 'pp-session-start.php'
         <script src="js/datatables/datatables-simple-demo.js"></script>
         <script src="js/litepicker/dist/bundle.js"></script>
         <script src="js/litepicker.js"></script>
+    <script type="text/javascript" src="js/majorette/pp-session.js"></script>
+
     </body>
 </html>

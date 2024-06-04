@@ -10,6 +10,7 @@ if(empty($data_staff_rfid)){
     name_last='".$_GET['name_last']."',
     prefix='".$_GET['prefix']."',
     id_role='".$_GET['id_role']."',
+    role_group='".$_GET['id_role_group']."',
     id_shif='".$_GET['id_shif']."',
     site='".$_GET['site']."'WHERE id_staff='" . $_GET['id_staff'] . "'";
 

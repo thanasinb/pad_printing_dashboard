@@ -1,5 +1,5 @@
 <?php
-require 'pp-session-start.php'
+require 'pp-session-start.php';
 ?>
 
 <!DOCTYPE html>
@@ -23,19 +23,6 @@ require 'pp-session-start.php'
     <script src="js/jquery/jquery.min.js"></script>
     <script src="js/jquery/jquery-ui.min.js"></script>
 
-    <!-- time -->
-    <script type="text/javascript" src="js/majorette/pp-time-stamp.js"></script>
-
-    <!--        <script src="js/reorder-columns/jquery.dragtable.js"></script>-->
-    <!--        <script src="js/reorder-columns/bootstrap-table.min.js"></script>-->
-    <!--        <script src="js/reorder-columns/bootstrap-table-reorder-columns.js"></script>-->
-    <!--        <script src="js/majorette/pp-dragtable.js"></script>-->
-    <!--        <script type="text/javascript" src="js/datetimepicker4/moment.min.js"></script>-->
-    <!--        <script type="text/javascript" src="js/datetimepicker4/tempusdominus-bootstrap-4.min.js"></script>-->
-    <!--        <link rel="stylesheet" href="css/datetimepicker4/tempusdominus-bootstrap-4.min.css" />-->
-    <script type="text/javascript" src="js/majorette/pp-machine-staff.js"></script>
-    <!--        <script type="text/javascript" src="js/majorette/pp-machine-currentTaskModal.js"></script>-->
-    <!--        <script type="text/javascript" src="js/majorette/pp-machine-refresh.js"></script>-->
 </head>
 <body class="nav-fixed">
 <?php require 'pp-setting-sidenavAccordion.php'; ?>
@@ -65,17 +52,10 @@ require 'pp-session-start.php'
                     <div class="card-body">
                         <table id="datatablesSimple" class="table table-striped" style="width: 100%; white-space: nowrap">
                             <thead class="text-black" style="background-color: #ffea07">
-                            <?php
-                            // เรียกใช้ไฟล์ pp-setting-qr-table-head.php เพื่อแสดงหัวตาราง
-                            require_once 'pp-history-table-head.php';
-                            ?>
+                            <?php require_once 'pp-history-table-head.php'; ?>
                             </thead>
                             <tbody id="table_body">
-
-                            <?php
-                            require 'pp-history-script.php';
-                            ?>
-
+                            <?php require 'pp-history-script.php'; ?>
                             </tbody>
                         </table>
                     </div>
@@ -86,13 +66,14 @@ require 'pp-session-start.php'
     </div>
 </div>
 
-
-<script src="js/majorette/pp-time-stamp.js"></script> <!-- อ้างอิงไฟล์ pp-time-stamp.js -->
+<script src="js/majorette/pp-time-stamp.js"></script>
 <script src="js/bootstrap@5.0.1/dist/js/bootstrap.bundle.min.js"></script>
 <script src="js/scripts.js"></script>
 <script src="js/simple-datatables@latest" type="text/javascript"></script>
 <script src="js/datatables/datatables-staff.js"></script>
 <script src="js/litepicker/dist/bundle.js"></script>
 <script src="js/litepicker.js"></script>
+<script type="text/javascript" src="js/majorette/pp-session.js"></script>
+
 </body>
 </html>

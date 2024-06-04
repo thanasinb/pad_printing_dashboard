@@ -127,63 +127,123 @@ $(document).ready(function(){
         $('#staff_modal').modal('show');
         // $('#modal_span_staff_id').text(id_staff);
         $.ajax({
-         url: "ajax/pp-staff-load.php",
-        type: "GET",
-        data: {
-         id_staff: id_staff
-         },
-        context: this,
-        cache: false,
-        success: function(dataResult){
-        // alert(dataResult);
-         var dataResult = JSON.parse(dataResult);
-        // $('#input_staff_id').text(dataResult.id_staff);
-        //$('#input_rfid').val(dataResult.id_rfid);
-        //$('#modal_prefix').text(dataResult.prefix);
-         $('#input_name').val(dataResult.name_first);
-        $('#input_last').val(dataResult.name_last);
-        $('#input_site').val(dataResult.site);
-        // $('#modal_role').text(dataResult.role);
-        //$('#modal_shif').text(dataResult.id_shif);
-         }
-        });
-    });
-
-    $('body').on('click', '.staff_delete', function(event){
-        var id_staff = $(this).parent().parent().find('.id_staff').html();
-        $.ajax({
-            url: "ajax/pp-staff-delete.php",
+            url: "ajax/pp-staff-load.php",
             type: "GET",
             data: {
-                id_staff  : id_staff
+                id_staff: id_staff
             },
             context: this,
             cache: false,
             success: function(dataResult){
+                // alert(dataResult);
                 var dataResult = JSON.parse(dataResult);
-                $('.row_staff:contains(' + id_staff + ')').remove();
+                // $('#input_staff_id').text(dataResult.id_staff);
+                //$('#input_rfid').val(dataResult.id_rfid);
+                //$('#modal_prefix').text(dataResult.prefix);
+                $('#input_name').val(dataResult.name_first);
+                $('#input_last').val(dataResult.name_last);
+                $('#input_site').val(dataResult.site);
+                // $('#modal_role').text(dataResult.role);
+                //$('#modal_shif').text(dataResult.id_shif);
             }
         });
     });
 
+    var delete_user_modal = document.getElementById('delete_user_modal');
+    delete_user_modal.addEventListener('show.bs.modal', function (event) {
+        // Button that triggered the modal
+        // var button = event.relatedTarget;
+
+        var selectedRow=$(event.relatedTarget).parent().parent();
+        var modalIdStaffText = selectedRow.find('.id_staff').text();
+
+        $('#modal_delete_user').html(modalIdStaffText);
+    });
+
+    $('#modal_button_delete').click(function (){
+        var id_staff = $('#modal_delete_user').html();
+
+        $.ajax({
+            url: "ajax/pp-staff-delete.php",
+            type: "GET",
+            data: {
+                id_staff: id_staff
+            },
+            context: this,
+            cache: false,
+            success: function(response) {
+                var dataResult = JSON.parse(response);
+                if (dataResult.statusCode === 200) {
+                    alert('User deleted successfully');
+                    location.reload();
+                } else {
+                    alert('Failed to delete user: ' + dataResult.message);
+                }
+            },
+            error: function(err) {
+                alert('Failed to delete user.');
+            }
+        });
+    });
+
+    // Handle change button click to enable fields
     $('#button_rfid').click(function (){
-        $('#input_staff_id').prop('disabled', false);
-        // $('#input_staff_id').focus();
-        $('#input_rfid').prop('disabled', false);
-        // $('#input_rfid').focus();
-        $('#prefix_name').prop('disabled', false);
-        // $('#prefix_name').focus();
-        $('#input_name').prop('disabled', false);
-        // $('#input_name').focus();
-        $('#input_last').prop('disabled', false);
-        // $('#input_last').focus();
-        $('#role').prop('disabled', false);
-        // $('#role').focus();
-        $('#shift').prop('disabled', false);
-        // $('#shift').focus();
-        $('#input_site').prop('disabled', false);
+        enableFields();
         $('#button_rfid').hide();
         $('#button_save_rfid').show();
     });
 
+    function resetModalFields() {
+        $('#input_staff_id').prop('disabled', true).val('');
+        $('#input_rfid').prop('disabled', true).val('');
+        $('#prefix_name').prop('disabled', true).val('');
+        $('#input_name').prop('disabled', true).val('');
+        $('#input_last').prop('disabled', true).val('');
+        $('#id_role_group').prop('disabled', true).val('');
+        $('#id_role').prop('disabled', true).val('');
+        $('#shift').prop('disabled', true).val('');
+        $('#input_site').prop('disabled', true).val('');
+        $('#button_save_rfid').hide();
+        $('#button_rfid').show();
+    }
+
+    function enableFields() {
+        $('#input_staff_id').prop('disabled', false);
+        $('#input_rfid').prop('disabled', false);
+        $('#prefix_name').prop('disabled', false);
+        $('#input_name').prop('disabled', false);
+        $('#input_last').prop('disabled', false);
+        $('#id_role_group').prop('disabled', false);
+        $('#id_role').prop('disabled', false);
+        $('#shift').prop('disabled', false);
+        $('#input_site').prop('disabled', false);
+    }
+
+    function getPrefixVal(prefix) {
+        if (prefix === 'นาย') return 1;
+        if (prefix === 'นาง') return 2;
+        if (prefix === 'นางสาว') return 3;
+        return '';
+    }
+
+    function getRoleGroupVal(role_group) {
+        if (role_group === 'Operator') return 1;
+        if (role_group === 'Foreman') return 2;
+        if (role_group === 'Admin') return 3;
+        return '';
+    }
+
+    function getRoleVal(role) {
+        if (role === 'Operator') return 1;
+        if (role === 'Technician') return 2;
+        if (role === 'Production Support') return 3;
+        if (role === 'Instructor') return 4;
+        if (role === 'Senior Instructor') return 5;
+        if (role === 'Foreman') return 6;
+        if (role === 'Leader') return 7;
+        if (role === 'Senior Technician') return 8;
+        if (role === 'Manager') return 9;
+        if (role === 'Engineering') return 10;
+        return '';
+    }
 });

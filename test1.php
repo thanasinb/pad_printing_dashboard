@@ -1,4 +1,3 @@
-<param name="" value="">
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -7,327 +6,244 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
     <meta name="description" content="" />
     <meta name="author" content="" />
-    <title>Ihere temmm</title>
+    <title>Dashboard</title>
     <link href="css/simple-datatables@latest/dist/style.css" rel="stylesheet" />
     <link href="css/litepicker/dist/css/litepicker.css" rel="stylesheet" />
     <link href="css/styles.css" rel="stylesheet" />
     <link rel="icon" type="image/x-icon" href="assets/img/favicon.png" />
-    <script data-search-pseudo-elements defer src="js/font-awesome/5.15.3/js/all.min.js"></script>
-    <script src="js/feather-icons/4.28.0/feather.min.js"></script>
-    <!--        <link rel="stylesheet" href="css/reorder-columns/dragtable.css">-->
-    <!--        <link rel="stylesheet" href="css/reorder-columns/bootstrap-table.min.css">-->
-    <link rel="stylesheet" href="css/majorette.css">
-    <script src="js/jquery/jquery.min.js"></script>
-    <script src="js/jquery/jquery-ui.min.js"></script>
-    <!--        <script src="js/reorder-columns/jquery.dragtable.js"></script>-->
-    <!--        <script src="js/reorder-columns/bootstrap-table.min.js"></script>-->
-    <!--        <script src="js/reorder-columns/bootstrap-table-reorder-columns.js"></script>-->
-    <!--        <script src="js/majorette/pp-dragtable.js"></script>-->
-    <!--        <script type="text/javascript" src="js/datetimepicker4/moment.min.js"></script>-->
-    <!--        <script type="text/javascript" src="js/datetimepicker4/tempusdominus-bootstrap-4.min.js"></script>-->
-    <!--        <link rel="stylesheet" href="css/datetimepicker4/tempusdominus-bootstrap-4.min.css" />-->
-    <?php
-    //        require 'js/majorette/date_picker.php'
-    ?>
-    <!--        <script type="text/javascript" src="js/majorette/pp-machine-assign-date.js"></script>-->
-    <!--        <script type="text/javascript" src="js/majorette/pp-machine-multiplier.js"></script>-->
-    <!--        <script type="text/javascript" src="js/majorette/pp-machine-currentTaskModal.js"></script>-->
-    <script type="text/javascript" src="js/majorette/pp-machine-refresh-3.js"></script>
-    <script type="text/javascript" src="js/majorette/pp-machine-clock.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-tooltip"></script>
+    <style>
+        .chart-container {
+            width: 1200px; /* ปรับขนาดความกว้าง */
+            height: 500px; /* ปรับขนาดความสูง */
+            overflow-x: auto; /* ทำให้ container เลื่อนในแนวนอนได้ */
+        }
+        canvas {
+            width: 1200px !important; /* ปรับขนาดของ canvas */
+            height: 100% !important; /* ให้ canvas สูงเต็มที่ */
+        }
+        .chartjs-tooltip {
+            max-height: 150px;
+            overflow-y: auto;
+            background: rgba(0, 0, 0, 0.7);
+            color: white;
+            border-radius: 3px;
+            padding: 10px;
+            pointer-events: none;
+            position: absolute;
+            transform: translate(-50%, 0);
+            transition: all .1s ease;
+            z-index: 9999;
+        }
+        .chartjs-tooltip-header {
+            background: #29bf29;
+            color: #000;
+            font-weight: bold;
+            padding: 2px 5px;
+            border-radius: 3px;
+        }
+    </style>
 </head>
 <body class="nav-fixed">
-
+<?php require 'pp-machine-sidenavAccordion.php'; ?>
 <div id="layoutSidenav">
     <?php require 'pp-layoutSidenav_nav.php'; ?>
     <div id="layoutSidenav_content">
         <main>
-            <header class="page-header page-header-dark pb-5">
-                <div class="container-xl px-4">
+            <header class="page-header page-header-dark bg-gradient-primary-to-secondary pb-10">
+                <div class="container-xl px-2">
                     <div class="page-header-content pt-4">
+                        <div class="row align-items-center justify-content-between">
+                            <div class="col-auto mt-4">
+                                <h1 class="page-header-title">
+                                    <div class="page-header-icon"><i data-feather="activity"></i></div>
+                                    Dashboard
+                                </h1>
+                                <div class="page-header-subtitle">Example dashboard overview and content summary</div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </header>
             <!-- Main page content-->
-            <div class="container-fluid px-4 mt-n10">
-                <!-- Example DataTable for Dashboard Demo-->
-                <div class="card mb-4 w-100" id="table-machine">
-                    <div class="card-header bg-red fw-bold text-white fs-4 d-flex justify-content-between">
-                        <div>Job overview by Machine</div>
-                        <div>
-                            <span class="hours"></span> :
-                            <span class="min"></span> :
-                            <span class="sec"></span>
+            <div class="container-xxl px-4 mt-n10">
+                <div class="row">
+                    <div class="container-xxl-8">
+                        <!-- Tabbed dashboard card example-->
+                        <div class="card mb-4">
+                            <div class="card-header border-bottom">
+                                <!-- Dashboard card navigation-->
+                                <ul class="nav nav-tabs card-header-tabs" id="dashboardNav" role="tablist">
+                                    <li class="nav-item me-1">
+                                        <a class="nav-link active" id="overview-pill" href="#overview" data-bs-toggle="tab" role="tab" aria-controls="overview" aria-selected="true">Overview</a>
+                                    </li>
+                                </ul>
+                            </div>
+                            <div class="card-body">
+                                <div class="tab-content" id="dashboardNavContent">
+                                    <!-- Dashboard Tab Pane 1-->
+                                    <div class="tab-pane fade show active" id="overview" role="tabpanel" aria-labelledby="overview-pill">
+                                        <div class="chart-container">
+                                            <canvas id="machineChart"></canvas>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
-                    </div>
-                    <div class="card-body">
-                        <div class="form-check">
-                            <input class="form-check-input" type="checkbox" name="checkbox_hide_unassigned_machines" id="checkbox_hide_unassigned_machines" checked>
-                            <label class="form-check-label" for="checkbox_hide_unassigned_machines">
-                                Hide unassigned machines (ซ่อนเครื่องไม่มีงาน)
-                            </label>
-                        </div>
-                        <table id="datatablesSimple" class="table table-striped" style="width: 100%; white-space: nowrap">
-                            <thead class="text-black" style="background-color: #ffea07">
-                            <?php
-                            require 'pp-machine-table-head-3.php'
-                            ?>
-                            </thead>
-                            <tbody id="table_body">
-                            <?php
-                            //                                    require "pp-machine-list-machine-script-3.php";
-                            ?>
-                            </tbody>
-                        </table>
                     </div>
                 </div>
             </div>
         </main>
-    </div>
-</div>
-<div class="modal fade" id="currentTaskModal" tabindex="-1" aria-labelledby="currentTaskModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="currentTaskModalLabel">Current task for machine: </h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body">
-                <table id="modal_table_current" class="table table-striped">
-                    <tr>
-                        <td>Machine ID: </td>
-                        <td id="modal_id_machine"></td>
-                        <td></td>
-                    </tr>
-                    <tr>
-                        <td>Item NO: </td>
-                        <td id="modal_item_no"></td>
-                        <td></td>
-                    </tr>
-                    <tr>
-                        <td>Operation</td>
-                        <td id="modal_operation"></td>
-                        <td></td>
-                    </tr>
-                    <tr>
-                        <td>Date due: </td>
-                        <td id="modal_date_due"></td>
-                        <td></td>
-                    </tr>
-                    <tr>
-                        <td>Qty/Tray: </td>
-                        <td><input type="number" id="modal_qty_per_tray" name="modal_qty_per_tray" disabled></td>
-                        <td></td>
-                    </tr>
-                    <tr>
-                        <td>Qty/Shif: </td>
-                        <td><input type="number" id="modal_qty_shif" name="modal_qty_shif" disabled></td>
-                        <td></td>
-                    </tr>
-                    <!--                        <tr>-->
-                    <!--                            <td>Qty accum: </td>-->
-                    <!--                            <td id="modal_qty_accum"></td>-->
-                    <!--                            <td></td>-->
-                    <!--                        </tr>-->
-                    <tr>
-                        <td>Qty order: </td>
-                        <td id="modal_qty_order"></td>
-                        <td></td>
-                    </tr>
-                    <tr>
-                        <td>Qty percent: </td>
-                        <td id="modal_qty_percent"></td>
-                        <td></td>
-                    </tr>
-                    <tr>
-                        <td>Task ID: </td>
-                        <td id="modal_id_task"></td>
-                        <td></td>
-                    </tr>
-                    <tr>
-                        <td>Job ID: </td>
-                        <td id="modal_id_job"></td>
-                        <td></td>
-                    </tr>
-                    <tr>
-                        <td>Last update: </td>
-                        <td id="modal_last_update"></td>
-                        <td></td>
-                    </tr>
-                </table>
-                <br>
-                <h5>Action: </h5>
-                <form id="form_modal_current_task" method="post">
-                    <input type="hidden" id="selected_radio" name="selected_radio" value="0">
-                    <input type="hidden" id="hidden_id_job" name="id_job" value="0">
-                    <input type="hidden" id="hidden_id_machine" name="id_mc" value="0">
-                    <input type="hidden" id="hidden_item_no" name="hidden_item_no" value="0">
-                    <input type="hidden" id="hidden_operation" name="operation" value="0">
-                    <input type="hidden" id="hidden_current_task" name="is_current_task" value="1">
-                    <div class="mb-3">
-                        <div class="form-check">
-                            <input class="form-check-input radioCurrentTask" type="radio" name="radioCurrentTask" id="radioChangeOp" value="1">
-                            <label class="form-check-label" for="radioChangeOp">
-                                Change operation (เปลี่ยน Operation)
-                            </label>
-                        </div>
-                        <!--                            <div class="form-check">-->
-                        <!--                                <input class="form-check-input radioCurrentTask" type="radio" name="radioCurrentTask" id="radioForceStop" value="2">-->
-                        <!--                                <label class="form-check-label" for="radioForceStop">-->
-                        <!--                                    Force stop-->
-                        <!--                                </label>-->
-                        <!--                            </div>-->
-                        <!--                            <div class="form-check">-->
-                        <!--                                <input class="form-check-input radioCurrentTask" type="radio" name="radioCurrentTask" id="radioComplete" value="3">-->
-                        <!--                                <label class="form-check-label" for="radioComplete">-->
-                        <!--                                    Mark as complete (จบงาน)-->
-                        <!--                                </label>-->
-                        <!--                            </div>-->
-                        <div class="form-check">
-                            <input class="form-check-input radioCurrentTask" type="radio" name="radioCurrentTask" id="radioRemove" value="4">
-                            <label class="form-check-label" for="radioRemove">
-                                Remove this task (เอางานออก)
-                            </label>
-                        </div>
-                        <div class="form-check">
-                            <input class="form-check-input radioCurrentTask" type="radio" name="radioCurrentTask" id="radioNextQueue" value="5">
-                            <label class="form-check-label" for="radioNextQueue">
-                                Feed task from next queue (ดึงงานจากคิวถัดไป)
-                            </label>
-                        </div>
-                        <div class="form-check">
-                            <input class="form-check-input radioCurrentTask" type="radio" name="radioCurrentTask" id="radioNewTask" value="6">
-                            <label class="form-check-label" for="radioNewTask">
-                                Select a new task (เพิ่มงานใหม่)
-                            </label>
-                        </div>
-                        <div class="form-check">
-                            <input class="form-check-input radioCurrentTask" type="radio" name="radioCurrentTask" id="radioResetActivity" value="7">
-                            <label class="form-check-label" for="radioResetActivity">
-                                Reset activity (รีเซ็ตงาน)
-                            </label>
-                        </div>
+        <footer class="footer-admin mt-auto footer-light">
+            <div class="container-xl px-4">
+                <div class="row">
+                    <div class="col-md-6 small">Copyright &copy; Your Website 2021</div>
+                    <div class="col-md-6 text-md-end small">
+                        <a href="#!">Privacy Policy</a>
+                        &middot;
+                        <a href="#!">Terms &amp; Conditions</a>
                     </div>
-                </form>
+                </div>
             </div>
-            <div class="modal-footer justify-content-between">
-                <button type="button" id="modal_button_change" class="btn btn-primary mr-auto">Change</button>
-                <button type="button" id="modal_button_save" class="btn btn-primary mr-auto">Save</button>
-                <button type="button" id="modal_button_go" type='submit' class="btn btn-primary" disabled>Go!</button>
-                <!--                    <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Close</button>-->
-            </div>
-        </div>
+        </footer>
     </div>
 </div>
-<div class="modal fade" id="nextTaskModal" tabindex="-1" aria-labelledby="nextTaskModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="nextTaskModalLabel">Next task for machine: </h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body">
-                <table id="modal_table_next" class="table table-striped">
-                    <tr>
-                        <td>Machine ID: </td>
-                        <td id="modal_next_id_machine"></td>
-                        <td></td>
-                    </tr>
-                    <tr>
-                        <td>Item NO: </td>
-                        <td id="modal_next_item_no"></td>
-                        <td></td>
-                    </tr>
-                    <tr>
-                        <td>Operation</td>
-                        <td id="modal_next_operation"></td>
-                        <td></td>
-                    </tr>
-                    <tr>
-                        <td>Date due: </td>
-                        <td id="modal_next_date_due"></td>
-                        <td></td>
-                    </tr>
-                    <tr>
-                        <td>Qty per tray: </td>
-                        <td id="modal_next_qty_per_tray"></td>
-                        <td></td>
-                    </tr>
-                    <tr>
-                        <td>Qty accum: </td>
-                        <td id="modal_next_qty_accum"></td>
-                        <td></td>
-                    </tr>
-                    <tr>
-                        <td>Qty order: </td>
-                        <td id="modal_next_qty_order"></td>
-                        <td></td>
-                    </tr>
-                    <tr>
-                        <td>Qty percent: </td>
-                        <td id="modal_next_qty_percent"></td>
-                        <td></td>
-                    </tr>
-                    <tr>
-                        <td>Task ID: </td>
-                        <td id="modal_next_id_task"></td>
-                        <td></td>
-                    </tr>
-                    <tr>
-                        <td>Job ID: </td>
-                        <td id="modal_next_id_job"></td>
-                        <td></td>
-                    </tr>
-                    <tr>
-                        <td>Last update: </td>
-                        <td id="modal_next_last_update"></td>
-                        <td></td>
-                    </tr>
-                </table>
-                <br>
-                <h5>Action: </h5>
-                <form id="form_modal_next_task" method="post">
-                    <input type="hidden" id="next_selected_radio" name="selected_radio" value="0">
-                    <input type="hidden" id="next_hidden_id_job" name="id_job" value="0">
-                    <input type="hidden" id="next_hidden_id_machine" name="id_mc" value="0">
-                    <input type="hidden" id="next_hidden_item_no" name="hidden_item_no" value="0">
-                    <input type="hidden" id="next_hidden_operation" name="operation" value="0">
-                    <input type="hidden" id="next_hidden_current_task" name="is_current_task" value="0">
-                    <div class="mb-3">
-                        <div class="form-check">
-                            <input class="form-check-input radioNextTask" type="radio" name="radioNextTask" id="radioNextChangeOp" value="1">
-                            <label class="form-check-label" for="radioNextChangeOp">
-                                Change operation (เปลี่ยน Operation)
-                            </label>
-                        </div>
-                        <div class="form-check">
-                            <input class="form-check-input radioNextTask" type="radio" name="radioNextTask" id="radioNextRemove" value="4">
-                            <label class="form-check-label" for="radioNextRemove">
-                                Remove this task (เอางานออก)
-                            </label>
-                        </div>
-                        <div class="form-check">
-                            <input class="form-check-input radioNextTask" type="radio" name="radioNextTask" id="radioNextNewTask" value="6">
-                            <label class="form-check-label" for="radioNextNewTask">
-                                Select a new task (เพิ่มงานใหม่)
-                            </label>
-                        </div>
-                    </div>
-                </form>
-            </div>
-            <div class="modal-footer">
-                <button type="button" id="modal_next_button_go" type='submit' class="btn btn-primary" disabled>Go!</button>
-            </div>
-        </div>
-    </div>
-</div>
-<script src="js/bootstrap@5.0.1/dist/js/bootstrap.bundle.min.js"></script>
-<script src="js/scripts.js"></script>
-<!--        <script src="js/Chart.js/2.9.4/Chart.min.js"></script>-->
-<!--        <script src="assets/demo/chart-area-demo.js"></script>-->
-<!--        <script src="assets/demo/chart-bar-demo.js"></script>-->
-<script src="js/simple-datatables@latest" type="text/javascript"></script>
-<script src="js/datatables/datatables-simple-demo.js"></script>
-<script src="js/litepicker/dist/bundle.js"></script>
-<script src="js/litepicker.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
+<script src="/projects/mjrqr/js/scripts.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/simple-datatables@latest" crossorigin="anonymous"></script>
+<script src="/projects/mjrqr/js/datatables/datatables-simple-demo.js"></script>
+<script>
+    <?php require 'pp-mc-get-to-chart.php'; ?>
+    document.addEventListener('DOMContentLoaded', function () {
+        const ctx = document.getElementById('machineChart').getContext('2d');
+
+        // ข้อมูลจาก PHP
+        const machines = <?php echo $machines_json; ?>;
+        const jobCounts = <?php echo $jobCounts_json; ?>;
+        const taskDetails = <?php echo $task_details_json; ?>;
+
+        console.log('Machines:', machines);
+        console.log('Job Counts:', jobCounts);
+        console.log('Task Details:', taskDetails);
+
+        const machineData = {
+            labels: machines,
+            datasets: [{
+                label: 'Total of Jobs',
+                data: jobCounts,
+                backgroundColor: 'rgba(255, 99, 132, 0.2)',
+                borderColor: 'rgba(255, 99, 132, 1)',
+                borderWidth: 1
+            }]
+        };
+
+        const machineChart = new Chart(ctx, {
+            type: 'bar',
+            data: machineData,
+            options: {
+                plugins: {
+                    tooltip: {
+                        callbacks: {
+                            title: function(tooltipItems) {
+                                return tooltipItems[0].label;
+                            },
+                            label: function(tooltipItem) {
+                                return 'Total of Jobs: ' + tooltipItem.raw;
+                            },
+                            afterLabel: function(context) {
+                                const index = context.dataIndex;
+                                const taskDetail = taskDetails[index].map(task => `${task}`).join('\n');
+                                return `ID Tasks:\n${taskDetail}`;
+                            }
+                        },
+                        custom: function(tooltipModel) {
+                            // Tooltip Element
+                            let tooltipEl = document.getElementById('chartjs-tooltip');
+                            if (!tooltipEl) {
+                                tooltipEl = document.createElement('div');
+                                tooltipEl.id = 'chartjs-tooltip';
+                                tooltipEl.classList.add('chartjs-tooltip');
+                                document.body.appendChild(tooltipEl);
+                            }
+
+                            // Hide if no tooltip
+                            if (tooltipModel.opacity === 0) {
+                                tooltipEl.style.opacity = 0;
+                                return;
+                            }
+
+                            // Set caret Position
+                            tooltipEl.classList.remove('above', 'below', 'no-transform');
+                            if (tooltipModel.yAlign) {
+                                tooltipEl.classList.add(tooltipModel.yAlign);
+                            } else {
+                                tooltipEl.classList.add('no-transform');
+                            }
+
+                            function getBody(bodyItem) {
+                                return bodyItem.lines;
+                            }
+
+                            // Set Text
+                            if (tooltipModel.body) {
+                                const titleLines = tooltipModel.title || [];
+                                const bodyLines = tooltipModel.body.map(getBody);
+
+                                let innerHtml = '<thead>';
+
+                                titleLines.forEach(function(title) {
+                                    innerHtml += '<tr><th class="chartjs-tooltip-header">' + title + '</th></tr>';
+                                });
+
+                                innerHtml += '</thead><tbody>';
+
+                                bodyLines.forEach(function(body, i) {
+                                    innerHtml += '<tr><td>' + body + '</td></tr>';
+                                });
+
+                                innerHtml += '</tbody>';
+
+                                let tableRoot = tooltipEl.querySelector('table');
+                                if (!tableRoot) {
+                                    tableRoot = document.createElement('table');
+                                    tooltipEl.appendChild(tableRoot);
+                                }
+                                tableRoot.innerHTML = innerHtml;
+                            }
+
+                            const position = this._chart.canvas.getBoundingClientRect();
+                            tooltipEl.style.opacity = 1;
+                            tooltipEl.style.left = position.left + window.pageXOffset + tooltipModel.caretX + 'px';
+                            tooltipEl.style.top = position.top + window.pageYOffset + tooltipModel.caretY + 'px';
+                            tooltipEl.style.font = tooltipModel.options.bodyFont.string;
+                            tooltipEl.style.padding = tooltipModel.options.padding + 'px ' + tooltipModel.options.padding + 'px';
+                        }
+                    }
+                },
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        title: {
+                            display: true,
+                            text: 'Total of Jobs'
+                        }
+                    },
+                    x: {
+                        title: {
+                            display: true,
+                            text: 'Machines'
+                        },
+                        ticks: {
+                            autoSkip: false, // ไม่ให้ข้ามการแสดงผล
+                            maxRotation: 90, // หมุน labels
+                            minRotation: 90 // หมุน labels
+                        }
+                    }
+                }
+            }
+        });
+    });
+</script>
 </body>
 </html>
