@@ -1,5 +1,5 @@
 <?php
-require 'pp-session-start.php'
+require 'pp-session-start.php';
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -25,9 +25,9 @@ require 'pp-session-start.php'
     <script type="text/javascript" src="js/majorette/pp-setting-dt.js"></script>
     <script type="text/javascript" src="js/majorette/pp-machine-refresh-3.js"></script>
     <script type="text/javascript" src="js/majorette/pp-machine-clock.js"></script>
-
     <style>
         @media print {
+            /* CSS สำหรับการพิมพ์ */
             body * {
                 visibility: hidden;
             }
@@ -39,7 +39,7 @@ require 'pp-session-start.php'
                 left: 0;
                 top: 0;
                 display: grid;
-                grid-template-columns: repeat(6, 1fr); /* 3 columns */
+                grid-template-columns: repeat(6, 1fr); /* กำหนดจำนวนคอลัมน์ในกริด */
                 gap: 10px;
                 padding: 20px;
             }
@@ -58,7 +58,9 @@ require 'pp-session-start.php'
                 margin-top: 10px;
             }
         }
+
         .qrcode-container {
+            /* CSS สำหรับกล่องที่บรรจุ QR Code */
             display: flex;
             flex-direction: column;
             align-items: center;
@@ -72,6 +74,7 @@ require 'pp-session-start.php'
         }
 
         .qrcode-display {
+            /* CSS สำหรับแสดง QR Code */
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(100px, 1fr)); /* ใช้ auto-fit เพื่อให้กริดยืดหยุ่น */
             gap: 10px;
@@ -82,14 +85,16 @@ require 'pp-session-start.php'
         }
 
         h1 {
+            /* CSS สำหรับหัวเรื่อง */
             color: #333;
             font-size: 36px;
             font-weight: bold;
             text-align: center;
-            margin-bottom: 20px; /* Increased margin for better spacing */
+            margin-bottom: 20px; /* เพิ่ม margin ของหัวเรื่องเพื่อระยะห่างที่ดีกว่า */
         }
 
         #quantity {
+            /* CSS สำหรับช่องป้อนจำนวน */
             width: 100%;
             max-width: 120px;
             margin: 10px 0;
@@ -101,36 +106,30 @@ require 'pp-session-start.php'
         }
 
         #qrcode {
+            /* CSS สำหรับคอนเทนเนอร์ของ QR Code */
             margin-top: 20px;
             padding: 10px;
         }
 
         #qrValue {
+            /* CSS สำหรับแสดงค่าของ QR Code */
             align-content: center;
             margin-top: 20px;
             font-size: 5px;
             color: #666;
         }
-        .form-control {
-            width: 580px; /* กำหนดความกว้างตามที่คุณต้องการ */
-            padding: 10px; /* เพิ่ม padding เพื่อความสวยงาม */
-            font-size: 16px; /* ปรับขนาดตัวอักษร */
-            text-align: center; /* จัดข้อความให้อยู่ตรงกลาง */
-            margin: 10px auto; /* จัดการ margin ให้อยู่ตรงกลาง */
-            display: block;
-            box-sizing: border-box;/* เพื่อให้ margin ทำงานได้ตามต้องการ */
-        }
+
         .button-row {
             width: 100%;
             display: flex;
-            justify-content: space-between;
+            justify-content: space-between; /* ทำให้ปุ่มใน .button-row แสดงในแนวนอน และทำให้เว้นวรรคเท่าที่กำหนดได้ */
             align-items: center;
-            /*padding: 20px;*/
-        }
-        .btnn {
             margin-top: 10px;
-            width: 120px; /* กำหนดความกว้าง */
-            height: 35px; /* กำหนดความสูง */
+        }
+
+        .btnn {
+            width: 120px; /* กำหนดขนาดปุ่ม */
+            height: 35px;
             border: none;
             color: white;
             cursor: pointer;
@@ -138,19 +137,28 @@ require 'pp-session-start.php'
             border-radius: 5px;
             text-align: center;
         }
+
         .btn-gen {
-            background-color: #dfdb00;
+            background-color: #03b384; /* สีพื้นหลังปุ่ม Generate */
         }
+
         .btn-download {
-            background-color: #1e7e1e;
+            background-color: #239e94;
+            display: none; /* ปุ่ม Download ซ่อนไว้เริ่มต้น */
         }
+
         .btn-print {
-            background-color: #0c9dcd;
+            background-color: #0c89cd;
+            display: none; /* ปุ่ม Print ซ่อนไว้เริ่มต้น */
         }
+
         .btn-save {
-            background-color: #1b1bac;
+            background-color: #3131b1;
+            text-align: center;
         }
+
     </style>
+
 </head>
 <body class="nav-fixed">
 <?php require 'pp-setting-sidenavAccordion.php'; ?>
@@ -164,17 +172,14 @@ require 'pp-session-start.php'
                     <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
                     <label for="quantity">จำนวนที่ต้องการ</label>
                     <input type="number" id="quantity" name="quantity" min="1" max="50" value="1" class="form-control">
-                    <button onclick="generateQRCode()" class="btnn btn-gen">Generate</button>
+                    <button onclick="generateQRCode()" class="btnn btn-gen"> <i class="fas fa-qrcode"></i> Generate</button>
                     <div id="qrcode" class="qrcode-display"></div>
                     <div id="qrValue"></div>
                     <div class="button-row">
-                        <button id="downloadBtn" onclick="downloadQRCode()" class="btnn btn-download">Download</button>
-                        <button id="printBtn" onclick="printQRCode()" class="btnn btn-print">Print</button>
-                        <button id="saveBtn" onclick="saveQRCode()" class="btnn btn-save">Save</button>
+                        <button id="downloadBtn" onclick="downloadQRCode()" class="btnn btn-download"> <i class="fas fa-download"></i> Download</button>
+                        <button id="printBtn" onclick="printQRCode()" class="btnn btn-print"> <i class="fas fa-print"></i> Print</button>
+                        <button id="saveBtn" onclick="saveQRCode()" class="btnn btn-save"> <i class="fas fa-save"></i> Save</button>
                     </div>
-<!--                    <button id="downloadBtn" onclick="downloadQRCode()" class="btn btn-success">Download QR Code</button>-->
-<!--                    <button id="printBtn" onclick="printQRCode()" class="btn btn-info">Print QR Code</button>-->
-<!--                    <button id="saveBtn" onclick="saveQRCode()" class="btn btn-primary">Save QR Code</button>-->
                 </div>
             </div>
         </main>
@@ -192,6 +197,11 @@ require 'pp-session-start.php'
 <script src="js/litepicker/dist/bundle.js"></script>
 <script src="js/litepicker.js"></script>
 <script type="text/javascript" src="js/majorette/pp-session.js"></script>
-
+<script>
+    function showDownloadPrintButtons() {
+        document.getElementById('downloadBtn').style.display = 'inline-block';
+        document.getElementById('printBtn').style.display = 'inline-block';
+    }
+</script>
 </body>
 </html>

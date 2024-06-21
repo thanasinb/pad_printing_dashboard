@@ -1,6 +1,5 @@
 <?php
 require 'pp-session-start.php';
-require 'pp-session.php'
 ?>
 <!DOCTYPE html>
 <html lang="en">

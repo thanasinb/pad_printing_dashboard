@@ -3,8 +3,8 @@ let qrcodeInstance = null;
 function createQRCode(qrcodeContainer, qrValueContainer) {
     let qrCodeValue = '';
 
-    // สร้างข้อความ QR Code ที่ยาวขึ้น
-    for (let j = 0; j < 5; j++) { // สร้างตัวอักษรและตัวเลขที่ยาวกว่า
+    // Generate a QR Code value (customize this as per your requirement)
+    for (let j = 0; j < 5; j++) {
         if (j < 2) {
             const randomChar = String.fromCharCode(65 + Math.floor(Math.random() * 26));
             qrCodeValue += randomChar;
@@ -14,25 +14,25 @@ function createQRCode(qrcodeContainer, qrValueContainer) {
         }
     }
 
-    // สร้าง element div สำหรับแสดง QR Code
+    // Create a div element for each QR Code item
     const qrcodeItemDiv = document.createElement('div');
     qrcodeItemDiv.classList.add('qrcode-item');
 
-    // สร้าง QR Code และกำหนดความกว้างและความสูง
+    // Create a QR Code and set its width and height
     const qrcode = new QRCode(qrcodeItemDiv, {
         text: qrCodeValue,
-        width: 100, // ความกว้างของ QR Code (สามารถปรับตามต้องการ)
-        height: 100, // ความสูงของ QR Code
-        correctLevel: QRCode.CorrectLevel.H // ระดับการแก้ไขของ QR Code (High)
+        width: 100,
+        height: 100,
+        correctLevel: QRCode.CorrectLevel.H
     });
 
-    // เพิ่ม QR Code ลงใน container
+    // Append the QR Code to the container
     qrcodeContainer.appendChild(qrcodeItemDiv);
 
-    // เพิ่มค่า QR Code ลงใน div
+    // Add the QR Code value to a div
     const qrValueDiv = document.createElement('div');
     qrValueDiv.classList.add('qr-code-value');
-    qrValueDiv.textContent = `Code:${qrCodeValue}`;
+    qrValueDiv.textContent = `Code: ${qrCodeValue}`;
     qrcodeItemDiv.appendChild(qrValueDiv);
 }
 
@@ -54,99 +54,50 @@ async function saveQRCode() {
 
     for (let index = 0; index < qrCodeValuesContainers.length; index++) {
         const qrCodeValueContainer = qrCodeValuesContainers[index];
-        const qrCodeValue = qrCodeValueContainer.textContent.replace('Code:', '').trim();
+        const qrCodeValue = qrCodeValueContainer.textContent.replace('Code: ', '').trim();
         const qrCodeImagePath = qrCodeValueContainer.parentNode.querySelector('canvas').toDataURL('image/png');
 
-        const xhr = new XMLHttpRequest();
-        const url = 'save_qr_code.php';
-        const params = `qr_code_value=${qrCodeValue}&qr_code_image=${qrCodeImagePath}`;
+        try {
+            const response = await fetch('save_qr_code.php', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded',
+                },
+                body: `qr_code_value=${qrCodeValue}&qr_code_image=${encodeURIComponent(qrCodeImagePath)}`,
+            });
 
-        await new Promise((resolve, reject) => {
-            xhr.open('POST', url, true);
-            xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
-            xhr.onreadystatechange = function () {
-                if (xhr.readyState === XMLHttpRequest.DONE) {
-                    if (xhr.status === 200) {
-                        successCount++;
-                        console.log(`QR Code ${index + 1} บันทึกเรียบร้อยแล้ว!`);
-                        resolve();
-                    } else if (xhr.status === 409) {
-                        errorCount++;
-                        errorMessages.push(`QR Code Value ${qrCodeValue} ซ้ำ`);
-                        resolve();
-                    } else {
-                        errorCount++;
-                        errorMessages.push(`ไม่สามารถบันทึกรหัสได้ ${qrCodeValue}. โปรดลองอีกครั้ง.`);
-                        resolve();
-                    }
-                }
-            };
-            xhr.send(params);
-        });
+            if (response.ok) {
+                successCount++;
+                console.log(`QR Code ${index + 1} saved successfully!`);
+            } else if (response.status === 409) {
+                errorCount++;
+                errorMessages.push(`QR Code Value ${qrCodeValue} already exists.`);
+            } else {
+                errorCount++;
+                errorMessages.push(`Failed to save QR Code ${qrCodeValue}. Please try again.`);
+            }
+        } catch (error) {
+            console.error('Error saving QR Code:', error);
+            errorCount++;
+            errorMessages.push(`Failed to save QR Code ${qrCodeValue}. Please try again.`);
+        }
     }
 
     if (errorCount === 0) {
-        alert('บันทึกรหัส Qr ทั้งหมดเรียบร้อยแล้ว!');
+        alert('All QR Codes saved successfully!');
+        showDownloadPrintButtons(); // Show download and print buttons
     } else {
         let message = `Some QR Codes could not be saved. Success: ${successCount}, Errors: ${errorCount}\n\n` + errorMessages.join('\n');
         alert(message);
     }
 }
 
-
-// function saveQRCode() {
-//     const qrCodeValuesContainers = document.querySelectorAll('.qr-code-value');
-//     let successCount = 0;
-//     let errorCount = 0;
-//     let errorMessages = [];
-//
-//     qrCodeValuesContainers.forEach((qrCodeValueContainer, index) => {
-//         const qrCodeValue = qrCodeValueContainer.textContent.replace('Code:', '').trim();
-//         const qrCodeImagePath = qrCodeValueContainer.parentNode.querySelector('canvas').toDataURL('image/png');
-//
-//         const xhr = new XMLHttpRequest();
-//         const url = 'save_qr_code.php';
-//         const params = `qr_code_value=${qrCodeValue}&qr_code_image=${qrCodeImagePath}`;
-//         xhr.open('POST', url, true);
-//         xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
-//         xhr.onreadystatechange = function() {
-//             if (xhr.readyState === XMLHttpRequest.DONE) {
-//                 if (xhr.status === 200) {
-//                     successCount++;
-//                     console.log(`QR Code ${index + 1} บันทึกเรียบร้อยแล้ว!`);
-//                 } else if (xhr.status === 409) {
-//                     errorCount++;
-//                     errorMessages.push(`QR Code Value ${qrCodeValue} ซ้ำ`);
-//                 } else {
-//                     errorCount++;
-//                     errorMessages.push(`ไม่สามารถบันทึกรหัสได้ ${qrCodeValue}. โปรดลองอีกครั้ง.`);
-//                 }
-//
-//                 // Check if this is the last request
-//                 if (index === qrCodeValuesContainers.length - 1) {
-//                     if (errorCount === 0) {
-//                         alert('บันทึกรหัส Qr ทั้งหมดเรียบร้อยแล้ว!');
-//                     } else {
-//                         let message = `Some QR Codes could not be saved. Success: ${successCount}, Errors: ${errorCount}\n\n` + errorMessages.join('\n');
-//                         alert(message);
-//                     }
-//                 }
-//             }
-//         };
-//         xhr.send(params);
-//     });
-// }
-
-
-
-
-
 function downloadQRCode() {
     const qrcodeItems = document.querySelectorAll('.qrcode-item');
     qrcodeItems.forEach((item, index) => {
-        const qrCodeValue = item.querySelector('.qr-code-value').textContent.replace('Code:', '').trim();
+        const qrCodeValue = item.querySelector('.qr-code-value').textContent.replace('Code: ', '').trim();
         const qrcodeCanvas = item.querySelector('canvas');
-        if (qrcodeCanvas) { // Check if the canvas exists
+        if (qrcodeCanvas) {
             const link = document.createElement('a');
             link.download = `qrcode_${qrCodeValue}.png`;
             link.href = qrcodeCanvas.toDataURL('image/png').replace('image/png', 'image/octet-stream');
@@ -156,10 +107,16 @@ function downloadQRCode() {
         }
     });
 }
+
 function printQRCode() {
     const printContents = document.getElementById('qrcode').innerHTML;
     const originalContents = document.body.innerHTML;
     document.body.innerHTML = `<div id="printableArea">${printContents}</div>`;
     window.print();
     document.body.innerHTML = originalContents;
+}
+
+function showDownloadPrintButtons() {
+    document.getElementById('downloadBtn').style.display = 'inline-block';
+    document.getElementById('printBtn').style.display = 'inline-block';
 }

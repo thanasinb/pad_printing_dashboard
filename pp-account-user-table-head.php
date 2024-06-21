@@ -1,9 +1,6 @@
 
 <tr class="fw-bold first-row">
     <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#add_user_modal">Add User</button>
-    <th rowspan="2" class="text-center" scope="col" id="dash_status">
-        <i data-feather="hash"></i> ID Login
-    </th>
     <th rowspan="2" class="text-center" scope="col" id="dash_machine">
         <i data-feather="user"></i> ID Staff
     </th>
@@ -23,7 +20,7 @@
         <i data-feather="shield"></i> Role
     </th>
     <th rowspan="2" class="text-center" scope="col" id="dash_machine">
-        <i data-feather="users"></i> Role Group Name
+        <i data-feather="users"></i> Group
     </th>
     <th rowspan="2" class="text-center" scope="col" id="dash_machine">
         <i data-feather="settings"></i> Operation

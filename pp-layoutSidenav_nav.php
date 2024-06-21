@@ -1,7 +1,21 @@
 <?php
+session_start();
+require 'update/establish.php';
 
+// Check if the user is logged in
+if (!isset($_SESSION['username'])) {
+    header("Location: pp-login.php");
+    exit();
+}
+
+// Retrieve role group and role group name from session
+$id_role_group = $_SESSION['role_group'];
+$role_group_name = $_SESSION['role_group_name'];
+require 'update/terminate.php';
 ?>
 
+
+<!--<script src="js/menu-logger.js"></script>-->
 <div id="layoutSidenav_nav">
     <nav class="sidenav shadow-right sidenav-light">
         <div class="sidenav-menu">
@@ -86,17 +100,21 @@
                     </nav>
                 </div>
 
-                <a class="nav-link collapsed" href="javascript:void(0);" data-bs-toggle="collapse" data-bs-target="#collapseAccount" aria-expanded="false" aria-controls="collapseAccount">
-                    <div class="nav-link-icon"><i class="fas fa-user"></i></div>
-                    Account
-                    <div class="sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
-                </a>
-                <div class="collapse" id="collapseAccount" data-bs-parent="#accordionSidenav">
-                    <nav class="sidenav-menu-nested nav accordion" id="accordionSidenavPages">
-                        <a class="nav-link" href="pp-account-user.php"><i class="fas fa-list" style="opacity: 0.5; margin-right: 6px;"></i>  User Account List </a>
-                        <a class="nav-link" href="pp-account.php"> <i class="fas fa-edit" style="opacity: 0.5; margin-right: 6px;"></i>  Edit Account  </a>
-                    </nav>
-                </div>
+                <?php if ($id_role_group == 3 && $role_group_name == 'Admin') : ?>
+                    <a class="nav-link collapsed" href="javascript:void(0);" data-bs-toggle="collapse" data-bs-target="#collapseAccount" aria-expanded="false" aria-controls="collapseAccount">
+                        <div class="nav-link-icon"><i class="fas fa-user"></i></div>
+                        Account
+                        <div class="sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
+                    </a>
+                    <div class="collapse" id="collapseAccount" data-bs-parent="#accordionSidenav">
+                        <nav class="sidenav-menu-nested nav accordion" id="accordionSidenavPages">
+                            <a class="nav-link" href="pp-account-user.php"><i class="fas fa-list" style="opacity: 0.5; margin-right: 6px;"></i>User Account List</a>
+                            <a class="nav-link" href="pp-account.php"> <i class="fas fa-edit" style="opacity: 0.5; margin-right: 6px;"></i>  Edit Account  </a>
+
+                        </nav>
+                    </div>
+                <?php endif; ?>
+
                 <a class="nav-link collapsed" href="javascript:void(0);" data-bs-toggle="collapse" data-bs-target="#collapseHistory" aria-expanded="false" aria-controls="collapseHistory">
                     <div class="nav-link-icon"><i class="fas fa-history"></i></div>
                     History
@@ -104,7 +122,7 @@
                 </a>
                 <div class="collapse" id="collapseHistory" data-bs-parent="#accordionSidenav">
                     <nav class="sidenav-menu-nested nav accordion" id="accordionSidenavPages">
-                        <a class="nav-link" href="pp-history.php"><i class="fas fa-history" style="opacity: 0.5; margin-right: 6px;"></i>  History List</a>
+                        <a class="nav-link menu-link" href="pp-history.php"><i class="fas fa-history" style="opacity: 0.5; margin-right: 6px;"></i>  History List</a>
                     </nav>
                 </div>
                 <a class="nav-link collapsed" href="javascript:void(0);" data-bs-toggle="collapse" data-bs-target="#collapseTray" aria-expanded="false" aria-controls="collapseTray">
@@ -123,8 +141,8 @@
         <!-- Sidenav Footer-->
         <div class="sidenav-footer">
             <div class="sidenav-footer-content">
-                <div class="sidenav-footer-subtitle">Logged in as:   <?php echo $role_group ?></div>
-                <div class="sidenav-footer-title"><?php echo $role ?></div>
+                <div class="sidenav-footer-subtitle">Logged in as Role Group: <?php echo $role_group ?></div>
+                <div class="sidenav-footer-title">Role: <?php echo $role ?></div>
             </div>
         </div>
     </nav>

@@ -1,7 +1,6 @@
 <?php
 
 require 'pp-session-start.php';
-require 'pp-session.php';
 
 ini_set('display_errors', 0);
 error_reporting(E_ERROR | E_WARNING | E_PARSE);
@@ -26,16 +25,9 @@ error_reporting(E_ERROR | E_WARNING | E_PARSE);
     <link rel="stylesheet" href="css/majorette.css">
     <script src="js/jquery/jquery.min.js"></script>
     <script src="js/jquery/jquery-ui.min.js"></script>
-    <!--        <script src="js/reorder-columns/jquery.dragtable.js"></script>-->
-    <!--        <script src="js/reorder-columns/bootstrap-table.min.js"></script>-->
-    <!--        <script src="js/reorder-columns/bootstrap-table-reorder-columns.js"></script>-->
-    <!--        <script src="js/majorette/pp-dragtable.js"></script>-->
-    <!--        <script type="text/javascript" src="js/datetimepicker4/moment.min.js"></script>-->
-    <!--        <script type="text/javascript" src="js/datetimepicker4/tempusdominus-bootstrap-4.min.js"></script>-->
-    <!--        <link rel="stylesheet" href="css/datetimepicker4/tempusdominus-bootstrap-4.min.css" />-->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script type="text/javascript" src="js/majorette/pp-machine-staff.js"></script>
-    <!--        <script type="text/javascript" src="js/majorette/pp-machine-currentTaskModal.js"></script>-->
-    <!--        <script type="text/javascript" src="js/majorette/pp-machine-refresh.js"></script>-->
+
 </head>
 <body class="nav-fixed">
 <?php require 'pp-staff-sidenavAccordion.php'; ?>
@@ -227,7 +219,6 @@ error_reporting(E_ERROR | E_WARNING | E_PARSE);
         </div>
     </div>
 </div>
-
 <script src="js/bootstrap@5.0.1/dist/js/bootstrap.bundle.min.js"></script>
 <script src="js/scripts.js"></script>
 <script src="js/simple-datatables@latest" type="text/javascript"></script>

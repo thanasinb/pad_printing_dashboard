@@ -18,7 +18,6 @@ $(document).ready(function() {
         $('#modal_password').val(password);
     });
 
-
     // Function to handle the confirm button click in the edit modal
     $('#modal_button_confirm').click(function() {
         var idStaff = $('#modal_id_staff').val();
@@ -50,9 +49,6 @@ $(document).ready(function() {
 
     var delete_user_modal = document.getElementById('delete_user_modal');
     delete_user_modal.addEventListener('show.bs.modal', function (event) {
-        // Button that triggered the modal
-        // var button = event.relatedTarget;
-
         var selectedRow=$(event.relatedTarget).parent().parent();
         var modalIdStaffText = selectedRow.find('.id_staff').text();
 

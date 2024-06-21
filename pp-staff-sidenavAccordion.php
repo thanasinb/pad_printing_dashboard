@@ -35,6 +35,37 @@ require 'pp-session.php';
     </form>
     <!-- Navbar Items-->
     <ul class="navbar-nav align-items-center ms-auto">
+        <li class="nav-item ms-3">
+            <p class="nav-link mb-0">
+                <span id="currentDateTime"></span>
+            </p>
+        </li>
+
+
+        <script>
+            // Function to update date and time
+            function updateDateTime() {
+                var now = new Date();
+                var dateTimeString = now.toLocaleString('en-US', {
+                    weekday: 'long',
+                    year: 'numeric',
+                    month: 'long',
+                    day: 'numeric',
+                    hour: 'numeric',
+                    minute: 'numeric',
+                    second: 'numeric',
+                    hour12: true
+                });
+
+                document.getElementById('currentDateTime').textContent = dateTimeString;
+            }
+
+            // Update date and time initially
+            updateDateTime();
+
+            // Update date and time every second
+            setInterval(updateDateTime, 1000);
+        </script>
         <!-- Documentation Dropdown-->
         <li class="nav-item dropdown no-caret d-none d-md-block me-3">
             <a class="nav-link dropdown-toggle" id="navbarDropdownDocs" href="javascript:void(0);" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">

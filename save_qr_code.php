@@ -1,35 +1,31 @@
 <?php
 require 'update/establish.php'; // เชื่อมต่อกับฐานข้อมูล MySQL
 
-session_start(); // เรียกใช้ session_start() เพื่อเริ่มต้นการใช้งาน session
+session_start(); // เริ่ม session เพื่อตรวจสอบสิทธิ์การเข้าใช้งาน
 
-// ตรวจสอบว่ามี session ของ username หรือไม่ ถ้าไม่มีให้ redirect ไปยังหน้าเข้าสู่ระบบหรือทำการจัดการตามที่คุณต้องการ
+// ตรวจสอบสิทธิ์การเข้าใช้งานด้วย username ใน session
 if (!isset($_SESSION['username'])) {
-    // สามารถเปลี่ยน redirect URL ตามที่ต้องการ
-    header("Location: login.php");
-    exit(); // หยุดการทำงานของสคริปต์หลังจาก redirect
+    http_response_code(403); // ส่งรหัส HTTP 403 Forbidden
+    exit();
 }
 
-// รับค่า QR Code และ URL ของภาพ QR Code ที่ส่งมาจาก AJAX request
+// รับค่า QR Code และภาพ QR Code จาก AJAX request
 $qrCodeValue = $_POST['qr_code_value'];
 $qrCodeImage = $_POST['qr_code_image'];
 
-// รับชื่อผู้ใช้จาก session
+// ดึง id_staff จากฐานข้อมูลโดยใช้ username จาก session
 $username = $_SESSION['username'];
-
-// สร้างคำสั่ง SQL เพื่อค้นหา id_staff จากฐานข้อมูล
-$sql_select = "SELECT id_staff FROM login WHERE username = '$username'";
+$sql_select = "SELECT id_staff FROM login WHERE username = ?";
 $stmt_select = $conn->prepare($sql_select);
 $stmt_select->bind_param("s", $username);
 $stmt_select->execute();
 $result = $stmt_select->get_result();
 
-// ตรวจสอบว่ามีผลลัพธ์จาก query หรือไม่
 if ($result && $result->num_rows > 0) {
-    // ดึงข้อมูล id_staff จากผลลัพธ์ของ query
     $row = $result->fetch_assoc();
     $id_staff = $row['id_staff'];
 
+    // ตรวจสอบว่ามี QR Code นี้ในฐานข้อมูลแล้วหรือไม่
     $sql_check = "SELECT COUNT(*) as count FROM qrcodes WHERE id_qr = ?";
     $stmt_check = $conn->prepare($sql_check);
     $stmt_check->bind_param("s", $qrCodeValue);
@@ -37,27 +33,31 @@ if ($result && $result->num_rows > 0) {
     $result_check = $stmt_check->get_result();
     $row_check = $result_check->fetch_assoc();
 
-    // เตรียมคำสั่ง SQL เพื่อบันทึกข้อมูล QR Code และ URL ของภาพ QR Code พร้อม id_staff ลงในตาราง qrcodes
     if ($row_check['count'] == 0) {
-    $sql = "INSERT INTO qrcodes (id_qr, qr_code_image_path, gen_date, id_staff) 
-            VALUES ('$qrCodeValue', '$qrCodeImage', DATE_FORMAT(NOW(), '%Y-%m-%d %H:%i:%s'), '$id_staff')";
-        $stmt_insert = $conn->prepare($sql);
+        // ถ้ายังไม่มีให้ทำการบันทึกลงฐานข้อมูล
+        $sql_insert = "INSERT INTO qrcodes (id_qr, qr_code_image_path, gen_date, id_staff) 
+                       VALUES (?, ?, NOW(), ?)";
+        $stmt_insert = $conn->prepare($sql_insert);
         $stmt_insert->bind_param("sss", $qrCodeValue, $qrCodeImage, $id_staff);
-
         if ($stmt_insert->execute()) {
-            http_response_code(200);
-        } else {
-            http_response_code(500);
-        }
+            // บันทึกประวัติการใช้งาน
+            $action = "บันทึก QR Code: $qrCodeValue";
+            $sql_history = "INSERT INTO history (username, action, date_time) VALUES (?, ?, NOW())";
+            $stmt_history = $conn->prepare($sql_history);
+            $stmt_history->bind_param("ss", $username, $action);
+            $stmt_history->execute();
 
+            http_response_code(200); // ส่งรหัส HTTP 200 OK
+        } else {
+            http_response_code(500); // ส่งรหัส HTTP 500 Internal Server Error
+        }
         $stmt_insert->close();
     } else {
-        http_response_code(409); // Conflict: รหัสซ้ำกัน
+        http_response_code(409); // ส่งรหัส HTTP 409 Conflict (รหัสซ้ำ)
     }
-
     $stmt_check->close();
 } else {
-    http_response_code(404); // ไม่พบ id_staff
+    http_response_code(404); // ส่งรหัส HTTP 404 Not Found (ไม่พบ id_staff)
 }
 
 $stmt_select->close();

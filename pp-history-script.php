@@ -17,10 +17,17 @@ if ($result->num_rows > 0) {
         $icon = '';
         if ($row['action'] == 'Logout') {
             $icon = '<i class="me-2 text-red" data-feather="log-out"></i>';
-        }
-        if ($row['action'] == 'Login') {
+        } elseif ($row['action'] == 'Login') {
             $icon = '<i class="me-2 text-green" data-feather="log-in"></i>';
+        } elseif (strpos($row['action'], 'ดาวน์โหลด QR Code จำนวน:') !== false) {
+            $icon = '<i class="me-2 text-blue" data-feather="download"></i>';
+        } elseif (strpos($row['action'], 'แก้ไขข้อมูลของ:') !== false) {
+            $icon = '<i class="me-2 text-blue" data-feather="edit"></i>';
         }
+          elseif (strpos($row['action'], 'บันทึก QR Code:') !== false) {
+            $icon = '<i class="me-2 text-blue" data-feather="save"></i>';
+        }
+
         echo "<tr class='text-black fw-bold row_staff'>";
         echo "<td class='text-center'>{$row['id_history']}</td>";
         echo "<td class='text-center'>{$row['prefix']}</td>";
@@ -31,7 +38,7 @@ if ($result->num_rows > 0) {
         echo "</tr>";
     }
 } else {
-    echo "<tr><td colspan='6' class='text-center'>No login history available.</td></tr>";
+    echo "<tr><td colspan='6' class='text-center'>ไม่มีประวัติการใช้งานที่พร้อมแสดง</td></tr>";
 }
 
 // ปิดการเชื่อมต่อกับฐานข้อมูล

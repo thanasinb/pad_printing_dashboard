@@ -13,7 +13,6 @@ $result = $conn->query($sql);
 if ($result->num_rows > 0) {
     while ($row = $result->fetch_assoc()) {
         echo "<tr class='text-black fw-bold row_staff'>";
-        echo '<td class="text-center">' . $row['id_login'] . '</td>';
         echo '<td class="text-center id_staff">' . $row['id_staff'] . '</td>';
         echo '<td class="text-center name_first">' . $row['name_first'] . '</td>';
         echo '<td class="text-center name_last">' . $row['name_last'] . '</td>';

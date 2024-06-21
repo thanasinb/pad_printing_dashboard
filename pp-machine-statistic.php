@@ -1,5 +1,7 @@
 <?php
 require 'pp-session-start.php';
+//require  'pp-mc-get-to-chart.php';
+
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -14,14 +16,8 @@ require 'pp-session-start.php';
     <link href="css/litepicker/dist/css/litepicker.css" rel="stylesheet" />
     <link rel="icon" type="image/x-icon" href="assets/img/favicon.png" />
     <link href="css/styles.css" rel="stylesheet" />
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-tooltip"></script>
-
-    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
-    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-
     <script data-search-pseudo-elements defer src="js/font-awesome/5.15.3/js/all.min.js"></script>
     <script src="js/feather-icons/4.28.0/feather.min.js"></script>
     <link rel="stylesheet" href="css/reorder-columns/dragtable.css">
@@ -29,24 +25,15 @@ require 'pp-session-start.php';
     <link rel="stylesheet" href="css/majorette.css">
     <script src="js/jquery/jquery.min.js"></script>
     <script src="js/jquery/jquery-ui.min.js"></script>
+
     <style>
         .chart-container {
-            width: 1200px;
-            height: 500px;
-            overflow-x: auto;
-        }
-        .chartjs-tooltip {
-            max-height: 150px;
-            overflow-y: auto;
-            background: rgba(0, 0, 0, 0.7);
-            color: white;
-            border-radius: 3px;
-            padding: 10px;
-            pointer-events: none;
-            position: absolute;
-            transform: translate(-50%, 0);
-            transition: all .1s ease;
-            z-index: 9999;
+            /*width: 1200px; !* Adjust the width as needed *!*/
+            /*height: 500px; !* Adjust the height as needed *!*/
+            margin: auto; /* This centers the chart */
+            display: flex;
+            justify-content: center; /* Aligns the chart horizontally */
+            align-items: center; /* Aligns the chart vertically */
         }
         .modal-body {
             display: flex;
@@ -56,10 +43,53 @@ require 'pp-session-start.php';
         .modal-dialog {
             max-width: 25%; /* ตั้งค่าให้ modal dialog มีความกว้างไม่เกิน 80% ของหน้าจอ */
         }
+        .nav-tabs .nav-link {
+            color: #ffffff; /* Change this to your desired color */
+        }
+
+        /* Change the text color of the active tab */
+        .nav-tabs .nav-link.active {
+            color: #000000; /* Change this to your desired color */
+        }
+
+        .form-container {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-end;
+            margin-bottom: 20px;
+            margin-right: 10px;
+        }
+
+        /*.form-container {*/
+        /*    margin-bottom: 10px;*/
+        /*}*/
+
+        label {
+            margin-right: 10px;
+        }
+
+        input[type="date"] {
+            padding: 5px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+
+        button {
+            padding: 6px 20px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #0056b3;
+        }
     </style>
 </head>
 <body class="nav-fixed">
-<?php require 'pp-setting-sidenavAccordion.php'; ?>
+<?php require 'pp-machine-sidenavAccordion.php'; ?>
 <div id="layoutSidenav">
     <?php require 'pp-layoutSidenav_nav.php'; ?>
     <div id="layoutSidenav_content">
@@ -77,20 +107,52 @@ require 'pp-session-start.php';
                         <!-- Tabbed dashboard card example-->
                         <div class="card mb-4">
                             <div class="card-header bg-red fw-bold text-white fs-4 d-flex justify-content-between">
-                                <div>Machine Statistic</div>
+<!--                                <div>Machine Statistic</div>-->
+                                <ul class="nav nav-tabs card-header-tabs" id="dashboardNav" role="tablist">
+                                    <li class="nav-item me-1">
+                                        <a class="nav-link active" id="overview-pill" href="#overview" data-bs-toggle="tab" role="tab" aria-controls="overview" aria-selected="true">Machine Chart Overview</a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a class="nav-link" id="activities-pill" href="#activities" data-bs-toggle="tab" role="tab" aria-controls="activities" aria-selected="false">Activities DT</a>
+                                    </li>
+                                </ul>
                                 <div>
                                     <span id="hours"></span> :
                                     <span id="minutes"></span> :
                                     <span id="seconds"></span>
                                 </div>
+
                             </div>
                             <div class="card-body">
                                 <div class="tab-content" id="dashboardNavContent">
                                     <!-- Dashboard Tab Pane 1-->
-                                    <div class="tab-pane fade show active " id="overview" role="tabpanel" aria-labelledby="overview-pill" style="width: 100%; white-space: nowrap">
+                                    <div class="tab-pane fade show active" id="overview" role="tabpanel" aria-labelledby="overview-pill">
+                                        <div class="form-container">
+                                            <form method="post" id="dateForm">
+                                                <label for="start_date">Start Date:</label>
+                                                <input type="date" id="start_date" name="start_date" required>
+                                                <label for="end_date">End Date:</label>
+                                                <input type="date" id="end_date" name="end_date" required>
+                                                <button type="submit">Submit</button>
+                                            </form>
+                                        </div>
                                         <div class="chart-container">
-                                            <?php require 'pp-mc-get-to-chart.php'; ?>
                                             <canvas id="machineChart"></canvas>
+                                            <?php require  'pp-mc-get-to-chart.php'; ?>
+                                        </div>
+                                    </div>
+                                    <div class="tab-pane fade" id="activities" role="tabpanel" aria-labelledby="activities-pill">
+                                        <div class="form-container">
+                                            <form id="downtimeDateForm">
+                                                <label for="downtime_start_date">Start Date:</label>
+                                                <input type="date" id="downtime_start_date" name="start_date">
+                                                <label for="downtime_end_date">End Date:</label>
+                                                <input type="date" id="downtime_end_date" name="end_date">
+                                                <button type="submit">Update</button>
+                                            </form>
+                                        </div>
+                                        <div class="chart-container">
+                                            <canvas id="downtimeChart"></canvas>
                                         </div>
                                     </div>
                                 </div>
@@ -101,7 +163,7 @@ require 'pp-session-start.php';
                                         <div class="modal-header">
                                             <h5 class="modal-title " id="detailModalLabel">Details</h5>
                                             <button class="btn-close" type="button" data-bs-dismiss="modal" aria-label="Close"></button>
-<!--                                                <span aria-hidden="true">&times;</span>-->
+                                            <!--                                                <span aria-hidden="true">&times;</span>-->
                                         </div>
                                         <div class="modal-body">
                                             <p id="modalContent"></p>
@@ -117,97 +179,25 @@ require 'pp-session-start.php';
                 </div>
             </div>
         </main>
-        <footer class="footer-admin mt-auto footer-light">
-            <div class="container-xl px-4">
-                <div class="row">
-                    <div class="col-md-6 small">Copyright &copy; Your Website 2021</div>
-                    <div class="col-md-6 text-md-end small">
-                        <a href="#!">Privacy Policy</a>
-                        &middot;
-                        <a href="#!">Terms &amp; Conditions</a>
-                    </div>
-                </div>
-            </div>
-        </footer>
     </div>
 </div>
-<!---->
-<!--<script>-->
-<!--    --><?php //require 'pp-mc-get-to-chart.php'; ?>
-//    document.addEventListener('DOMContentLoaded', function () {
-//        const ctx = document.getElementById('machineChart').getContext('2d');
-//
-//        const machines = <?php //echo $machines_json; ?>//;
-//        const jobCounts = <?php //echo $jobCounts_json; ?>//;
-//        const taskDetails = <?php //echo $task_details_json; ?>//;
-//
-//        const machineData = {
-//            labels: machines,
-//            datasets: [{
-//                label: 'Total of Jobs',
-//                data: jobCounts,
-//                backgroundColor: 'rgba(255, 99, 132, 0.2)',
-//                borderColor: 'rgba(255, 99, 132, 1)',
-//                borderWidth: 1
-//            }]
-//        };
-//
-//        const machineChart = new Chart(ctx, {
-//            type: 'bar',
-//            data: machineData,
-//            options: {
-//                onClick: function (evt, elements) {
-//                    if (elements.length > 0) {
-//                        const element = elements[0];
-//                        const index = element.index;
-//                        const machine = machines[index];
-//                        const jobCount = jobCounts[index];
-//                        const tasks = taskDetails[index].map(task => `${task}`).join('<br>');
-//
-//                        const modalContent = `
-//                        <strong>Machine:</strong> ${machine}<br>
-//                        <strong>Total of Jobs:</strong> ${jobCount}<br>
-//                        <strong>ID Tasks:</strong><br> ${tasks}
-//                    `;
-//
-//                        document.getElementById('modalContent').innerHTML = modalContent;
-//                        $('#detailModal').modal('show');
-//                    }
-//                },
-//                scales: {
-//                    y: {
-//                        beginAtZero: true,
-//                        title: {
-//                            display: true,
-//                            text: 'Total of Jobs'
-//                        }
-//                    },
-//                    x: {
-//                        title: {
-//                            display: true,
-//                            text: 'Machines'
-//                        },
-//                        ticks: {
-//                            autoSkip: false,
-//                            maxRotation: 90,
-//                            minRotation: 90
-//                        }
-//                    }
-//                }
-//            }
-//        });
-//    });
+<input type="hidden" id="machines" value='<?php echo $machines_json; ?>'>
+<input type="hidden" id="machineDowntime" value='<?php echo $machineDowntime_json; ?>'>
+<input type="hidden" id="jobCounts" value='<?php echo $jobCounts_json; ?>'>
+<input type="hidden" id="taskDetails" value='<?php echo $taskDetails_json; ?>'>
+<input type="hidden" id="downtimeDurations" value='<?php echo json_encode($downtimeDurations); ?>'>
+<input type="hidden" id="downtimeDetails" value='<?php echo json_encode($downtimeDetails); ?>'>
 
-
+<script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script src="js/bootstrap@5.0.1/dist/js/bootstrap.bundle.min.js"></script>
 <script src="js/scripts.js"></script>
+<script src="js/majorette/chart-script.js"></script>
+<script src="js/majorette/chart-script-dt.js"></script>
 <script src="js/simple-datatables@latest" type="text/javascript"></script>
 <script src="js/datatables/datatables-staff.js"></script>
 <script src="js/litepicker/dist/bundle.js"></script>
 <script src="js/litepicker.js"></script>
 <script src="js/majorette/pp-time-stamp.js"></script>
-<script src="js/Chart.js/chart-mc-overall.js"></script>
-<script type="text/javascript" src="js/majorette/pp-session.js"></script>
-
 </body>
 </html>

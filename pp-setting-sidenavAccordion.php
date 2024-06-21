@@ -36,14 +36,48 @@ require 'pp-session.php';
             <div class="input-group-text"><i data-feather="search"></i></div>
         </div>
     </form>
+
     <!-- Navbar Items-->
     <ul class="navbar-nav align-items-center ms-auto">
+        <li class="nav-item ms-3">
+            <p class="nav-link mb-0">
+                <span id="currentDateTime"></span>
+            </p>
+        </li>
+
+
+        <script>
+            // Function to update date and time
+            function updateDateTime() {
+                var now = new Date();
+                var dateTimeString = now.toLocaleString('en-US', {
+                    weekday: 'long',
+                    year: 'numeric',
+                    month: 'long',
+                    day: 'numeric',
+                    hour: 'numeric',
+                    minute: 'numeric',
+                    second: 'numeric',
+                    hour12: true
+                });
+
+                document.getElementById('currentDateTime').textContent = dateTimeString;
+            }
+
+            // Update date and time initially
+            updateDateTime();
+
+            // Update date and time every second
+            setInterval(updateDateTime, 1000);
+        </script>
         <!-- Documentation Dropdown-->
         <li class="nav-item dropdown no-caret d-none d-md-block me-3">
-            <a class="nav-link dropdown-toggle" id="navbarDropdownDocs" href="javascript:void(0);" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            <!-- Date and Time Display -->
+    <a class="nav-link dropdown-toggle" id="navbarDropdownDocs" href="javascript:void(0);" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                 <div class="fw-500">Documentation</div>
                 <i class="fas fa-chevron-right dropdown-arrow"></i>
             </a>
+
             <div class="dropdown-menu dropdown-menu-end py-0 me-sm-n15 me-lg-0 o-hidden animated--fade-in-up" aria-labelledby="navbarDropdownDocs">
                 <a class="dropdown-item py-3" href="https://docs.startbootstrap.com/sb-admin-pro" target="_blank">
                     <div class="icon-stack bg-primary-soft text-primary me-4"><i data-feather="book"></i></div>
@@ -70,6 +104,7 @@ require 'pp-session.php';
                 </a>
             </div>
         </li>
+
         <!-- Navbar Search Dropdown-->
         <!-- * * Note: * * Visible only below the lg breakpoint-->
         <li class="nav-item dropdown no-caret me-3 d-lg-none">

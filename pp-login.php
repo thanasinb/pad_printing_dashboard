@@ -1,51 +1,53 @@
 <?php
 session_start();
-
-// เชื่อมต่อกับไฟล์เชื่อมต่อฐานข้อมูล
 require 'update/establish.php';
 
-// ตรวจสอบว่ามีการส่งข้อมูล username และ password มาหรือไม่
 if (isset($_POST['username']) && isset($_POST['password'])) {
-    // รับค่า username และ password จากฟอร์ม
     $username = $_POST['username'];
     $password = $_POST['password'];
 
-    // คำสั่ง SQL สำหรับเลือกข้อมูลผู้ใช้จากฐานข้อมูล
-    $sql = "SELECT login.*, role.*
+    $sql = "SELECT login.*, role.*, role_group.role_group_name
             FROM login
             INNER JOIN staff ON login.id_staff = staff.id_staff
             INNER JOIN role ON staff.id_role = role.id_role
-            WHERE login.username='$username' AND login.password='$password' AND (role.role_group = 2 OR role.role_group = 3)";
+            INNER JOIN role_group ON role.role_group = role_group.id_role_group
+            WHERE login.username = ? AND login.password = ?";
+    $stmt = $conn->prepare($sql);
+    $stmt->bind_param("ss", $username, $password);
+    $stmt->execute();
+    $result = $stmt->get_result();
 
-    // ทำการคิวรีฐานข้อมูล
-    $result = $conn->query($sql);
-
-    // ตรวจสอบว่ามีข้อมูลผู้ใช้ในฐานข้อมูลหรือไม่
     if ($result->num_rows > 0) {
-        // พบข้อมูลผู้ใช้ที่ตรงกับ username และ password
-        // เก็บข้อมูล username ใน Session
+        $row = $result->fetch_assoc();
         $_SESSION['username'] = $username;
+        $_SESSION['role_group'] = $row['role_group'];
+        $_SESSION['role_group_name'] = $row['role_group_name'];
+        $_SESSION['role'] = $row['role'];
+        $_SESSION['last_activity'] = time();
 
-        // เพิ่มรายการประวัติการเข้าสู่ระบบลงในฐานข้อมูล history
+        // Generate a secure session token
+        $session_token = bin2hex(random_bytes(32));
+        $_SESSION['session_token'] = $session_token;
+
+        // Set secure cookie with the session token
+        setcookie("session_token", $session_token, time() + (30 * 24 * 60 * 60), "/", "", true, true);
+
         $login_user = $_SESSION['username'];
-        $history_sql = "INSERT INTO history (username, action, date_time)
-                        VALUES ('$login_user', 'Login', NOW())";
-        $conn->query($history_sql);
+        $history_sql = "INSERT INTO history (username, action, date_time) VALUES (?, 'Login', NOW())";
+        $history_stmt = $conn->prepare($history_sql);
+        $history_stmt->bind_param("s", $login_user);
+        $history_stmt->execute();
 
-        // ส่งผู้ใช้ไปยังหน้า pp-machine-3.php
         header("Location: pp-machine-3.php");
         exit();
     } else {
-        // ไม่พบข้อมูลผู้ใช้หรือ username/password ไม่ตรง
-        // ส่งผู้ใช้กลับไปยังหน้า pp-login.php พร้อมส่งข้อความผิดพลาด
         header("Location: pp-login.php?error=password_incorrect");
         exit();
     }
 }
-
-// ปิดการเชื่อมต่อกับฐานข้อมูล
 require 'update/terminate.php';
 ?>
+
 
 
 <!DOCTYPE html>
@@ -79,8 +81,7 @@ require 'update/terminate.php';
                 <div class="card-header text-center">Login</div>
                 <div class="card-body">
                     <?php
-                    // ตรวจสอบว่ามีข้อความผิดพลาดที่ส่งมาจาก pp-login.php หรือไม่
-                    if(isset($_GET['error']) && $_GET['error'] == 'password_incorrect') {
+                    if (isset($_GET['error']) && $_GET['error'] == 'password_incorrect') {
                         echo '<div class="alert alert-danger" role="alert">รหัสผ่านผิด!</div>';
                     }
                     ?>
