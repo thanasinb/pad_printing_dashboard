@@ -144,7 +144,8 @@ $(document).ready(function(){
                 url: "ajax/pp-modal-get.php",
                 type: "GET",
                 data: {
-                    id_mc: id_machine
+                    id_mc: id_machine,
+                    queue_number: 1
                 },
                 context: this,
                 cache: false,
