@@ -8,7 +8,7 @@ require '../update/lib_get_qty_shif.php';
 require '../update/lib_get_qty_process_manual.php';
 require '../update/lib_flag_cycle_time.php';
 
-
+// FETCH CURRENT (FIRST) TASKS
 $sql = "SELECT 
             machine.id_mc, 
             machine_queue.id_task, 
@@ -30,6 +30,7 @@ $sql = "SELECT
 
 $array_machine_queue = $conn->query($sql)->fetch_all(MYSQLI_ASSOC);
 
+// FETCH NEXT TASKS
 $sql = "SELECT 
             machine.id_mc, 
             machine_queue.id_task AS next_id_task, 

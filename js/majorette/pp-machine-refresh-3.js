@@ -7,7 +7,7 @@ $(document).ready(function(){
     loadData();
     startLoop();
 
-    var id_machine, item_no, id_job, operation, id_task;
+    var id_machine, item_no, id_job, operation, id_task, next_item_no, next_operation;
 
     $('#modal_button_save').hide();
     $('#modal_qty_per_tray').prop('disabled', true);
@@ -17,7 +17,6 @@ $(document).ready(function(){
     $('.radioNextTask').click(function (){
         $('#modal_next_button_go').attr('disabled', false);
     });
-
     $('#dash_machine').click(function () {
         sort_key='id_mc';
         sort_dir=1;
@@ -181,13 +180,16 @@ $(document).ready(function(){
 
     nextTaskModal.addEventListener('show.bs.modal', function (event) {
         id_machine = $(event.relatedTarget).parent().parent().find('.id_machine').text();
-        item_no = $(event.relatedTarget).parent().parent().find('.item_no').text();
+        next_item_no = $(event.relatedTarget).parent().parent().find('.next_item_no').text();
+        next_operation = $(event.relatedTarget).parent().parent().find('.next_operation').text();
         var modal_next_id_machine = nextTaskModal.querySelector('#modal_next_id_machine');
         var modal_next_item_no = nextTaskModal.querySelector('#modal_next_item_no');
+        var modal_next_operation = nextTaskModal.querySelector('#modal_next_operation');
         var modal_next_title = nextTaskModal.querySelector('.modal-title');
         modal_next_title.textContent = 'Next task for machine: ' + id_machine;
         modal_next_id_machine.textContent = id_machine;
-        modal_next_item_no.textContent = item_no.replace('✍','');
+        modal_next_item_no.textContent = next_item_no.replace('✍','');
+        modal_next_operation.textContent = next_operation;
 
         // if (item_no!='') {
         //     $('#radioChangeOp').attr('disabled', false);
@@ -307,13 +309,33 @@ function loadData() {
             $.each(data, function(i, item) {
                 var html_btn_current_modal = "<button name=\"id_mc\" type=\"submit\" value=\"" + item.id_mc +
                                                     "\" data-bs-toggle=\"modal\" data-bs-target=\"#currentTaskModal\"" +
-                                                    "class=\"btn btn-datatable btn-icon text-black me-2 btn-current-task\">&#9997;</button>"
+                                                    "class=\"btn btn-datatable btn-icon text-black me-2 \">&#9997;</button>";
+                var html_btn_next_modal = "<button name=\"next_id_mc\" type=\"submit\" value=\"" + item.id_mc +
+                                                 "\" data-bs-toggle=\"modal\" data-bs-target=\"#nextTaskModal\"" +
+                                                 "class=\"btn btn-datatable btn-icon text-black me-2 btn-next-task\">&#9997;</button>";
+
+                // IF THERE IS NO CURRENT TASK ASSIGNED
                 if(item.item_no==null){
-                    if(!$('#checkbox_hide_unassigned_machines').is(":checked")){
-                        var row = "<tr class=\"text-black fw-bold\"><td></td>" +
-                            "<td class='id_machine'>" + item.id_mc + "</td>" +
-                            "<td>" + html_btn_current_modal + "</td>" +
-                            "<td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td>&#9997;</td><td></td></tr>";
+                    // IF BOTH CURRENT AND NEXT TASKS DOES NOT EXIST
+                    if(item.next_item_no==null) {
+                        if (!$('#checkbox_hide_unassigned_machines').is(":checked")) {
+                            var row = "<tr class=\"text-black fw-bold\"><td></td>" +
+                                "<td class='id_machine'>" + item.id_mc + "</td>" +
+                                "<td>" + html_btn_current_modal + "</td>" +
+                                "<td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td>" +
+                                "<td class=\"text-nowrap next_item_no\">" + html_btn_next_modal + "</td>" +
+                                "<td class=\"next_operation\"></td></tr>";
+                        }
+                        //IF THERE IS ONLY NEXT TASK ASSIGNED
+                    }else{
+                        if (!$('#checkbox_hide_unassigned_machines').is(":checked")) {
+                            var row = "<tr class=\"text-black fw-bold\"><td></td>" +
+                                "<td class='id_machine'>" + item.id_mc + "</td>" +
+                                "<td>" + html_btn_current_modal + "</td>" +
+                                "<td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td>" +
+                                "<td class=\"text-nowrap next_item_no\">" + html_btn_next_modal + item.next_item_no + "</td>" +
+                                "<td class=\"next_operation\">" + item.next_operation + "</td></tr>";
+                        }
                     }
                 }
                 else {
@@ -370,7 +392,11 @@ function loadData() {
                     }
                     row = row + item.run_time_std + "</td><td>" + item.run_time_open + "</td>";
                     // row = row + "<td>" + item.est_time + "</td>";
-                    row = row + "<td>&#9997;</td><td></td></tr>";
+                    if (item.next_item_no==null){
+                        row = row + "<td>" + html_btn_next_modal + "</td><td></td></tr>";
+                    }else {
+                        row = row + "<td>" + html_btn_next_modal + item.next_item_no + "</td><td></td></tr>";
+                    }
                 }
                 $('#table_body').append(row);
             });
