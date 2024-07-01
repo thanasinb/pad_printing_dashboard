@@ -177,6 +177,66 @@ $(document).ready(function(){
         }
     });
 
+    var nextTaskModal = document.getElementById('nextTaskModal');
+
+    nextTaskModal.addEventListener('show.bs.modal', function (event) {
+        id_machine = $(event.relatedTarget).parent().parent().find('.id_machine').text();
+        item_no = $(event.relatedTarget).parent().parent().find('.item_no').text();
+        var modal_next_id_machine = nextTaskModal.querySelector('#modal_next_id_machine');
+        var modal_next_item_no = nextTaskModal.querySelector('#modal_next_item_no');
+        var modal_next_title = nextTaskModal.querySelector('.modal-title');
+        modal_next_title.textContent = 'Next task for machine: ' + id_machine;
+        modal_next_id_machine.textContent = id_machine;
+        modal_next_item_no.textContent = item_no.replace('✍','');
+
+        // if (item_no!='') {
+        //     $('#radioChangeOp').attr('disabled', false);
+        //     $('#radioResetActivity').attr('disabled', false);
+        //     $('#radioComplete').attr('disabled', false);
+        //     $('#radioRemove').attr('disabled', false);
+        //     $('#radioNextQueue').attr('disabled', true);
+        //     $('#radioNewTask').attr('disabled', true);
+        //     $('#modal_button_go').attr('disabled', true);
+        //     $('#modal_button_change').attr('disabled', false);
+        //
+        //     $.ajax({
+        //         url: "ajax/pp-modal-get.php",
+        //         type: "GET",
+        //         data: {
+        //             id_mc: id_machine,
+        //             queue_number: 1
+        //         },
+        //         context: this,
+        //         cache: false,
+        //         success: function(dataResult){
+        //             var data = JSON.parse(dataResult);
+        //             id_job = data.id_job;
+        //             operation = data.operation;
+        //             id_task = data.id_task;
+        //             $('#modal_operation').text(data.operation);
+        //             $('#modal_date_due').text(data.date_due);
+        //             $('#modal_qty_per_tray').val(data.qty_per_tray);
+        //             $('#modal_qty_shif').val(data.qty_shif);
+        //             $('#modal_qty_order').text(data.qty_order);
+        //             $('#modal_id_task').text(data.id_task);
+        //             $('#modal_id_job').text(data.id_job);
+        //             $('#modal_last_update').text(data.last_update);
+        //         }
+        //     });
+        // }
+        // else{
+        //     $('#modal_button_change').attr('disabled', true);
+        //     $('#radioChangeOp').attr('disabled', true);
+        //     $('#radioResetActivity').attr('disabled', true);
+        //     $('#radioComplete').attr('disabled', true);
+        //     $('#radioRemove').attr('disabled', true);
+        //     $('#radioNextQueue').attr('disabled', false);
+        //     $('#radioNewTask').attr('disabled', false);
+        //     $('#modal_button_go').attr('disabled', true);
+        // }
+    });
+
+
     $('#modal_button_change').click(function (){
         $('#modal_qty_per_tray').prop('disabled', false);
         $('#modal_qty_shif').prop('disabled', false);
