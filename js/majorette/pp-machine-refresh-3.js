@@ -410,8 +410,8 @@ function loadData() {
                     if (item.next_item_no==null){
                         row = row + "<td>" + html_btn_next_modal + "</td><td></td></tr>";
                     }else {
-                        row = row + "<td>" + html_btn_next_modal + item.next_item_no + "</td>" +
-                            "<td>" + item.next_operation + "</td></tr>";
+                        row = row + "<td class=\"text-nowrap next_item_no\">" + html_btn_next_modal + item.next_item_no + "</td>" +
+                            "<td class=\"next_operation\">" + item.next_operation + "</td></tr>";
                     }
                 }
                 $('#table_body').append(row);

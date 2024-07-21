@@ -20,9 +20,12 @@
 //        }
         elseif ($_POST['selected_radio']==4) {
             // FOR REMOVING TASK
-            $sql = "DELETE FROM machine_queue WHERE id_machine='" . $_POST['id_mc'] . "' AND queue_number=1";
+            if ($_POST['is_current_task']==1){
+                $sql = "DELETE FROM machine_queue WHERE id_machine='" . $_POST['id_mc'] . "' AND queue_number=1";
+            }else{
+                $sql = "DELETE FROM machine_queue WHERE id_machine='" . $_POST['id_mc'] . "' AND queue_number=2";
+            }
             $conn->query($sql);
-//            echo  $sql;
         }elseif ($_POST['selected_radio']==5) {
             $sql = "UPDATE machine_queue SET queue_number = queue_number - 1 WHERE id_machine='" . $_POST['id_mc'] . "' AND queue_number > 0";
             $conn->query($sql);
