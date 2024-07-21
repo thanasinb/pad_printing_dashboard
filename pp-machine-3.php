@@ -192,11 +192,6 @@
                             <td><input type="number" id="modal_qty_shif" name="modal_qty_shif" disabled></td>
                             <td></td>
                         </tr>
-<!--                        <tr>-->
-<!--                            <td>Qty accum: </td>-->
-<!--                            <td id="modal_qty_accum"></td>-->
-<!--                            <td></td>-->
-<!--                        </tr>-->
                         <tr>
                             <td>Qty order: </td>
                             <td id="modal_qty_order"></td>
@@ -316,17 +311,16 @@
                             <td id="modal_next_date_due"></td>
                             <td></td>
                         </tr>
-                        <tr>
-                            <td>Qty per tray: </td>
-                            <td id="modal_next_qty_per_tray"></td>
+                            <td>Qty/Tray: </td>
+                            <td>
+                                <input type="number" id="modal_next_qty_per_tray" name="modal_qty_per_tray" disabled></td>
                             <td></td>
                         </tr>
                         <tr>
-                            <td>Qty accum: </td>
-                            <td id="modal_next_qty_accum"></td>
+                            <td>Qty/Shif: </td>
+                            <td><input type="number" id="modal_next_qty_shif" name="modal_qty_shif" disabled></td>
                             <td></td>
-                        </tr>
-                        <tr>
+                        </tr>                        <tr>
                             <td>Qty order: </td>
                             <td id="modal_next_qty_order"></td>
                             <td></td>
@@ -384,6 +378,8 @@
                     </form>
                 </div>
                 <div class="modal-footer">
+                    <button type="button" id="modal_next_button_change" class="btn btn-primary mr-auto">Change</button>
+                    <button type="button" id="modal_next_button_save" class="btn btn-primary mr-auto">Save</button>
                     <button type="button" id="modal_next_button_go" type='submit' class="btn btn-primary" disabled>Go!</button>
                 </div>
             </div>

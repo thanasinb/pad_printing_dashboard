@@ -10,6 +10,7 @@ $(document).ready(function(){
     var id_machine, item_no, id_job, operation, id_task, next_item_no, next_operation;
 
     $('#modal_button_save').hide();
+    $('#modal_next_button_save').hide();
     $('#modal_qty_per_tray').prop('disabled', true);
     $('.radioCurrentTask').click(function (){
         $('#modal_button_go').attr('disabled', false);
@@ -84,6 +85,7 @@ $(document).ready(function(){
     $('#modal_next_button_go').click(function (){
         var radio_checked = $("input[name='radioNextTask']:checked").val();
         $('#next_selected_radio').val(radio_checked);
+        $('#next_hidden_id_machine').val(id_machine);
 
         if (radio_checked==1){
             $('#form_modal_next_task').attr('action', 'pp-machine-list-task.php');
@@ -178,6 +180,24 @@ $(document).ready(function(){
 
     var nextTaskModal = document.getElementById('nextTaskModal');
 
+    nextTaskModal.addEventListener('hide.bs.modal', function (event) {
+        $('input[name=radioNextTask]:checked').prop('checked', false);
+        $('#modal_next_button_save').hide();
+        $('#modal_next_button_change').show();
+        $('#modal_next_qty_per_tray').attr('disabled', true);
+        $('#modal_next_qty_shif').attr('disabled', true);
+        $('#modal_next_id_machine').text('');
+        $('#modal_next_item_no').text('');
+        $('#modal_next_operation').text('');
+        $('#modal_next_date_due').text('');
+        $('#modal_next_qty_per_tray').val(null);
+        $('#modal_next_qty_shif').val(null);
+        $('#modal_next_qty_order').text('');
+        $('#modal_next_id_task').text('');
+        $('#modal_next_id_job').text('');
+        $('#modal_next_last_update').text('');
+    });
+
     nextTaskModal.addEventListener('show.bs.modal', function (event) {
         id_machine = $(event.relatedTarget).parent().parent().find('.id_machine').text();
         next_item_no = $(event.relatedTarget).parent().parent().find('.next_item_no').text();
@@ -191,51 +211,46 @@ $(document).ready(function(){
         modal_next_item_no.textContent = next_item_no.replace('✍','');
         modal_next_operation.textContent = next_operation;
 
-        // if (item_no!='') {
-        //     $('#radioChangeOp').attr('disabled', false);
-        //     $('#radioResetActivity').attr('disabled', false);
-        //     $('#radioComplete').attr('disabled', false);
-        //     $('#radioRemove').attr('disabled', false);
-        //     $('#radioNextQueue').attr('disabled', true);
-        //     $('#radioNewTask').attr('disabled', true);
-        //     $('#modal_button_go').attr('disabled', true);
-        //     $('#modal_button_change').attr('disabled', false);
-        //
-        //     $.ajax({
-        //         url: "ajax/pp-modal-get.php",
-        //         type: "GET",
-        //         data: {
-        //             id_mc: id_machine,
-        //             queue_number: 1
-        //         },
-        //         context: this,
-        //         cache: false,
-        //         success: function(dataResult){
-        //             var data = JSON.parse(dataResult);
-        //             id_job = data.id_job;
-        //             operation = data.operation;
-        //             id_task = data.id_task;
-        //             $('#modal_operation').text(data.operation);
-        //             $('#modal_date_due').text(data.date_due);
-        //             $('#modal_qty_per_tray').val(data.qty_per_tray);
-        //             $('#modal_qty_shif').val(data.qty_shif);
-        //             $('#modal_qty_order').text(data.qty_order);
-        //             $('#modal_id_task').text(data.id_task);
-        //             $('#modal_id_job').text(data.id_job);
-        //             $('#modal_last_update').text(data.last_update);
-        //         }
-        //     });
-        // }
-        // else{
-        //     $('#modal_button_change').attr('disabled', true);
-        //     $('#radioChangeOp').attr('disabled', true);
-        //     $('#radioResetActivity').attr('disabled', true);
-        //     $('#radioComplete').attr('disabled', true);
-        //     $('#radioRemove').attr('disabled', true);
-        //     $('#radioNextQueue').attr('disabled', false);
-        //     $('#radioNewTask').attr('disabled', false);
-        //     $('#modal_button_go').attr('disabled', true);
-        // }
+        if (modal_next_item_no.textContent!='') {
+            $('#radioNextChangeOp').attr('disabled', false);
+            $('#radioNextRemove').attr('disabled', false);
+            $('#radioNextNewTask').attr('disabled', true);
+            $('#modal_next_button_go').attr('disabled', true);
+            $('#modal_next_button_save').attr('disabled', true);
+            $('#modal_next_button_change').attr('disabled', false);
+
+            $.ajax({
+                url: "ajax/pp-modal-get.php",
+                type: "GET",
+                data: {
+                    id_mc: id_machine,
+                    queue_number: 2
+                },
+                context: this,
+                cache: false,
+                success: function(dataResult){
+                    var data = JSON.parse(dataResult);
+                    id_job = data.id_job;
+                    operation = data.operation;
+                    id_task = data.id_task;
+                    $('#modal_next_operation').text(data.operation);
+                    $('#modal_next_date_due').text(data.date_due);
+                    $('#modal_next_qty_per_tray').val(data.qty_per_tray);
+                    $('#modal_next_qty_shif').val(data.qty_shif);
+                    $('#modal_next_qty_order').text(data.qty_order);
+                    $('#modal_next_id_task').text(data.id_task);
+                    $('#modal_next_id_job').text(data.id_job);
+                    $('#modal_next_last_update').text(data.last_update);
+                }
+            });
+        }
+        else{
+            $('#modal_next_button_change').attr('disabled', true);
+            $('#modal_next_button_go').attr('disabled', true);
+            $('#radioNextChangeOp').attr('disabled', true);
+            $('#radioNextRemove').attr('disabled', true);
+            $('#radioNextNewTask').attr('disabled', false);
+        }
     });
 
 
@@ -395,7 +410,8 @@ function loadData() {
                     if (item.next_item_no==null){
                         row = row + "<td>" + html_btn_next_modal + "</td><td></td></tr>";
                     }else {
-                        row = row + "<td>" + html_btn_next_modal + item.next_item_no + "</td><td></td></tr>";
+                        row = row + "<td>" + html_btn_next_modal + item.next_item_no + "</td>" +
+                            "<td>" + item.next_operation + "</td></tr>";
                     }
                 }
                 $('#table_body').append(row);
