@@ -1,0 +1,17 @@
+<tr class="fw-bold">
+    <th class="text-center">
+        <i data-feather="list"></i> ลำดับ
+    </th>
+    <th class="text-center">
+        <i data-feather="user"></i> ชื่อ
+    </th>
+    <th class="text-center">
+        <i data-feather="inbox"></i> จำนวนถาด
+    </th>
+    <th class="text-center">
+        😊 On Target   <i data-feather="arrow-up">
+    </th>
+    <th class="text-center">
+        😞 Dis Target   <i data-feather="arrow-down">
+    </th>
+</tr>
