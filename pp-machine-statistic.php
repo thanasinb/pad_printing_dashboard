@@ -133,7 +133,7 @@ require 'pp-session-start.php';
                                                 <input type="date" id="start_date" name="start_date" required>
                                                 <label for="end_date">End Date:</label>
                                                 <input type="date" id="end_date" name="end_date" required>
-                                                <button type="submit">Submit</button>
+                                                <button type="submit">Update</button>
                                             </form>
                                         </div>
                                         <div class="chart-container">

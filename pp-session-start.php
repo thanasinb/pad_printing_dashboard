@@ -38,7 +38,7 @@ if (!isset($_SESSION['username'])) {
         if (hash_equals($_SESSION['session_token'], $session_token)) {
             $_SESSION['last_activity'] = time();
         } else {
-            echo "<script>alert('Session หมดอายุแล้วจ้า');</script>";
+            echo "<script>alert('Session หมดอายุแล้ว');</script>";
             echo "<script>window.location.href = 'pp-logout-session.php';</script>";
             exit();
         }

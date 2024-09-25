@@ -120,11 +120,9 @@ require 'pp-session-start.php';
         }
 
         .button-row {
-            width: 100%;
             display: flex;
-            justify-content: space-between; /* ทำให้ปุ่มใน .button-row แสดงในแนวนอน และทำให้เว้นวรรคเท่าที่กำหนดได้ */
-            align-items: center;
-            margin-top: 10px;
+            justify-content: center; /* ทำให้ปุ่ม Save อยู่ตรงกลาง */
+            margin-top: 20px;
         }
 
         .btnn {
@@ -136,6 +134,10 @@ require 'pp-session-start.php';
             font-size: 16px;
             border-radius: 5px;
             text-align: center;
+        }
+
+        .btn-save {
+            background-color: #3131b1;
         }
 
         .btn-gen {
@@ -152,10 +154,7 @@ require 'pp-session-start.php';
             display: none; /* ปุ่ม Print ซ่อนไว้เริ่มต้น */
         }
 
-        .btn-save {
-            background-color: #3131b1;
-            text-align: center;
-        }
+       
 
     </style>
 
@@ -176,9 +175,15 @@ require 'pp-session-start.php';
                     <div id="qrcode" class="qrcode-display"></div>
                     <div id="qrValue"></div>
                     <div class="button-row">
-                        <button id="downloadBtn" onclick="downloadQRCode()" class="btnn btn-download"> <i class="fas fa-download"></i> Download</button>
-                        <button id="printBtn" onclick="printQRCode()" class="btnn btn-print"> <i class="fas fa-print"></i> Print</button>
-                        <button id="saveBtn" onclick="saveQRCode()" class="btnn btn-save"> <i class="fas fa-save"></i> Save</button>
+                        <button id="saveBtn" onclick="saveQRCode()" class="btnn btn-save" style="margin: 0 auto;">
+                            <i class="fas fa-save"></i> Save
+                        </button>
+                        <button id="downloadBtn" onclick="downloadQRCode()" class="btnn btn-download" style="display: none;">
+                            <i class="fas fa-download"></i> Download
+                        </button>
+                        <button id="printBtn" onclick="printQRCode()" class="btnn btn-print" style="display: none;">
+                            <i class="fas fa-print"></i> Print
+                        </button>
                     </div>
                 </div>
             </div>

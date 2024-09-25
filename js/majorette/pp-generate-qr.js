@@ -91,9 +91,29 @@ async function saveQRCode() {
         alert(message);
     }
 }
+async function saveDownloadHistory(downloadCount, downloadedCodes) {
+    try {
+        const response = await fetch('save_qr_code.php', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded',
+            },
+            body: `action=download&count=${downloadCount}&qr_codes=${JSON.stringify(downloadedCodes)}`,
+        });
 
-function downloadQRCode() {
+        if (!response.ok) {
+            console.error('Failed to save download history');
+        }
+    } catch (error) {
+        console.error('Error saving download history:', error);
+    }
+}
+
+async function downloadQRCode() {
     const qrcodeItems = document.querySelectorAll('.qrcode-item');
+    let downloadCount = 0;
+    let downloadedCodes = [];
+
     qrcodeItems.forEach((item, index) => {
         const qrCodeValue = item.querySelector('.qr-code-value').textContent.replace('Code: ', '').trim();
         const qrcodeCanvas = item.querySelector('canvas');
@@ -102,11 +122,18 @@ function downloadQRCode() {
             link.download = `qrcode_${qrCodeValue}.png`;
             link.href = qrcodeCanvas.toDataURL('image/png').replace('image/png', 'image/octet-stream');
             link.click();
+            downloadedCodes.push(qrCodeValue);
+            downloadCount++;
         } else {
             console.error(`Canvas element not found for QR Code value: ${qrCodeValue}`);
         }
     });
+
+    if (downloadCount > 0) {
+        await saveDownloadHistory(downloadCount, downloadedCodes);
+    }
 }
+
 
 function printQRCode() {
     const printContents = document.getElementById('qrcode').innerHTML;

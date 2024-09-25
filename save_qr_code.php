@@ -9,12 +9,28 @@ if (!isset($_SESSION['username'])) {
     exit();
 }
 
+$username = $_SESSION['username'];
+
+if ($_POST['action'] == 'download') {
+    $downloadCount = intval($_POST['count']);
+    $downloadedCodes = json_decode($_POST['qr_codes'], true); // รับข้อมูล QR Code values
+
+    // บันทึกประวัติการใช้งาน
+    $action = "Download QR Code: " . implode(', ', $downloadedCodes);
+    $sql_history = "INSERT INTO history (username, action, date_time, qr_codes) VALUES (?, ?, NOW(), ?)";
+    $stmt_history = $conn->prepare($sql_history);
+    $stmt_history->bind_param("sss", $username, $action, json_encode($downloadedCodes)); // บันทึก QR Code values ในประวัติ
+    $stmt_history->execute();
+    http_response_code(200); // ส่งรหัส HTTP 200 OK
+    $stmt_history->close();
+    $conn->close();
+    exit();
+}
 // รับค่า QR Code และภาพ QR Code จาก AJAX request
 $qrCodeValue = $_POST['qr_code_value'];
 $qrCodeImage = $_POST['qr_code_image'];
 
 // ดึง id_staff จากฐานข้อมูลโดยใช้ username จาก session
-$username = $_SESSION['username'];
 $sql_select = "SELECT id_staff FROM login WHERE username = ?";
 $stmt_select = $conn->prepare($sql_select);
 $stmt_select->bind_param("s", $username);

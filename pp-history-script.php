@@ -19,14 +19,21 @@ if ($result->num_rows > 0) {
             $icon = '<i class="me-2 text-red" data-feather="log-out"></i>';
         } elseif ($row['action'] == 'Login') {
             $icon = '<i class="me-2 text-green" data-feather="log-in"></i>';
-        } elseif (strpos($row['action'], 'ดาวน์โหลด QR Code จำนวน:') !== false) {
+        } elseif (strpos($row['action'], 'Download QR Code:') !== false) {
             $icon = '<i class="me-2 text-blue" data-feather="download"></i>';
         } elseif (strpos($row['action'], 'แก้ไขข้อมูลของ:') !== false) {
             $icon = '<i class="me-2 text-blue" data-feather="edit"></i>';
-        }
-          elseif (strpos($row['action'], 'บันทึก QR Code:') !== false) {
+        } elseif (strpos($row['action'], 'บันทึก QR Code:') !== false) {
             $icon = '<i class="me-2 text-blue" data-feather="save"></i>';
+        } elseif (strpos($row['action'], 'แก้ไข Description Tha:') !== false) {
+            $icon = '<i class="me-2 text-blue" data-feather="edit"></i>';
+        } elseif (strpos($row['action'], 'แก้ไข Downtime Code:') !== false) {
+            $icon = '<i class="me-2 text-blue" data-feather="edit"></i>';
+        } elseif (strpos($row['action'], 'เพิ่ม Downtime:') !== false) {
+            $icon = '<i class="me-2 text-blue" data-feather="plus-circle"></i>';
         }
+
+
 
         echo "<tr class='text-black fw-bold row_staff'>";
         echo "<td class='text-center'>{$row['id_history']}</td>";

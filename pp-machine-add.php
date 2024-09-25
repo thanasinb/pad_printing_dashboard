@@ -1,4 +1,4 @@
-<?php
+-<?php
 require 'pp-session-start.php';
 ?>
 <!DOCTYPE html>
