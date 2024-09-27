@@ -74,16 +74,23 @@ require 'pp-session-start.php';
         }
 
         .qrcode-display {
-            /* CSS สำหรับแสดง QR Code */
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(100px, 1fr)); /* ใช้ auto-fit เพื่อให้กริดยืดหยุ่น */
-            gap: 10px;
-            width: calc(100% - 40px); /* ให้ครอบคลุมความกว้างทั้งหมดของ qrcode-container */
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
             align-items: center;
             padding: 25px;
             margin: 20px 10px;
+            gap: 20px; /* เพิ่มระยะห่างระหว่าง QR code */
+            transition: justify-content 0.3s ease;
         }
 
+        .qrcode-center {
+            justify-content: center; /* เริ่มต้นที่กึ่งกลาง */
+        }
+
+        .qrcode-left {
+            justify-content: flex-start; /* เมื่อมี QR code เพิ่ม ให้เลื่อนจากซ้ายไปขวา */
+        }
         h1 {
             /* CSS สำหรับหัวเรื่อง */
             color: #333;
@@ -121,12 +128,13 @@ require 'pp-session-start.php';
 
         .button-row {
             display: flex;
-            justify-content: center; /* ทำให้ปุ่ม Save อยู่ตรงกลาง */
+            justify-content: center; /* ทำให้ปุ่มอยู่ตรงกลาง */
+            align-items: center;
             margin-top: 20px;
         }
 
         .btnn {
-            width: 120px; /* กำหนดขนาดปุ่ม */
+            width: 120px;
             height: 35px;
             border: none;
             color: white;
@@ -134,6 +142,7 @@ require 'pp-session-start.php';
             font-size: 16px;
             border-radius: 5px;
             text-align: center;
+            margin: 0 15px; /* เพิ่มระยะห่างระหว่างปุ่ม */
         }
 
         .btn-save {
@@ -154,7 +163,7 @@ require 'pp-session-start.php';
             display: none; /* ปุ่ม Print ซ่อนไว้เริ่มต้น */
         }
 
-       
+
 
     </style>
 
@@ -171,17 +180,20 @@ require 'pp-session-start.php';
                     <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
                     <label for="quantity">จำนวนที่ต้องการ</label>
                     <input type="number" id="quantity" name="quantity" min="1" max="50" value="1" class="form-control">
-                    <button onclick="generateQRCode()" class="btnn btn-gen"> <i class="fas fa-qrcode"></i> Generate</button>
-                    <div id="qrcode" class="qrcode-display"></div>
+                    <button onclick="generateQRCode()" class="btnn btn-gen">
+                        <i class="fas fa-qrcode"></i> Generate
+                    </button>
+                    <div id="qrcode" class="qrcode-display qrcode-center"></div> <!-- Added qrcode-center class -->
+                    <div id="qrValue"></div>
                     <div id="qrValue"></div>
                     <div class="button-row">
-                        <button id="saveBtn" onclick="saveQRCode()" class="btnn btn-save" style="margin: 0 auto;">
+                        <button id="saveBtn" onclick="saveQRCode()" class="btnn btn-save">
                             <i class="fas fa-save"></i> Save
                         </button>
-                        <button id="downloadBtn" onclick="downloadQRCode()" class="btnn btn-download" style="display: none;">
+                        <button id="downloadBtn" onclick="downloadQRCode()" class="btnn btn-download">
                             <i class="fas fa-download"></i> Download
                         </button>
-                        <button id="printBtn" onclick="printQRCode()" class="btnn btn-print" style="display: none;">
+                        <button id="printBtn" onclick="printQRCode()" class="btnn btn-print">
                             <i class="fas fa-print"></i> Print
                         </button>
                     </div>

@@ -41,6 +41,15 @@ function generateQRCode() {
     const qrcodeContainer = document.getElementById('qrcode');
     qrcodeContainer.innerHTML = '';
 
+    // เมื่อมี QR code มากกว่า 1 ให้เปลี่ยนการจัดเรียงเป็นจากซ้ายไปขวา
+    if (quantity > 1) {
+        qrcodeContainer.classList.remove('qrcode-center');
+        qrcodeContainer.classList.add('qrcode-left');
+    } else {
+        qrcodeContainer.classList.remove('qrcode-left');
+        qrcodeContainer.classList.add('qrcode-center');
+    }
+
     for (let i = 0; i < quantity; i++) {
         createQRCode(qrcodeContainer, null);
     }
