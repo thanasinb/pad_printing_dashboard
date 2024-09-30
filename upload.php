@@ -1,42 +1,37 @@
 <?php
-require 'update/establish.php';  // เชื่อมต่อกับฐานข้อมูล
 session_start();
+require 'update/establish.php';
 
-if (isset($_FILES['imageFile']) && isset($_SESSION['username'])) {
-    $username = $_SESSION['username'];
+if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['croppedImage'])) {
+    // รับภาพที่ถูกครอบ (base64)
+    $croppedImage = $_POST['croppedImage'];
 
-    // ดึง id_staff จากตาราง staff ตาม username
-    $staff_id_query = $conn->prepare("SELECT id_staff FROM staff WHERE username = ?");
-    $staff_id_query->bind_param("s", $username);
-    $staff_id_query->execute();
-    $result = $staff_id_query->get_result();
+    // Decode base64 image
+    $image_parts = explode(";base64,", $croppedImage);
+    $image_type_aux = explode("image/", $image_parts[0]);
+    $image_type = $image_type_aux[1];
+    $image_base64 = base64_decode($image_parts[1]);
 
-    if ($result->num_rows > 0) {
-        $staff = $result->fetch_assoc();
-        $staff_id = $staff['id_staff'];
+    // ตั้งชื่อไฟล์
+    $fileName = uniqid() . '.' . $image_type;
+    $filePath = "uploads/" . $fileName;
 
-        // กำหนดโฟลเดอร์และชื่อไฟล์ที่จะบันทึก
-        $target_dir = "uploads/";
-        $imageFileType = strtolower(pathinfo(basename($_FILES["imageFile"]["name"]), PATHINFO_EXTENSION));
-        $target_file = $target_dir . uniqid() . "." . $imageFileType;
+    // บันทึกไฟล์ลงในโฟลเดอร์ uploads/
+    if (file_put_contents($filePath, $image_base64)) {
+        // อัปเดตชื่อไฟล์ในฐานข้อมูล
+        $username = $_SESSION['username'];
+        $sql = "UPDATE staff SET profile_image = ? WHERE id_staff = (SELECT id_staff FROM login WHERE username = ?)";
+        $stmt = $conn->prepare($sql);
+        $stmt->bind_param("ss", $fileName, $username);
 
-        // ย้ายไฟล์ไปยังโฟลเดอร์ที่กำหนด
-        if (move_uploaded_file($_FILES["imageFile"]["tmp_name"], $target_file)) {
-            // เพิ่มหรืออัพเดทข้อมูลรูปโปรไฟล์ในฐานข้อมูล
-            $query = $conn->prepare("INSERT INTO staff_profile_images (staff_id, image_path) VALUES (?, ?) 
-                                      ON DUPLICATE KEY UPDATE image_path = VALUES(image_path)");
-            $query->bind_param("is", $staff_id, $target_file);
-
-            if ($query->execute()) {
-                echo $target_file;  // ส่งคืนเส้นทางรูปภาพ
-            } else {
-                echo "ERROR: ไม่สามารถบันทึกรูปโปรไฟล์ในฐานข้อมูลได้";
-            }
+        if ($stmt->execute()) {
+            // ส่งเส้นทางของภาพที่อัปโหลดสำเร็จ
+            echo "/projects/mjrqr/uploads/" . $fileName;
         } else {
-            echo "ERROR: อัพโหลดไฟล์ไม่สำเร็จ";
+            echo "ERROR: มีข้อผิดพลาดในการอัปเดตโปรไฟล์: " . $conn->error;
         }
     } else {
-        echo "ERROR: ไม่พบผู้ใช้ในฐานข้อมูล";
+        echo "ERROR: มีข้อผิดพลาดในการบันทึกไฟล์.";
     }
 }
 ?>

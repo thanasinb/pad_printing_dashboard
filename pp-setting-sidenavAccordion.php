@@ -23,7 +23,26 @@ if ($result->num_rows > 0) {
         'date' => date('F j, Y')
     ]; // กรณีไม่มีข้อมูล
 }
+// ตรวจสอบว่าผู้ใช้ล็อกอินอยู่
+if (isset($_SESSION['username'])) {
+    $username = $_SESSION['username'];
 
+    // ดึงชื่อไฟล์ภาพโปรไฟล์จากฐานข้อมูล
+    $sql = "SELECT profile_image FROM staff WHERE id_staff = (SELECT id_staff FROM login WHERE username = ?)";
+    $stmt = $conn->prepare($sql);
+    $stmt->bind_param("s", $username);
+    $stmt->execute();
+    $result = $stmt->get_result();
+    $row = $result->fetch_assoc();
+
+    // ตรวจสอบว่ามีภาพโปรไฟล์หรือไม่
+    if ($row && !empty($row['profile_image'])) {
+        $profileImagePath = "uploads/" . $row['profile_image'];
+    } else {
+        // หากไม่มีภาพที่อัปโหลด ให้แสดงภาพเริ่มต้น
+        $profileImagePath = "assets/img/illustrations/profiles/profile-1.png";
+    }
+}
 $conn->close(); // ปิดการเชื่อมต่อฐานข้อมูล
 ?>
 <nav class="topnav navbar navbar-expand shadow justify-content-between justify-content-sm-start navbar-light bg-white" id="sidenavAccordion">
@@ -135,10 +154,12 @@ $conn->close(); // ปิดการเชื่อมต่อฐานข้�
 
         <!-- User Dropdown-->
         <li class="nav-item dropdown no-caret dropdown-user me-3 me-lg-4">
-            <a class="btn btn-icon btn-transparent-dark dropdown-toggle" id="navbarDropdownUserImage" href="javascript:void(0);" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><img class="img-fluid" src="assets/img/illustrations/profiles/profile-1.png" /></a>
+            <a class="btn btn-icon btn-transparent-dark dropdown-toggle" id="navbarDropdownUserImage" href="javascript:void(0);" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                <img class="img-fluid" src="<?php echo $profileImagePath; ?>" />
+            </a>
             <div class="dropdown-menu dropdown-menu-end border-0 shadow animated--fade-in-up" aria-labelledby="navbarDropdownUserImage">
                 <h6 class="dropdown-header d-flex align-items-center">
-                    <img class="dropdown-user-img" src="assets/img/illustrations/profiles/profile-1.png" />
+                    <img class="dropdown-user-img" src="<?php echo $profileImagePath; ?>" />
                     <div class="dropdown-user-details">
                         <div class="dropdown-user-details-name"><?php echo $name, " ", $surname; ?></div>
                     </div>
@@ -148,7 +169,6 @@ $conn->close(); // ปิดการเชื่อมต่อฐานข้�
                     <div class="dropdown-item-icon"><i data-feather="settings"></i></div>
                     Account
                 </a>
-
                 <a class="dropdown-item" href="pp-logout.php" onclick="confirmLogout()">
                     <div class="dropdown-item-icon"><i data-feather="log-out"></i></div>
                     Logout
