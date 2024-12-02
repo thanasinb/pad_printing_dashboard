@@ -1,7 +1,50 @@
 <?php
-require 'pp-session.php'
-?>
+require 'pp-session.php';
+require 'update/establish.php'; // เชื่อมต่อฐานข้อมูล
 
+// ดึงข้อมูลการแจ้งเตือนจากฐานข้อมูล
+$dayOfWeek = date('l'); // ได้ค่าเป็นเช่น Monday, Tuesday
+$sql = "SELECT message, created_at FROM daily_alerts WHERE day_of_week = '$dayOfWeek'";
+$result = $conn->query($sql);
+
+// กำหนดการแสดงผลข้อความแจ้งเตือนเริ่มต้น
+$alert_messages = [];
+
+if ($result->num_rows > 0) {
+    while ($row = $result->fetch_assoc()) {
+        $alert_messages[] = [
+            'message' => $row['message'],
+            'date' => date('F j, Y', strtotime($row['created_at']))
+        ]; // เก็บข้อความและวันที่ลงใน array
+    }
+} else {
+    $alert_messages[] = [
+        'message' => "No alerts for today.",
+        'date' => date('F j, Y')
+    ]; // กรณีไม่มีข้อมูล
+}
+// ตรวจสอบว่าผู้ใช้ล็อกอินอยู่
+if (isset($_SESSION['username'])) {
+    $username = $_SESSION['username'];
+
+    // ดึงชื่อไฟล์ภาพโปรไฟล์จากฐานข้อมูล
+    $sql = "SELECT profile_image FROM staff WHERE id_staff = (SELECT id_staff FROM login WHERE username = ?)";
+    $stmt = $conn->prepare($sql);
+    $stmt->bind_param("s", $username);
+    $stmt->execute();
+    $result = $stmt->get_result();
+    $row = $result->fetch_assoc();
+
+    // ตรวจสอบว่ามีภาพโปรไฟล์หรือไม่
+    if ($row && !empty($row['profile_image'])) {
+        $profileImagePath = "uploads/" . $row['profile_image'];
+    } else {
+        // หากไม่มีภาพที่อัปโหลด ให้แสดงภาพเริ่มต้น
+        $profileImagePath = "assets/img/illustrations/profiles/profile-1.png";
+    }
+}
+$conn->close(); // ปิดการเชื่อมต่อฐานข้อมูล
+?>
 <nav class="topnav navbar navbar-expand shadow justify-content-between justify-content-sm-start navbar-light bg-white" id="sidenavAccordion">
     <!-- Sidenav Toggle Button-->
     <button class="btn btn-icon btn-transparent-dark order-1 order-lg-0 me-2 ms-lg-2 me-lg-0" id="sidebarToggle"><i data-feather="menu"></i></button>

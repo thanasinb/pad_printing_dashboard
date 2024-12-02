@@ -1,5 +1,5 @@
 <?php
-session_start();
+require 'pp-session-start.php';
 require 'update/establish.php'; // เชื่อมต่อกับฐานข้อมูล
 
 // ตรวจสอบว่าผู้ใช้ล็อกอินหรือไม่
@@ -39,16 +39,15 @@ if (isset($_SESSION['username'])) {
     <link href="css/simple-datatables@latest/dist/style.css" rel="stylesheet" />
     <link href="css/litepicker/dist/css/litepicker.css" rel="stylesheet" />
     <link href="css/styles.css" rel="stylesheet" />
-    <link rel="icon" type="image/x-icon" href="assets/img/favicon.png" />
+    <link rel="icon" type="image/x-icon" href="assets/img/profile-user.png" />
     <script data-search-pseudo-elements defer src="js/font-awesome/5.15.3/js/all.min.js"></script>
     <script src="js/feather-icons/4.28.0/feather.min.js"></script>
+    <link rel="stylesheet" href="css/reorder-columns/dragtable.css">
+    <link rel="stylesheet" href="css/reorder-columns/bootstrap-table.min.css">
     <link rel="stylesheet" href="css/majorette.css">
     <script src="js/jquery/jquery.min.js"></script>
     <script src="js/jquery/jquery-ui.min.js"></script>
-    <script type="text/javascript" src="js/majorette/pp-setting-dt.js"></script>
-    <link href="https://cdn.jsdelivr.net/npm/simple-datatables@latest/dist/style.css" rel="stylesheet" />
-    <script data-search-pseudo-elements defer src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/js/all.min.js" crossorigin="anonymous"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/feather-icons/4.28.0/feather.min.js" crossorigin="anonymous"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
     <!-- Cropper.js CSS -->
     <link href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.12/cropper.min.css" rel="stylesheet" />

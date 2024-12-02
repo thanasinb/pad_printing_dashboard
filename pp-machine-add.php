@@ -1,4 +1,4 @@
--<?php
+<?php
 require 'pp-session-start.php';
 ?>
 <!DOCTYPE html>
@@ -13,10 +13,17 @@ require 'pp-session-start.php';
         <link href="css/simple-datatables@latest/dist/style.css" rel="stylesheet" />
         <link href="css/litepicker/dist/css/litepicker.css" rel="stylesheet" />
         <link href="css/styles.css" rel="stylesheet" />
-        <link rel="icon" type="image/x-icon" href="assets/img/favicon.png" />
+        <link rel="icon" type="image/x-icon" href="assets/img/machine-learning.png" />
         <script data-search-pseudo-elements defer src="js/font-awesome/5.15.3/js/all.min.js"></script>
         <script src="js/feather-icons/4.28.0/feather.min.js"></script>
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+        <link rel="stylesheet" href="css/reorder-columns/dragtable.css">
+        <link rel="stylesheet" href="css/reorder-columns/bootstrap-table.min.css">
+        <link rel="stylesheet" href="css/majorette.css">
+        <script src="js/jquery/jquery.min.js"></script>
+        <script src="js/jquery/jquery-ui.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-tooltip"></script>
+        <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
 
         <!--        <script src="js/majorette/pp-machine-add.js"></script>-->
     </head>
@@ -82,6 +89,13 @@ require 'pp-session-start.php';
         <script src="js/litepicker/dist/bundle.js"></script>
         <script src="js/litepicker.js"></script>
     <script type="text/javascript" src="js/majorette/pp-session.js"></script>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="js/majorette/chart-script.js"></script>
+    <script src="js/majorette/chart-script-dt.js"></script>
+    <script src="js/simple-datatables@latest" type="text/javascript"></script>
+    <script src="js/datatables/datatables-staff.js"></script>
 
     </body>
 </html>
