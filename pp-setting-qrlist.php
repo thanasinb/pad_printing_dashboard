@@ -6,7 +6,6 @@ require 'pp-session-start.php';
 <html lang="en">
 <head>
     <meta charset="utf-8" />
-    <meta charset="utf-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
     <meta name="description" content="" />
@@ -56,12 +55,9 @@ require 'pp-session-start.php';
                             <thead class="text-black" style="background-color: #ffea07">
                             <?php require'pp-setting-qr-table-head.php' ?>
                             </thead>
-
-                        
                             <tbody id="table_body">
                             <?php
                             require 'pp-setting-qr-script.php';
-
                             ?>
                             </tbody>
                         </table>
