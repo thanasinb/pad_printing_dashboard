@@ -65,6 +65,22 @@ require 'update/terminate.php';
                         <a class="nav-link" href="pp-staff-upload.php"><i class="fas fa-file-import" style="opacity: 0.5; margin-right: 6px;"></i>Import Excel</a>
                     </nav>
                 </div>
+
+                <?php if ($id_role_group == 3 && $role_group_name == 'Admin') : ?>
+                    <a class="nav-link collapsed" href="javascript:void(0);" data-bs-toggle="collapse" data-bs-target="#collapseAccount" aria-expanded="false" aria-controls="collapseAccount">
+                        <div class="nav-link-icon"><i class="fas fa-user"></i></div>
+                        Account
+                        <div class="sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
+                    </a>
+                    <div class="collapse" id="collapseAccount" data-bs-parent="#accordionSidenav">
+                        <nav class="sidenav-menu-nested nav accordion" id="accordionSidenavPages">
+                            <a class="nav-link" href="pp-account-user.php"><i class="fas fa-list" style="opacity: 0.5; margin-right: 6px;"></i>User Account List</a>
+                            <a class="nav-link" href="pp-account.php"> <i class="fas fa-edit" style="opacity: 0.5; margin-right: 6px;"></i>  Edit Account  </a>
+
+                        </nav>
+                    </div>
+                <?php endif; ?>
+
                 <a class="nav-link collapsed" href="javascript:void(0);" data-bs-toggle="collapse" data-bs-target="#collapseJobs" aria-expanded="false" aria-controls="collapseJobs">
                     <div class="nav-link-icon"><i class="fas fa-tasks"></i></div>
                     Jobs
@@ -100,20 +116,7 @@ require 'update/terminate.php';
                     </nav>
                 </div>
 
-                <?php if ($id_role_group == 3 && $role_group_name == 'Admin') : ?>
-                    <a class="nav-link collapsed" href="javascript:void(0);" data-bs-toggle="collapse" data-bs-target="#collapseAccount" aria-expanded="false" aria-controls="collapseAccount">
-                        <div class="nav-link-icon"><i class="fas fa-user"></i></div>
-                        Account
-                        <div class="sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
-                    </a>
-                    <div class="collapse" id="collapseAccount" data-bs-parent="#accordionSidenav">
-                        <nav class="sidenav-menu-nested nav accordion" id="accordionSidenavPages">
-                            <a class="nav-link" href="pp-account-user.php"><i class="fas fa-list" style="opacity: 0.5; margin-right: 6px;"></i>User Account List</a>
-                            <a class="nav-link" href="pp-account.php"> <i class="fas fa-edit" style="opacity: 0.5; margin-right: 6px;"></i>  Edit Account  </a>
 
-                        </nav>
-                    </div>
-                <?php endif; ?>
 
                 <a class="nav-link collapsed" href="javascript:void(0);" data-bs-toggle="collapse" data-bs-target="#collapseHistory" aria-expanded="false" aria-controls="collapseHistory">
                     <div class="nav-link-icon"><i class="fas fa-history"></i></div>

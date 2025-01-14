@@ -3,6 +3,8 @@ require 'pp-session-start.php';
 //require  'pp-mc-get-to-chart.php';
 
 ?>
+<link rel="stylesheet" href="css/pp-sidenav.css">
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -187,7 +189,11 @@ require 'pp-session-start.php';
 <input type="hidden" id="taskDetails" value='<?php echo $taskDetails_json; ?>'>
 <input type="hidden" id="downtimeDurations" value='<?php echo json_encode($downtimeDurations); ?>'>
 <input type="hidden" id="downtimeDetails" value='<?php echo json_encode($downtimeDetails); ?>'>
-
+<input type="hidden" id="totalDowntime" value='<?php echo json_encode(round($totalDowntime, 2)); ?>'>
+<script>
+    document.addEventListener('click', () => checkSession());
+    document.addEventListener('input', () => checkSession());
+</script>
 <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script src="js/bootstrap@5.0.1/dist/js/bootstrap.bundle.min.js"></script>

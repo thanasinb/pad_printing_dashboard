@@ -3,43 +3,64 @@ session_start();
 require 'update/establish.php';
 
 if (isset($_POST['username']) && isset($_POST['password'])) {
-    $username = $_POST['username'];
+    $username = htmlspecialchars($_POST['username'], ENT_QUOTES, 'UTF-8');
     $password = $_POST['password'];
 
-    $sql = "SELECT login.*, role.*, role_group.role_group_name
-            FROM login
-            INNER JOIN staff ON login.id_staff = staff.id_staff
-            INNER JOIN role ON staff.id_role = role.id_role
-            INNER JOIN role_group ON role.role_group = role_group.id_role_group
-            WHERE login.username = ? AND login.password = ?";
+    // ตรวจสอบว่าผู้ใช้มี Session เดิมหรือไม่
+    if (isset($_SESSION['username']) && $_SESSION['username'] === $username) {
+        // บันทึก Logout เดิม
+        $stmt = $conn->prepare("INSERT INTO history (username, action, date_time) VALUES (?, 'Logout (automatic, new login)', NOW())");
+        $stmt->bind_param("s", $_SESSION['username']);
+        $stmt->execute();
+        $stmt->close();
+
+        // ทำลาย Session เดิม
+        session_unset();
+        session_destroy();
+    }
+
+    // ดึงข้อมูลผู้ใช้จากฐานข้อมูล
+    $sql = "SELECT login.*, role.*, role_group.role_group_name 
+            FROM login 
+            INNER JOIN staff ON login.id_staff = staff.id_staff 
+            INNER JOIN role ON staff.id_role = role.id_role 
+            INNER JOIN role_group ON role.role_group = role_group.id_role_group 
+            WHERE login.username = ?";
     $stmt = $conn->prepare($sql);
-    $stmt->bind_param("ss", $username, $password);
+    $stmt->bind_param("s", $username);
     $stmt->execute();
     $result = $stmt->get_result();
 
     if ($result->num_rows > 0) {
         $row = $result->fetch_assoc();
-        $_SESSION['username'] = $username;
-        $_SESSION['role_group'] = $row['role_group'];
-        $_SESSION['role_group_name'] = $row['role_group_name'];
-        $_SESSION['role'] = $row['role'];
-        $_SESSION['last_activity'] = time();
+        $hashed_password = $row['password'];
 
-        // Generate a secure session token
-        $session_token = bin2hex(random_bytes(32));
-        $_SESSION['session_token'] = $session_token;
+        // ตรวจสอบรหัสผ่าน
+        if (password_verify($password, $hashed_password)) {
+            // สร้าง Session และ Cookie
+            $_SESSION['username'] = $username;
+            $_SESSION['role_group'] = $row['role_group'];
+            $_SESSION['role_group_name'] = $row['role_group_name'];
+            $_SESSION['role'] = $row['role'];
+            $_SESSION['last_activity'] = time();
 
-        // Set secure cookie with the session token
-        setcookie("session_token", $session_token, time() + (30 * 24 * 60 * 60), "/", "", true, true);
+            // Generate Session Token
+            $session_token = bin2hex(random_bytes(32));
+            $_SESSION['session_token'] = $session_token;
+            setcookie("session_token", $session_token, time() + (30 * 24 * 60 * 60), "/", "", true, true);
 
-        $login_user = $_SESSION['username'];
-        $history_sql = "INSERT INTO history (username, action, date_time) VALUES (?, 'Login', NOW())";
-        $history_stmt = $conn->prepare($history_sql);
-        $history_stmt->bind_param("s", $login_user);
-        $history_stmt->execute();
+            // บันทึกการ Login
+            $stmt = $conn->prepare("INSERT INTO history (username, action, date_time) VALUES (?, 'Login', NOW())");
+            $stmt->bind_param("s", $username);
+            $stmt->execute();
 
-        header("Location: pp-machine-3.php");
-        exit();
+            // Redirect
+            header("Location: pp-machine-3.php");
+            exit();
+        } else {
+            header("Location: pp-login.php?error=password_incorrect");
+            exit();
+        }
     } else {
         header("Location: pp-login.php?error=password_incorrect");
         exit();
@@ -47,8 +68,6 @@ if (isset($_POST['username']) && isset($_POST['password'])) {
 }
 require 'update/terminate.php';
 ?>
-
-
 
 <!DOCTYPE html>
 <html lang="en">
@@ -62,7 +81,7 @@ require 'update/terminate.php';
     <link href="css/simple-datatables@latest/dist/style.css" rel="stylesheet" />
     <link href="css/litepicker/dist/css/litepicker.css" rel="stylesheet" />
     <link href="css/styles.css" rel="stylesheet" />
-    <link rel="icon" type="image/x-icon" href="assets/img/favicon.png" />
+    <link rel="icon" type="image/x-icon" href="assets/img/login.png" />
     <script data-search-pseudo-elements defer src="js/font-awesome/5.15.3/js/all.min.js"></script>
     <script src="js/feather-icons/4.28.0/feather.min.js"></script>
     <script src="js/jquery/jquery.min.js"></script>

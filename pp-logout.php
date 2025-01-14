@@ -11,7 +11,7 @@ if(isset($_SESSION['username'])) {
 
     // SQL query เพื่อเพิ่มรายการประวัติการล็อกเอาท์ลงในฐานข้อมูล history
     $history_sql = "INSERT INTO history (username, action, date_time)
-                    VALUES ('$logout_user', 'Logout', NOW())";
+                    VALUES ('$logout_user', 'Logout (Log out yourself)', NOW())";
 
     // ทำการ execute SQL query
     $conn->query($history_sql);

@@ -45,6 +45,8 @@ if (isset($_SESSION['username'])) {
 }
 $conn->close(); // ปิดการเชื่อมต่อฐานข้อมูล
 ?>
+<link rel="stylesheet" href="css/pp-sidenav.css">
+
 <nav class="topnav navbar navbar-expand shadow justify-content-between justify-content-sm-start navbar-light bg-white" id="sidenavAccordion">
     <!-- Sidenav Toggle Button-->
     <button class="btn btn-icon btn-transparent-dark order-1 order-lg-0 me-2 ms-lg-2 me-lg-0" id="sidebarToggle"><i data-feather="menu"></i></button>
@@ -123,7 +125,35 @@ $conn->close(); // ปิดการเชื่อมต่อฐานข้�
                 <a class="dropdown-item dropdown-notifications-footer" href="#!">View All Alerts</a>
             </div>
         </li>
+        <!-- Dark Mode Toggle -->
+        <li class="nav-item ms-3">
+            <button class="btn btn-icon btn-transparent-dark" id="darkModeToggle" title="Toggle Dark Mode">
+                <i data-feather="moon"></i>
+            </button>
+        </li>
+        <script>
+            document.addEventListener("DOMContentLoaded", function () {
+                const darkModeToggle = document.getElementById("darkModeToggle");
+                const body = document.body;
 
+                // ตรวจสอบว่าผู้ใช้เคยเปิดโหมดมืดไว้หรือไม่
+                if (localStorage.getItem("darkMode") === "enabled") {
+                    body.classList.add("dark-mode");
+                }
+
+                // Event Listener สำหรับปุ่ม
+                darkModeToggle.addEventListener("click", function () {
+                    if (body.classList.contains("dark-mode")) {
+                        body.classList.remove("dark-mode");
+                        localStorage.setItem("darkMode", "disabled"); // บันทึกสถานะ
+                    } else {
+                        body.classList.add("dark-mode");
+                        localStorage.setItem("darkMode", "enabled"); // บันทึกสถานะ
+                    }
+                });
+            });
+
+        </script>
         <!-- Messages Dropdown-->
         <li class="nav-item dropdown no-caret d-none d-sm-block me-3 dropdown-notifications">
             <a class="btn btn-icon btn-transparent-dark dropdown-toggle" id="navbarDropdownMessages" href="javascript:void(0);" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i data-feather="mail"></i></a>
@@ -153,6 +183,16 @@ $conn->close(); // ปิดการเชื่อมต่อฐานข้�
         </li>
 
         <!-- User Dropdown-->
+        <style>
+            .dropdown-user-details-role {
+                font-size: 12px;
+                color: gray;
+            }
+            .dropdown-user-details-role1 {
+                font-size: 12px;
+                color: black;
+            }
+        </style>
         <li class="nav-item dropdown no-caret dropdown-user me-3 me-lg-4">
             <a class="btn btn-icon btn-transparent-dark dropdown-toggle" id="navbarDropdownUserImage" href="javascript:void(0);" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                 <img class="img-fluid" src="<?php echo $profileImagePath; ?>" />
@@ -161,7 +201,15 @@ $conn->close(); // ปิดการเชื่อมต่อฐานข้�
                 <h6 class="dropdown-header d-flex align-items-center">
                     <img class="dropdown-user-img" src="<?php echo $profileImagePath; ?>" />
                     <div class="dropdown-user-details">
-                        <div class="dropdown-user-details-name"><?php echo $name, " ", $surname; ?></div>
+                        <div class="dropdown-user-details-name">
+                            <?php echo $name . " " . $surname; ?>
+                        </div>
+                        <div class="dropdown-user-details-role">
+                            Logged in as Role Group: <?php echo $role_group; ?><br>
+                        </div>
+                        <div class="dropdown-user-details-role1">
+                            Role: <?php echo $role; ?>
+                        </div>
                     </div>
                 </h6>
                 <div class="dropdown-divider"></div>
@@ -173,7 +221,6 @@ $conn->close(); // ปิดการเชื่อมต่อฐานข้�
                     <div class="dropdown-item-icon"><i data-feather="log-out"></i></div>
                     Logout
                 </a>
-                <script src="js/logoutpopup.js"></script>
             </div>
         </li>
     </ul>

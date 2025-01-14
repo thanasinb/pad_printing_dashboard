@@ -71,7 +71,10 @@ require 'pp-session-start.php'
                 </div>
                 <!-- Modals and other elements -->
                 <!-- Modal Content here... -->
-
+                <script>
+                    document.addEventListener('click', () => checkSession());
+                    document.addEventListener('input', () => checkSession());
+                </script>
                 <script src="js/bootstrap@5.0.1/dist/js/bootstrap.bundle.min.js"></script>
                 <script src="js/scripts.js"></script>
                 <script src="js/simple-datatables@latest" type="text/javascript"></script>

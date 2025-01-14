@@ -20,8 +20,8 @@ if (isset($start_date) && isset($end_date) && !empty($start_date) && !empty($end
     // ป้องกัน SQL Injection โดยการเตรียมคำสั่ง SQL
     $stmt = $conn->prepare("SELECT id_machine, COUNT(DISTINCT id_task) as job_count, GROUP_CONCAT(DISTINCT id_task) as tasks 
                         FROM activity 
-                        WHERE DATE(time_start) BETWEEN ? AND ? 
-                        OR DATE(time_close) BETWEEN ? AND ? 
+                        WHERE DATE(date_eff) BETWEEN ? AND ? 
+                        OR DATE(date_eff) BETWEEN ? AND ? 
                         GROUP BY id_machine");
 
     if (!$stmt) {

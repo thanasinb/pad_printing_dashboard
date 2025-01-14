@@ -1,0 +1,41 @@
+/* ปรับขนาดตาราง */
+.table-bordered {
+    border: 1px solid #dee2e6;
+}
+.table-bordered th, .table-bordered td {
+    border: 1px solid #dee2e6;
+    vertical-align: middle;
+    padding: 10px;
+}
+
+/* ตรงกลางข้อความ */
+.text-center {
+    text-align: center;
+}
+
+/* ปรับสีพื้นหลังหัวข้อ */
+thead tr {
+    background-color: #ffc107; /* เปลี่ยนสีเหลืองให้เข้มขึ้น */
+    font-weight: bold;
+    color: #000; /* ใช้สีตัวอักษรเป็นสีดำ */
+}
+
+/* ปรับสีพื้นหลังแถวสลับ */
+tbody tr:nth-child(odd) td {
+    background-color: #d6d6d6; /* สีเทาเข้มขึ้น */
+    color: #000; /* สีตัวอักษร */
+}
+tbody tr:nth-child(even) td {
+    background-color: #e6e6e6; /* สีเทาอ่อน */
+    color: #000; /* สีตัวอักษร */
+}
+
+/* กำหนดสีข้อความ */
+tbody td {
+    font-weight: 500; /* เพิ่มความหนาของข้อความ */
+}
+
+/* กำหนดระยะห่างใน Modal */
+.modal-content {
+    padding: 15px;
+}

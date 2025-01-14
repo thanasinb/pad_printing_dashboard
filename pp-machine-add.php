@@ -89,7 +89,10 @@ require 'pp-session-start.php';
         <script src="js/litepicker/dist/bundle.js"></script>
         <script src="js/litepicker.js"></script>
     <script type="text/javascript" src="js/majorette/pp-session.js"></script>
-
+    <script>
+        document.addEventListener('click', () => checkSession());
+        document.addEventListener('input', () => checkSession());
+    </script>
     <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="js/majorette/chart-script.js"></script>

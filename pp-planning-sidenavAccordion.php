@@ -197,13 +197,33 @@ $conn->close(); // ปิดการเชื่อมต่อฐานข้�
             </div>
         </li>
         <!-- User Dropdown-->
+        <style>
+            .dropdown-user-details-role {
+                font-size: 12px;
+                color: gray;
+            }
+            .dropdown-user-details-role1 {
+                font-size: 12px;
+                color: black;
+            }
+        </style>
         <li class="nav-item dropdown no-caret dropdown-user me-3 me-lg-4">
-            <a class="btn btn-icon btn-transparent-dark dropdown-toggle" id="navbarDropdownUserImage" href="javascript:void(0);" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><img class="img-fluid" src="assets/img/illustrations/profiles/profile-1.png" /></a>
+            <a class="btn btn-icon btn-transparent-dark dropdown-toggle" id="navbarDropdownUserImage" href="javascript:void(0);" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                <img class="img-fluid" src="<?php echo $profileImagePath; ?>" />
+            </a>
             <div class="dropdown-menu dropdown-menu-end border-0 shadow animated--fade-in-up" aria-labelledby="navbarDropdownUserImage">
                 <h6 class="dropdown-header d-flex align-items-center">
-                    <img class="dropdown-user-img" src="assets/img/illustrations/profiles/profile-1.png" />
+                    <img class="dropdown-user-img" src="<?php echo $profileImagePath; ?>" />
                     <div class="dropdown-user-details">
-                        <div class="dropdown-user-details-name"><?php echo $name,"   ",$surname;?></div>
+                        <div class="dropdown-user-details-name">
+                            <?php echo $name . " " . $surname; ?>
+                        </div>
+                        <div class="dropdown-user-details-role">
+                            Logged in as Role Group: <?php echo $role_group; ?><br>
+                        </div>
+                        <div class="dropdown-user-details-role1">
+                            Role: <?php echo $role; ?>
+                        </div>
                     </div>
                 </h6>
                 <div class="dropdown-divider"></div>
@@ -211,9 +231,7 @@ $conn->close(); // ปิดการเชื่อมต่อฐานข้�
                     <div class="dropdown-item-icon"><i data-feather="settings"></i></div>
                     Account
                 </a>
-
-                <script src="js/logoutpopup.js"></script>
-                <a class="dropdown-item" href="pp-logout.php"onclick="confirmLogout()">
+                <a class="dropdown-item" href="pp-logout.php" onclick="confirmLogout()">
                     <div class="dropdown-item-icon"><i data-feather="log-out"></i></div>
                     Logout
                 </a>

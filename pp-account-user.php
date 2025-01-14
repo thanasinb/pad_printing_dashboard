@@ -27,6 +27,8 @@ require 'pp-session-start.php'
     <script type="text/javascript" src="js/majorette/pp-account-user.js"></script>
     <!-- css style -->
     <link href="css/pp-account-user.css" rel="stylesheet" />
+    <link rel="stylesheet" href="css/pp-sidenav.css">
+
     <!--        <script src="js/reorder-columns/jquery.dragtable.js"></script>-->
     <!--        <script src="js/reorder-columns/bootstrap-table.min.js"></script>-->
     <!--        <script src="js/reorder-columns/bootstrap-table-reorder-columns.js"></script>-->
@@ -36,6 +38,10 @@ require 'pp-session-start.php'
     <!--        <link rel="stylesheet" href="css/datetimepicker4/tempusdominus-bootstrap-4.min.css" />-->
     <!--        <script type="text/javascript" src="js/majorette/pp-machine-currentTaskModal.js"></script>-->
     <!--        <script type="text/javascript" src="js/majorette/pp-machine-refresh.js"></script>-->
+
+    <link rel="stylesheet" href="https://code.jquery.com/ui/1.13.2/themes/base/jquery-ui.css">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://code.jquery.com/ui/1.13.2/jquery-ui.min.js"></script>
 </head>
 <body class="nav-fixed">
 <?php require 'pp-setting-sidenavAccordion.php'; ?>
@@ -111,7 +117,12 @@ require 'pp-session-start.php'
                                             <tr>
                                                 <td>Password: </td>
                                                 <td>
-                                                    <input type="text" id="modal_password" name="modal_password">
+                                                    <div style="position: relative; display: flex; align-items: center;">
+                                                        <input type="password" id="modal_password" name="modal_password" class="form-control" placeholder="Please enter new password">
+                                                        <button type="button" id="togglePassword" style="background: none; border: none; margin-left: 5px;">
+                                                            <i class="fas fa-eye eye-icon"></i>
+                                                        </button>
+                                                    </div>
                                                 </td>
                                             </tr>
                                         </table>
@@ -160,7 +171,12 @@ require 'pp-session-start.php'
                                         <form id="add_user_form">
                                             <div class="mb-3">
                                                 <label for="new_id_staff" class="form-label">Staff ID</label>
-                                                <input type="text" class="form-control" id="new_id_staff" name="new_id_staff" required>
+                                                <input type="text" class="form-control" id="new_id_staff" name="new_id_staff" autocomplete="off">
+                                                <div id="id_staff_suggestions" class="list-group" style="position: absolute; z-index: 10;"></div>
+                                            </div>
+                                            <div class="mb-3">
+                                                <label for="preview_name" class="form-label">Name Preview</label>
+                                                <input type="text" id="preview_name" class="form-control" placeholder="First Name+Last Name" readonly>
                                             </div>
                                             <div class="mb-3">
                                                 <label for="new_username" class="form-label">Username</label>
@@ -168,31 +184,159 @@ require 'pp-session-start.php'
                                             </div>
                                             <div class="mb-3">
                                                 <label for="new_password" class="form-label">Password</label>
-                                                <input type="password" class="form-control" id="new_password" name="new_password" required>
+                                                <div style="display: flex; align-items: center;">
+                                                    <input type="password" class="form-control" id="new_password" name="new_password" required style="flex: 1; margin-right: 5px;">
+                                                    <button type="button" id="togglePasswordAdd" style="background: none; border: none; cursor: pointer;">
+                                                        <i class="fas fa-eye"></i>
+                                                    </button>
+                                                </div>
                                             </div>
+
                                             <button type="submit" class="btn btn-primary">Add User</button>
                                         </form>
                                     </div>
                                 </div>
                             </div>
                         </div>
-
-
                         <script>
-                            $(document).ready(function(){
-                                $('#add_user_form').on('submit', function(event){
-                                    event.preventDefault();
+                            document.addEventListener("DOMContentLoaded", function () {
+                                const togglePasswordAdd = document.getElementById("togglePasswordAdd");
+                                const passwordFieldAdd = document.getElementById("new_password");
 
+                                togglePasswordAdd.addEventListener("click", function () {
+                                    // สลับ type ระหว่าง password และ text
+                                    const type = passwordFieldAdd.getAttribute("type") === "password" ? "text" : "password";
+                                    passwordFieldAdd.setAttribute("type", type);
+
+                                    // สลับไอคอน
+                                    this.innerHTML = type === "password"
+                                        ? '<i class="fas fa-eye"></i>'
+                                        : '<i class="fas fa-eye-slash"></i>';
+                                });
+                            });
+                        </script>
+                        <script>
+                            document.addEventListener("DOMContentLoaded", function () {
+                                const togglePassword = document.getElementById("togglePassword");
+                                const passwordField = document.getElementById("modal_password");
+                                const placeholderText = document.getElementById("hidden_placeholder");
+                                const confirmButton = document.querySelector("#modal_button_confirm");
+
+                                // สลับการแสดง/ซ่อนรหัสผ่าน
+                                togglePassword.addEventListener("click", function () {
+                                    const type = passwordField.getAttribute("type") === "password" ? "text" : "password";
+                                    passwordField.setAttribute("type", type);
+                                    this.innerHTML = type === "password"
+                                        ? '<i class="fas fa-eye"></i>'
+                                        : '<i class="fas fa-eye-slash"></i>';
+                                });
+
+                                // ซ่อน placeholder เมื่อเริ่มพิมพ์
+                                passwordField.addEventListener("input", function () {
+                                    placeholderText.style.display = passwordField.value.length > 0 ? "none" : "block";
+                                });
+
+                                // ตรวจสอบก่อนกด Confirm
+                                confirmButton.addEventListener("click", function (event) {
+                                    if (passwordField.value.trim() === "") {
+                                        alert("กรุณาใส่รหัสผ่านใหม่ก่อนกด Confirm!");
+                                        event.preventDefault(); // ป้องกันการส่งฟอร์ม
+                                    }
+                                });
+                            });
+                        </script>
+                        <script>
+
+                            document.addEventListener('click', () => checkSession());
+                            document.addEventListener('input', () => checkSession());
+                            </script>
+                            <script>
+                                $(document).ready(function() {
+                                    $('#new_id_staff').on('input', function() {
+                                        var staffId = $(this).val();
+                                        if (staffId.trim() !== "") {
+                                            $.ajax({
+                                                url: 'get-staff-details.php', // ไฟล์ PHP สำหรับดึงข้อมูล staff
+                                                type: 'POST',
+                                                data: { id_staff: staffId },
+                                                success: function(response) {
+                                                    var data = JSON.parse(response);
+                                                    if (data.statusCode === 200) {
+                                                        $('#preview_name').val(data.name_first + ' ' + data.name_last);
+                                                    } else {
+                                                        $('#preview_name').val('No staff found');
+                                                    }
+                                                },
+                                                error: function() {
+                                                    $('#preview_name').val('Error fetching staff details');
+                                                }
+                                            });
+                                        } else {
+                                            $('#preview_name').val(''); // รีเซ็ตหากไม่มีค่า
+                                        }
+                                    });
+                                });
+
+                        </script>
+                        <script>
+                            $('#add_user_form').on('submit', function(event) {
+                                event.preventDefault();
+
+                                $.ajax({
+                                    url: 'pp-account-user-add.php',
+                                    method: 'POST',
+                                    data: $(this).serialize(),
+                                    success: function(response) {
+                                        if (response.statusCode === 200) {
+                                            alert('User added successfully');
+                                            location.reload();
+                                        } else {
+                                            alert('Error: ' + response.message);
+                                        }
+                                    },
+                                    error: function() {
+                                        alert('Error occurred while adding user.');
+                                    }
+                                });
+                            });
+                        </script>
+                        <script>
+                            $(document).ready(function() {
+                                $('#new_id_staff').on('input', function() {
+                                    var query = $(this).val();
+
+                                    if (query.length > 0) {
+                                        $.ajax({
+                                            url: 'fetch-staff-id.php',
+                                            method: 'POST',
+                                            data: { query: query },
+                                            success: function(data) {
+                                                $('#id_staff_suggestions').html(data);
+                                            }
+                                        });
+                                    } else {
+                                        $('#id_staff_suggestions').html('');
+                                    }
+                                });
+
+                                // เมื่อคลิกเลือก Staff ID
+                                $(document).on('click', '.suggestion-item', function() {
+                                    var staffId = $(this).text();
+                                    $('#new_id_staff').val(staffId);
+                                    $('#id_staff_suggestions').html('');
+
+                                    // ดึงข้อมูลชื่อจริงและนามสกุล
                                     $.ajax({
-                                        url: 'pp-account-user-add.php', // เปลี่ยนเส้นทางไปยังไฟล์ php ที่ทำงานเพื่อบันทึกข้อมูล
+                                        url: 'fetch-staff-details.php', // ไฟล์ PHP ดึงข้อมูล Staff ตาม ID
                                         method: 'POST',
-                                        data: $(this).serialize(),
-                                        success: function(data){
-                                            $('#add_user_modal').modal('hide');
-                                            location.reload(); // รีโหลดหน้าเพื่อดูผลลัพธ์
-                                        },
-                                        error: function(){
-                                            alert('Error adding user');
+                                        data: { id_staff: staffId },
+                                        success: function(response) {
+                                            var data = JSON.parse(response);
+                                            if (data.statusCode === 200) {
+                                                $('#preview_name').val(data.name_first + ' ' + data.name_last);
+                                            } else {
+                                                $('#preview_name').val('Name not found');
+                                            }
                                         }
                                     });
                                 });
@@ -205,7 +349,7 @@ require 'pp-session-start.php'
 <script src="js/litepicker/dist/bundle.js"></script>
 <script src="js/litepicker.js"></script>
                       <script  src="js/majorette/pp-time-stamp.js"></script>
-                        <script type="text/javascript" src="js/majorette/pp-session.js"></script>
+<!--                        <script type="text/javascript" src="js/majorette/pp-session.js"></script>-->
 
 
 </body>

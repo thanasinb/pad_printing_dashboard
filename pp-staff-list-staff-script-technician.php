@@ -15,31 +15,31 @@ $result_staff = $conn->query($sql);
 
 while($data_staff = $result_staff->fetch_assoc()) {
     echo "<tr class='text-black fw-bold row_staff'>";
-    echo "<td class='id_staff'>" . $data_staff['id_staff'] . "</td>";
-    echo "<td class='rfid'>" . $data_staff['id_rfid'] . "</tdclass>";
-    echo "<td class='prefix'>";
+    echo "<td class='id_staff text-center'>" . $data_staff['id_staff'] . "</td>";
+    echo "<td class='rfid text-center'>" . $data_staff['id_rfid'] . "</td>";
+    echo "<td class='prefix text-center'>";
     $prefix = intval($data_staff['prefix']);
-    if ($prefix==1)
+    if ($prefix == 1)
         echo "นาย";
-    elseif ($prefix==2)
+    elseif ($prefix == 2)
         echo "นาง";
-    elseif ($prefix==3)
+    elseif ($prefix == 3)
         echo "นางสาว";
-    echo "<td>". $data_staff['name_first'] ." ". $data_staff['name_last']."</td>";
+    echo "</td>";
+    echo "<td class='text-center'>" . $data_staff['name_first'] . " " . $data_staff['name_last'] . "</td>";
 
-    echo "<td class='role'>";
+    echo "<td class='role text-center'>";
     $id_role = intval($data_staff['id_role']);
-    if ($id_role==6)
+    if ($id_role == 6)
         echo "Foreman";
-    elseif ($id_role==9)
+    elseif ($id_role == 9)
         echo "Manager";
-    elseif ($id_role==10)
+    elseif ($id_role == 10)
         echo "Engineer";
     echo "</td>";
-    echo "<td class='shif' >" . $data_staff['id_shif'] . "</td>";
+    echo "<td class='shif text-center'>" . $data_staff['id_shif'] . "</td>";
     echo "<td></td>";
-//    echo "<td>" . "<div class='avatar avatar-xl me-3 bg-gray-200'><img class='avatar-img img-fluid' src='./images/staffs/" . $data_staff['staff_img'] . "'  alt=' ' /></div>" . "</td>";
-     echo '<td class="text-center">
+    echo '<td class="text-center">
                     <button type="button"
                             class="btn btn-datatable btn-icon text-black me-2 staff_edit"
                             data-id_staff="' . $data_staff['id_staff'] . '"
@@ -57,7 +57,6 @@ while($data_staff = $result_staff->fetch_assoc()) {
                   </td>';
 
     echo "</tr>";
-
 }
 require 'update/terminate.php';
 ?>

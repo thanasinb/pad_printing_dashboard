@@ -20,7 +20,7 @@
         <i data-feather="shield"></i> Role
     </th>
     <th rowspan="2" class="text-center" scope="col" id="dash_machine">
-        <i data-feather="users"></i> Group
+        <i data-feather="users"></i> Role Group
     </th>
     <th rowspan="2" class="text-center" scope="col" id="dash_machine">
         <i data-feather="settings"></i> Operation

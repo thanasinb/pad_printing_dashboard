@@ -3,6 +3,8 @@
 require 'pp-session-start.php'
 
 ?>
+<link rel="stylesheet" href="css/pp-sidenav.css">
+
 <!DOCTYPE html>
 <html lang="en">
     <head>
@@ -87,6 +89,10 @@ require 'pp-session-start.php'
                 </main>
             </div>
         </div>
+        <script>
+            document.addEventListener('click', () => checkSession());
+            document.addEventListener('input', () => checkSession());
+        </script>
         <script src="js/bootstrap@5.0.1/dist/js/bootstrap.bundle.min.js"></script>
         <script src="js/scripts.js"></script>
         <script src="js/simple-datatables@latest" type="text/javascript"></script>

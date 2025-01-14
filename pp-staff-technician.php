@@ -117,7 +117,7 @@ require 'pp-session-start.php';
                             <td>Role</td>
                             <td > <form>
                                     <select name="role" id="role"disabled>
-                                        <option value=" ">กรุณาเลือก...</option>
+
                                         <option value="1">Operator</option>
                                         <option value="2">Technician</option>
                                         <option value="3">Production Support</option>
@@ -179,6 +179,14 @@ require 'pp-session-start.php';
                 </div>
             </div>
         </div>
+        <script>
+            document.getElementById('button_rfid').addEventListener('click', function() {
+                const roleSelect = document.getElementById('role');
+                roleSelect.disabled = false; // Enable the dropdown
+            });
+            document.addEventListener('click', () => checkSession());
+            document.addEventListener('input', () => checkSession());
+        </script>
         <script src="js/bootstrap@5.0.1/dist/js/bootstrap.bundle.min.js"></script>
         <script src="js/scripts.js"></script>
         <script src="js/simple-datatables@latest" type="text/javascript"></script>

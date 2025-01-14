@@ -4,48 +4,37 @@ require 'update/establish.php';
 
 ini_set('session.gc_maxlifetime', 3600);
 
+// ตรวจสอบว่า Session หมดอายุหรือยัง
 if (isset($_SESSION['last_activity']) && (time() - $_SESSION['last_activity'] > 3600)) {
-    $logout_user = $_SESSION['username'];
+    $logout_user = $_SESSION['username'] ?? 'Unknown User'; // เก็บ username ก่อนทำลาย Session
 
-    $stmt = $conn->prepare("INSERT INTO history (username, action, date_time) VALUES (?, 'Logout', NOW())");
+    // บันทึก Logout (session expired)
+    $stmt = $conn->prepare("INSERT INTO history (username, action, date_time) VALUES (?, 'Logout (session expired)', NOW())");
     $stmt->bind_param("s", $logout_user);
-
-    if ($stmt->execute()) {
-        session_unset();
-        session_destroy();
-
-        if (isset($_COOKIE['session_token'])) {
-            setcookie("session_token", "", time() - 3600, "/");
-        }
-
-        echo "<script>alert('Session หมดอายุแล้ว');</script>";
-        echo "<script>window.location.href = 'pp-logout-session.php';</script>";
-        exit();
-    } else {
-        error_log("Failed to insert logout history: " . $stmt->error);
-    }
-
+    $stmt->execute();
     $stmt->close();
-}
 
-$_SESSION['last_activity'] = time();
+    // ทำลาย Session
+    session_unset();
+    session_destroy();
 
-if (!isset($_SESSION['username'])) {
+    // ลบ Cookie
     if (isset($_COOKIE['session_token'])) {
-        $session_token = $_COOKIE['session_token'];
+        setcookie("session_token", "", time() - 3600, "/");
+    }
 
-        // Validate the session token
-        if (hash_equals($_SESSION['session_token'], $session_token)) {
-            $_SESSION['last_activity'] = time();
-        } else {
-            echo "<script>alert('Session หมดอายุแล้ว');</script>";
-            echo "<script>window.location.href = 'pp-logout-session.php';</script>";
-            exit();
-        }
-    } else {
-        echo "<script>alert('Session หมดอายุแล้วจ้า');</script>";
-        echo "<script>window.location.href = 'pp-logout-session.php';</script>";
+    // ตรวจสอบว่าเป็น AJAX Request หรือไม่
+    if (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) === 'xmlhttprequest') {
+        echo json_encode(['status' => 'expired', 'message' => 'Session หมดอายุแล้ว']);
         exit();
     }
+
+    // Redirect สำหรับคำขอปกติ
+    echo "<script>alert('Session ของคุณหมดอายุแล้ว กรุณาเข้าสู่ระบบอีกครั้ง');</script>";
+    echo "<script>window.location.href = 'pp-logout-session.php';</script>";
+    exit();
 }
+
+// อัปเดตกิจกรรมล่าสุด
+$_SESSION['last_activity'] = time();
 ?>

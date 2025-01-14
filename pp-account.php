@@ -220,26 +220,41 @@ if (isset($_SESSION['username'])) {
         }
     }
 
-    $('#uploadImageForm').on('submit', function(e) {
-        e.preventDefault(); // ป้องกันการส่ง form แบบปกติ
+    $('#uploadImageForm').on('submit', function (e) {
+        e.preventDefault(); // ป้องกันการส่งฟอร์มแบบปกติ
         var formData = new FormData(this);
 
         $.ajax({
-            url: 'upload.php',
+            url: 'upload.php', // URL ของไฟล์ PHP ที่จัดการอัปโหลด
             type: 'POST',
             data: formData,
-            success: function(data) {
-                if (data.startsWith("ERROR")) {
-                    alert(data);
+            processData: false,
+            contentType: false,
+            success: function (response) {
+                console.log("Response from upload.php:", response); // Debug response
+
+                if (response.startsWith("ERROR")) {
+                    alert(response); // แสดงข้อผิดพลาด
                 } else {
-                    // อัปเดตภาพใหม่ในหน้าโดยไม่ต้องรีเฟรช
-                    $('#preview').attr('src', data); // อัปเดตเส้นทางของภาพใหม่
-                    $('#previewImage').attr('src', data); // อัปเดตในส่วนอื่นหากจำเป็น
+                    const timestamp = new Date().getTime();
+                    const newImageUrl = response + '?t=' + timestamp;
+
+                    console.log("New image URL:", newImageUrl); // Debug URL ใหม่
+
+                    // อัปเดตภาพในหน้าโปรไฟล์
+                    $('#preview').attr('src', newImageUrl); // อัปเดตภาพในหน้าโปรไฟล์
+                    $('#previewImage').attr('src', newImageUrl); // อัปเดตภาพใน navbar
+
+                    // อัปเดตภาพใน Sidenav
+                    $('#sidenavUserImage').attr('src', newImageUrl); // อัปเดตภาพใน Sidenav
+                    $('#dropdownUserImage').attr('src', newImageUrl); // อัปเดตภาพใน Dropdown
+
+                    alert('Profile updated successfully!');
                 }
             },
-            cache: false,
-            contentType: false,
-            processData: false
+            error: function () {
+                alert('Error updating profile image.');
+            }
         });
     });
 
@@ -345,7 +360,10 @@ if (isset($_SESSION['username'])) {
     function cancelCrop() {
         document.getElementById('cropContainer').style.display = 'none'; // ซ่อนพื้นที่ครอบ
         document.getElementById('imageFile').value = ''; // ล้างค่าไฟล์ที่ถูกเลือก
+
     }
+    document.addEventListener('click', () => checkSession());
+    document.addEventListener('input', () => checkSession());
 </script>
 
 
@@ -356,7 +374,7 @@ if (isset($_SESSION['username'])) {
 <script src="/projects/mjrqr/assets/demo/chart-pie-demo.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/simple-datatables@latest" crossorigin="anonymous"></script>
 <script src="/projects/mjrqr/js/datatables/datatables-simple-demo.js"></script>
-<script type="text/javascript" src="js/majorette/pp-session.js"></script>
+<!--<script type="text/javascript" src="js/majorette/pp-session.js"></script>-->
 
 
 

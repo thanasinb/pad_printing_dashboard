@@ -80,7 +80,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     <link href="css/simple-datatables@latest/dist/style.css" rel="stylesheet" />
     <link href="css/litepicker/dist/css/litepicker.css" rel="stylesheet" />
     <link href="css/styles.css" rel="stylesheet" />
-    <link rel="icon" type="image/x-icon" href="assets/img/favicon.png" />
+    <link rel="icon" type="image/x-icon" href="assets/img/3.png" />
     <script data-search-pseudo-elements defer src="js/font-awesome/5.15.3/js/all.min.js"></script>
     <script src="js/feather-icons/4.28.0/feather.min.js"></script>
     <link rel="stylesheet" href="css/majorette.css">

@@ -25,34 +25,47 @@ require 'pp-session-start.php';
     <script type="text/javascript" src="js/majorette/pp-setting-dt.js"></script>
     <script type="text/javascript" src="js/majorette/pp-machine-refresh-3.js"></script>
     <script type="text/javascript" src="js/majorette/pp-machine-clock.js"></script>
+    <!-- PDF-->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.4.0/jspdf.umd.min.js"></script>
+    <!-- session check -->
+    <link rel="stylesheet" href="css/pp-sidenav.css">
+
+
     <style>
         @media print {
-            /* CSS สำหรับการพิมพ์ */
             body * {
                 visibility: hidden;
             }
+
             #printableArea, #printableArea * {
                 visibility: visible;
             }
+
             #printableArea {
                 position: absolute;
                 left: 0;
                 top: 0;
                 display: grid;
-                grid-template-columns: repeat(6, 1fr); /* กำหนดจำนวนคอลัมน์ในกริด */
-                gap: 10px;
+                grid-template-columns: repeat(3, 1fr); /* กำหนดจำนวนคอลัมน์ในกริด */
+                gap: 20px; /* เพิ่มระยะห่างระหว่างแต่ละ QR Code */
                 padding: 20px;
             }
+
             .qrcode-item {
                 display: flex;
                 flex-direction: column;
                 align-items: center;
-                page-break-inside: avoid;
-                break-inside: avoid;
+                justify-content: center;
+                padding: 10px;
+                border: 2px solid #000; /* เพิ่มกรอบสี่เหลี่ยมสีดำ */
+                border-radius: 8px; /* มุมมนของกรอบ */
+                page-break-inside: avoid; /* ป้องกันไม่ให้ข้ามหน้ากระดาษ */
+                break-inside: avoid; /* รองรับในเบราว์เซอร์ใหม่ */
             }
+
             .qr-code-value {
                 font-family: 'Arial', sans-serif;
-                font-size: 12px;
+                font-size: 14px;
                 color: #333;
                 text-align: center;
                 margin-top: 10px;
@@ -213,12 +226,13 @@ require 'pp-session-start.php';
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 <script src="js/litepicker/dist/bundle.js"></script>
 <script src="js/litepicker.js"></script>
-<script type="text/javascript" src="js/majorette/pp-session.js"></script>
+<!--<script type="text/javascript" src="js/majorette/pp-session.js"></script>-->
 <script>
     function showDownloadPrintButtons() {
         document.getElementById('downloadBtn').style.display = 'inline-block';
         document.getElementById('printBtn').style.display = 'inline-block';
     }
+ 
 </script>
 </body>
 </html>

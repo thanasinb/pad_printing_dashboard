@@ -8,38 +8,39 @@ $result_staff = $conn->query($sql);
 
 while($data_staff = $result_staff->fetch_assoc()) {
     echo "<tr class='text-black fw-bold row_staff'>";
-    echo "<td class='id_staff'>" . $data_staff['id_staff'] . "</td>";
-    echo "<td class='rfid'>" . $data_staff['id_rfid'] . "</tdclass>";
-    echo "<td class='prefix'>";
+    echo "<td class='id_staff text-center'>" . $data_staff['id_staff'] . "</td>";
+    echo "<td class='rfid text-center'>" . $data_staff['id_rfid'] . "</td>";
+    echo "<td class='prefix text-center'>";
     $prefix = intval($data_staff['prefix']);
-    if ($prefix==1)
+    if ($prefix == 1)
         echo "นาย";
-    elseif ($prefix==2)
+    elseif ($prefix == 2)
         echo "นาง";
-    elseif ($prefix==3)
+    elseif ($prefix == 3)
         echo "นางสาว";
-    echo "<td>". $data_staff['name_first'] ." ". $data_staff['name_last']."</td>";
+    echo "</td>";
+    echo "<td class='text-center'>" . $data_staff['name_first'] . " " . $data_staff['name_last'] . "</td>";
 
-    echo "<td class='role'>";
+    echo "<td class='role text-center'>";
     $id_role = intval($data_staff['id_role']);
-    if ($id_role==1)
+    if ($id_role == 1)
         echo "Operator";
-    elseif ($id_role==3)
+    elseif ($id_role == 3)
         echo "Production Support";
-    elseif ($id_role==4)
+    elseif ($id_role == 4)
         echo "Instructor";
-    elseif ($id_role==5)
+    elseif ($id_role == 5)
         echo "Senior Instructor";
-    elseif ($id_role==6)
+    elseif ($id_role == 6)
         echo "Foreman";
-    elseif ($id_role==7)
+    elseif ($id_role == 7)
         echo "Leader";
-    elseif ($id_role==9)
+    elseif ($id_role == 9)
         echo "Manager";
-    elseif ($id_role==10)
+    elseif ($id_role == 10)
         echo "Engineering";
     echo "</td>";
-    echo "<td class='shif' >" . $data_staff['id_shif'] . "</td>";
+    echo "<td class='shif text-center'>" . $data_staff['id_shif'] . "</td>";
     echo "<td></td>";
     echo '<td class="text-center">
                 <button type="button" 
@@ -57,7 +58,6 @@ while($data_staff = $result_staff->fetch_assoc()) {
                     <i class="fas fa-trash"></i>
                 </button>
               </td>';
-
     echo "</tr>";
 }
 // ปิดการเชื่อมต่อกับฐานข้อมูล

@@ -108,70 +108,59 @@ error_reporting(E_ERROR | E_WARNING | E_PARSE);
                         <td></td>
                     </tr>
                     <tr>
-                        <td>Role Group</td>
-                        <td>
-                            <form>
-                                <select name="role_group" id="id_role_group"disabled>
-                                    <option value=" ">กรุณาเลือก...</option>
-                                    <option value="1">Operator</option>
-                                    <option value="2">Foreman</option>
-                                    <option value="3">Admin</option>
-                                </select>
-                            </form>
-                        </td>
-                        <td></td>
-                    </tr>
-                    <tr>
                         <td>Role</td>
                         <td>
                             <form>
                                 <select name="role" id="id_role"disabled>
-                                    <option value=" ">กรุณาเลือก...</option>
+
                                 </select>
                             </form>
                         </td>
-                        <td></td>
                     </tr>
                 </table>
 
                 <script>
-                    document.getElementById('id_role_group').addEventListener('change', function() {
-                        const roleGroup = this.value;
+                    document.addEventListener('DOMContentLoaded', function() {
                         const roleSelect = document.getElementById('id_role');
+                        const changeButton = document.getElementById('button_rfid');
+
+
+                        // Define all available options
+                        const options = [
+                            { value: '1', text: 'Operator' },
+                            { value: '2', text: 'Technician' },
+                            { value: '3', text: 'Production Support' },
+                            { value: '4', text: 'Instructor' },
+                            { value: '5', text: 'Senior Instructor' },
+                            { value: '6', text: 'Foreman' },
+                            { value: '7', text: 'Leader' },
+                            { value: '8', text: 'Senior Technician' },
+                            { value: '9', text: 'Manager' },
+                            { value: '10', text: 'Engineering' }
+                        ];
+
+                        // Initial population of dropdown (read-only by default)
                         roleSelect.innerHTML = ''; // Clear previous options
-
-                        let options = [];
-                        if (roleGroup === '1') {
-                            options = [
-                                { value: '1', text: 'Operator' },
-                                { value: '2', text: 'Technician' },
-                                { value: '3', text: 'Production Support' },
-                                { value: '4', text: 'Instructor' },
-                                { value: '5', text: 'Senior Instructor' },
-                                { value: '7', text: 'Leader' },
-                                { value: '8', text: 'Senior Technician' }
-                            ];
-                        } else if (roleGroup === '2') {
-                            options = [
-                                { value: '6', text: 'Foreman' }
-                            ];
-                        } else if (roleGroup === '3') {
-                            options = [
-                                { value: '9', text: 'Manager' },
-                                { value: '10', text: 'Engineering' }
-                            ];
-                        }
-
                         options.forEach(option => {
                             const opt = document.createElement('option');
                             opt.value = option.value;
                             opt.textContent = option.text;
+                           
                             roleSelect.appendChild(opt);
                         });
 
-                        roleSelect.disabled = false; // Enable the role select
+                        // Disable the dropdown and Save button initially
+                        roleSelect.disabled = true;
+
+
+                        // Enable dropdown and Save button when Change button is clicked
+                        changeButton.addEventListener('click', function() {
+                            roleSelect.disabled = false; // Enable the dropdown
+
+                        });
                     });
                 </script>
+
                 <tr>
                     <td>Shif</td>
                     <td > <form>
@@ -219,6 +208,10 @@ error_reporting(E_ERROR | E_WARNING | E_PARSE);
         </div>
     </div>
 </div>
+<script>
+    document.addEventListener('click', () => checkSession());
+    document.addEventListener('input', () => checkSession());
+</script>
 <script src="js/bootstrap@5.0.1/dist/js/bootstrap.bundle.min.js"></script>
 <script src="js/scripts.js"></script>
 <script src="js/simple-datatables@latest" type="text/javascript"></script>
