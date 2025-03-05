@@ -1,48 +1,78 @@
 <?php
-session_start(); // เริ่ม session ทุกครั้งที่ใช้งาน session variables
+session_start(); // เริ่ม session เพื่อใช้งาน username
 
-$error_code = 0;
+// เปิดการแสดงข้อผิดพลาดสำหรับการ debug
+error_reporting(E_ALL);
+ini_set('display_errors', 1);
 
-// เชื่อมต่อกับฐานข้อมูล
 require 'update/establish.php';
 
-// ตรวจสอบว่ามี id_code_downtime นี้ในฐานข้อมูลหรือไม่
+// ตรวจสอบว่ามีค่า $_POST ครบถ้วน
+$required_fields = ['box_code', 'downtime_code', 'description_eng', 'description_tha'];
+$data = [];
+
+foreach ($required_fields as $field) {
+    if (isset($_POST[$field]) && !empty(trim($_POST[$field]))) {
+        $data[$field] = trim($_POST[$field]);
+    } else {
+        echo "<script>alert('Error: Please fill in all required fields.'); window.location.href='pp-setting-dt-add.php?message=empty_fields';</script>";
+        exit();
+    }
+}
+
+// ตรวจสอบว่ามี Downtime Code นี้อยู่แล้วหรือไม่
 $sql_check = "SELECT id_code_downtime FROM code_downtime WHERE id_code_downtime=?";
 $stmt_check = $conn->prepare($sql_check);
-$stmt_check->bind_param("s", $_POST['box_code']);
+$stmt_check->bind_param("s", $data['box_code']);
 $stmt_check->execute();
 $stmt_check->store_result();
 
 if ($stmt_check->num_rows > 0) {
-    // ถ้ามี id_code_downtime นี้อยู่แล้วในฐานข้อมูล
-    $error_code = 603; // Error code 603 หมายถึง id_code_downtime นี้มีอยู่แล้ว
-} else {
-    // ถ้ายังไม่มี id_code_downtime นี้ในฐานข้อมูล
-    $sql_insert = "INSERT INTO code_downtime (id_code_downtime, code_downtime, des_downtime, des_downtime_thai, enable, date_setting) VALUES (?, ?, ?, ?, 1, CURRENT_TIMESTAMP)";
-    $stmt_insert = $conn->prepare($sql_insert);
-    $stmt_insert->bind_param("ssss", $_POST['box_code'], $_POST['downtime_code'], $_POST['description_eng'], $_POST['description_tha']);
-
-    if ($stmt_insert->execute()) {
-        // บันทึกประวัติการเพิ่ม downtime ลงในฐานข้อมูล
-        $username = $_SESSION['username'];
-        $action = "เพิ่ม Downtime: {$_POST['downtime_code']}";
-        $sql_log_action = "INSERT INTO history (username, action, date_time) VALUES (?, ?, NOW())";
-        $stmt_log_action = $conn->prepare($sql_log_action);
-        $stmt_log_action->bind_param("ss", $username, $action);
-        $stmt_log_action->execute();
-
-        $stmt_log_action->close();
-        $stmt_insert->close();
-    } else {
-        // หากเกิดข้อผิดพลาดในการ execute คำสั่ง SQL
-        $error_code = $stmt_insert->errno; // ระบุ error code ในกรณีที่เกิดข้อผิดพลาด
-    }
+    echo "<script>alert('Error: Downtime Code already exists. Please use a different one.'); window.location.href='pp-setting-dt-add.php?message=duplicate';</script>";
+    $stmt_check->close();
+    $conn->close();
+    exit();
 }
 
-// ปิดการเชื่อมต่อกับฐานข้อมูล
-require 'update/terminate.php';
+$stmt_check->close();
 
-// Redirect ไปยังหน้า pp-setting-dt-add.php พร้อมส่ง error code กลับไปด้วย
-header("Location: ./pp-setting-dt-add.php?error_code=" . $error_code);
-die();
+// เพิ่มข้อมูลลงในฐานข้อมูล
+$sql_insert = "INSERT INTO code_downtime (id_code_downtime, code_downtime, des_downtime, des_downtime_thai, enable, date_setting) 
+               VALUES (?, ?, ?, ?, 1, CURRENT_TIMESTAMP)";
+$stmt_insert = $conn->prepare($sql_insert);
+$stmt_insert->bind_param(
+    "ssss",
+    $data['box_code'],
+    $data['downtime_code'],
+    $data['description_eng'],
+    $data['description_tha']
+);
+
+if ($stmt_insert->execute()) {
+    // บันทึกลง history
+    $username = $_SESSION['username'];
+    $action = "เพิ่ม Downtime Code: " . $data['downtime_code'];
+
+    // รายละเอียดที่เพิ่มเข้าไป
+    $details = json_encode([
+        "Box Code: " . $data['box_code'],
+        "Downtime Code: " . $data['downtime_code'],
+        "Description Eng: " . $data['description_eng'],
+        "Description Thai: " . $data['description_tha']
+    ], JSON_UNESCAPED_UNICODE);
+    $final_action = $action ;
+
+    $sql_log = "INSERT INTO history (username, action, details, date_time) VALUES (?, ?, ?, NOW())";
+    $stmt_log = $conn->prepare($sql_log);
+    $stmt_log->bind_param("sss", $username, $final_action, $details);
+    $stmt_log->execute();
+    $stmt_log->close();
+
+    echo "<script>alert('Success: Downtime Code has been added successfully.'); window.location.href='pp-setting-dt-add.php?message=success';</script>";
+} else {
+    echo "<script>alert('Error: Unable to add Downtime Code. Please try again.'); window.location.href='pp-setting-dt-add.php?message=error';</script>";
+}
+
+$stmt_insert->close();
+$conn->close();
 ?>

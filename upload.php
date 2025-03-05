@@ -2,6 +2,8 @@
 session_start();
 require 'update/establish.php';
 
+
+
 if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['croppedImage'])) {
     // รับภาพที่ถูกครอบ (base64)
     $croppedImage = $_POST['croppedImage'];

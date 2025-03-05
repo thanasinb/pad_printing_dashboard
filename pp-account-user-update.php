@@ -1,12 +1,13 @@
 <?php
 require 'update/establish.php';
-session_start(); // เรียกใช้ session
+session_start(); // ใช้ session เพื่อตรวจสอบ user ที่แก้ไข
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $idStaff = $_POST['id_staff'];
     $newUsername = trim($_POST['username']);
     $newPassword = trim($_POST['password']);
 
+    // ดึงข้อมูลปัจจุบัน
     $sqlGetUser = "SELECT login.username, login.password, staff.name_first, staff.name_last 
                    FROM login 
                    LEFT JOIN staff ON login.id_staff = staff.id_staff 
@@ -22,41 +23,58 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $currentPassword = $row['password'];
         $nameFirst = $row['name_first'];
         $nameLast = $row['name_last'];
-        $action = "แก้ไขข้อมูลของ: $nameFirst $nameLast";
 
-        $fields = [];
-        $details = [];
+        $action = "แก้ไขบัญชีของ: $nameFirst $nameLast";
+        $changes = [];
 
+        // ถ้า `username` เปลี่ยน ให้เก็บรายละเอียด
         if (!empty($newUsername) && $newUsername !== $currentUsername) {
-            $fields[] = "username=?";
-            $details[] = "แก้ไข username";
+            $changes[] = "แก้ไข Username: $currentUsername → $newUsername";
         }
 
+        // ถ้า `password` เปลี่ยน ให้บันทึกเป็น `แก้ไข Password`
         if (!empty($newPassword)) {
-            if (!password_verify($newPassword, $currentPassword)) {
+            if (empty($currentPassword) || !password_verify($newPassword, $currentPassword)) {
                 $hashedPassword = password_hash($newPassword, PASSWORD_DEFAULT);
-                $fields[] = "password=?";
-                $details[] = "แก้ไข password";
+                $changes[] = "แก้ไข Password";
             }
         }
 
-        if (!empty($fields)) {
+        // ถ้ามีการเปลี่ยนแปลง
+        if (!empty($changes)) {
+            $fields = [];
+            $params = [];
+            $types = "";
+
+            if (!empty($newUsername) && $newUsername !== $currentUsername) {
+                $fields[] = "username=?";
+                $params[] = $newUsername;
+                $types .= "s";
+            }
+
+            if (!empty($newPassword)) {
+                if (empty($currentPassword) || !password_verify($newPassword, $currentPassword)) {
+                    $fields[] = "password=?";
+                    $params[] = $hashedPassword;
+                    $types .= "s";
+                }
+            }
+
+            $params[] = $idStaff;
+            $types .= "s";
+
             $sqlUpdate = "UPDATE login SET " . implode(", ", $fields) . " WHERE id_staff=?";
             $stmtUpdate = $conn->prepare($sqlUpdate);
+            $stmtUpdate->bind_param($types, ...$params);
+            $final_action = $action ;
 
-            $params = [];
-            foreach ($fields as $field) {
-                if ($field === "username=?") $params[] = $newUsername;
-                if ($field === "password=?") $params[] = $hashedPassword;
-            }
-            $params[] = $idStaff;
-            $stmtUpdate->bind_param(str_repeat("s", count($params)), ...$params);
 
             if ($stmtUpdate->execute()) {
-                $action .= " " . implode(" และ ", $details);
-                $stmtHistory = $conn->prepare("INSERT INTO history (username, action, date_time) VALUES (?, ?, CURRENT_TIMESTAMP)");
+                // บันทึก `history` เป็น JSON
+                $historyDetails = json_encode($changes, JSON_UNESCAPED_UNICODE);
+                $stmtHistory = $conn->prepare("INSERT INTO history (username, action, details, date_time) VALUES (?, ?, ?, CURRENT_TIMESTAMP)");
                 $usernameUpdater = $_SESSION['username'];
-                $stmtHistory->bind_param("ss", $usernameUpdater, $action);
+                $stmtHistory->bind_param("sss", $usernameUpdater, $final_action, $historyDetails);
                 $stmtHistory->execute();
 
                 echo json_encode(["statusCode" => 200, "message" => "User updated successfully."]);

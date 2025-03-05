@@ -1,9 +1,16 @@
 document.addEventListener('DOMContentLoaded', function () {
+
+    function formatDate(dateString) {
+        if (!dateString) return "N/A";  // ถ้ายังไม่มีค่า ให้แสดง N/A
+        const [year, month, day] = dateString.split('-');
+        return `${day}/${month}/${year}`;
+    }
     const ctx = document.getElementById('machineChart').getContext('2d');
 
-    const machines = JSON.parse(document.getElementById('machines').value);
-    const jobCounts = JSON.parse(document.getElementById('jobCounts').value);
-    const taskDetails = JSON.parse(document.getElementById('taskDetails').value);
+    // เก็บข้อมูลปัจจุบันในตัวแปรสถานะ
+    let currentMachines = JSON.parse(document.getElementById('machines').value);
+    let currentJobCounts = JSON.parse(document.getElementById('jobCounts').value);
+    let currentTaskDetails = JSON.parse(document.getElementById('taskDetails').value);
 
     // ฟังก์ชันสำหรับดึงสีที่เหมาะสมกับธีม
     function getThemeColors() {
@@ -34,11 +41,14 @@ document.addEventListener('DOMContentLoaded', function () {
                     if (elements.length > 0) {
                         const element = elements[0];
                         const index = element.index;
-                        const machine = machines[index];
-                        const jobCount = jobCounts[index];
-                        const tasks = taskDetails[index].join('<br>');
+                        const machine = currentMachines[index];
+                        const jobCount = currentJobCounts[index];
+                        const tasks = currentTaskDetails[index].join('<br>');
 
+                        selectedStartDate = document.getElementById('start_date').value;
+                        selectedEndDate = document.getElementById('end_date').value;
                         const modalContent = `
+                            <strong>Selected Date Range:</strong> ${formatDate(selectedStartDate)} to ${formatDate(selectedEndDate)}<br>
                             <strong>Machine:</strong> ${machine}<br>
                             <strong>Total of Jobs:</strong> ${jobCount}<br>
                             <strong>ID Tasks:</strong><br> ${tasks}
@@ -92,14 +102,28 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
     // สร้างกราฟด้วยข้อมูลเริ่มต้น
-    let machineChart = createChart(machines, jobCounts, taskDetails);
+    let machineChart = createChart(currentMachines, currentJobCounts, currentTaskDetails);
 
     // ฟอร์มสำหรับโหลดข้อมูลใหม่
     document.getElementById('dateForm').addEventListener('submit', function (event) {
         event.preventDefault();
         const startDate = document.getElementById('start_date').value;
         const endDate = document.getElementById('end_date').value;
+        const start = new Date(startDate);
+        const end = new Date(endDate);
 
+        if (isNaN(start.getTime()) || isNaN(end.getTime())) {
+            alert('โปรดระบุวันที่ในรูปแบบที่ถูกต้อง');
+            return;
+        }
+        if (start > end) {
+            alert('โปรดระบุช่วงวันให้ถูกต้อง');
+            return;
+        }
+        // if (end > today) {
+        //     alert('โปรดระบุช่วงวันให้ถูกต้องให้อยู่ภายในวันปัจจุบัน');
+        //     return;
+        // }
         fetch(`get_data.php?startDate=${startDate}&endDate=${endDate}`)
             .then(response => response.json())
             .then(data => {
@@ -107,13 +131,17 @@ document.addEventListener('DOMContentLoaded', function () {
                     alert(data.error);
                     return;
                 }
-                const newMachines = data.machines;
-                const newJobCounts = data.jobCounts;
-                const newTaskDetails = data.taskDetails;
+
+                // อัปเดตข้อมูลปัจจุบัน
+                currentMachines = data.machines;
+                currentJobCounts = data.jobCounts;
+                currentTaskDetails = data.taskDetails;
 
                 // ทำลายกราฟเดิมและสร้างกราฟใหม่ด้วยข้อมูลที่อัปเดต
-                machineChart.destroy();
-                machineChart = createChart(newMachines, newJobCounts, newTaskDetails);
+                if(machineChart) {
+                    machineChart.destroy();
+                }
+                machineChart = createChart(currentMachines, currentJobCounts, currentTaskDetails);
             })
             .catch(error => {
                 console.error('Error fetching data:', error);
@@ -121,11 +149,5 @@ document.addEventListener('DOMContentLoaded', function () {
             });
     });
 
-    // ฟังก์ชันอัปเดตธีมเมื่อเปลี่ยนโหมด
-    const observer = new MutationObserver(() => {
-        machineChart.destroy(); // ลบกราฟเดิม
-        machineChart = createChart(machines, jobCounts, taskDetails); // สร้างกราฟใหม่
-    });
 
-    observer.observe(document.body, { attributes: true, attributeFilter: ['class'] });
 });

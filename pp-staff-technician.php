@@ -34,40 +34,147 @@ require 'pp-session-start.php';
         <script type="text/javascript" src="js/majorette/pp-machine-staff.js"></script>
 <!--        <script type="text/javascript" src="js/majorette/pp-machine-currentTaskModal.js"></script>-->
 <!--        <script type="text/javascript" src="js/majorette/pp-machine-refresh.js"></script>-->
+        <link rel="stylesheet" href="css/pp-sidenav.css">
+
     </head>
+    <style>
+
+        /* เอฟเฟกต์ปุ่ม Confirm (สีน้ำเงิน) */
+        .btn-confirm-modal {
+            transition: all 0.2s ease-in-out;
+            background-color: #007bff; /* สีน้ำเงิน */
+            color: white !important;
+            font-size: 16px;
+            font-weight: bold;
+            padding: 10px 20px;
+            border-radius: 8px;
+            border: none;
+            display: inline-block;
+            cursor: pointer;
+            text-align: center;
+        }
+
+        /* เมื่อเมาส์ไปชี้ที่ปุ่ม Confirm */
+        .btn-confirm-modal:hover {
+            transform: scale(1.1);
+            opacity: 0.9;
+            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
+            background-color: #0069d9; /* สีน้ำเงินเข้มขึ้น */
+        }
+
+        /* เอฟเฟกต์ตอนกดปุ่ม Confirm */
+        .btn-confirm-modal:active {
+            transform: scale(0.95);
+            box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.15);
+            background-color: #0056b3;
+        }
+
+
+        /* ปุ่มใน Dark Mode */
+        body.dark-mode .btn-confirm-modal {
+            background-color: #375a7f !important; /* สีฟ้าหม่น */
+            color: #ffffff !important; /* สีข้อความขาว */
+            border: 1px solid #444444 !important; /* เส้นขอบเข้ม */
+        }
+
+        /* Hover ใน Dark Mode */
+        body.dark-mode .btn-confirm-modal:hover {
+            background-color: #3b566a !important; /* สีฟ้าหม่นเข้มขึ้นเมื่อ hover */
+        }
+
+        /* เอฟเฟกต์ปุ่ม Close (สีม่วง) */
+        .btn-close-modal {
+            transition: all 0.2s ease-in-out;
+            background-color:  #f44336; /* สีม่วง */
+            color: white !important;
+            font-size: 16px;
+            font-weight: bold;
+            padding: 10px 20px;
+            border-radius: 8px;
+            border: none;
+            display: inline-block;
+            cursor: pointer;
+            text-align: center;
+        }
+
+        /* เมื่อเมาส์ไปชี้ที่ปุ่ม Close */
+        .btn-close-modal:hover {
+            transform: scale(1.1);
+            opacity: 0.9;
+            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
+            background-color: #d32f2f;
+        }
+
+        /* เอฟเฟกต์ตอนกดปุ่ม Close */
+        .btn-close-modal:active {
+            transform: scale(0.95);
+            box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.15);
+            background-color: #a52020;
+        }
+        /* ปุ่มใน Dark Mode */
+        body.dark-mode .btn-close-modal {
+            background-color:#A52A2A !important; /* สีม่วงหม่น */
+            border-color: #A52A2A !important; /* สีเส้นขอบ */
+            color: white !important; /* สีตัวอักษร */
+        }
+
+        /* Hover ใน Dark Mode */
+        body.dark-mode .btn-close-modal:hover {
+            background-color: #8c2424 !important; /* สีม่วงหม่น */
+        }
+    </style>
     <body class="nav-fixed">
     <?php require 'pp-staff-sidenavAccordion.php'; ?>
-        <div id="layoutSidenav">
-            <?php require 'pp-layoutSidenav_nav.php'; ?>
-            <div id="layoutSidenav_content">
-                <main>
-                    <header class="page-header page-header-dark pb-5">
-                        <div class="container-xl px-4">
-                            <div class="page-header-content pt-4">
-                            </div>
-                        </div>
-                    </header>
-                    <!-- Main page content-->
-                    <div class="container-fluid px-4 mt-n10">
-                        <!-- Example DataTable for Dashboard Demo-->
-                        <div class="card mb-4 w-100" id="table-machine">
-                            <div class="card-header bg-red fw-bold text-white fs-4">Staff List</div>
-                            <div class="card-body">
-                                <table id="datatablesSimple" class="table table-striped">
-                                    <thead class="text-black" style="background-color: #ffea07"><?php require 'pp-staff-table-head.php' ?></thead>
-                                    <tbody><?php require "pp-staff-list-staff-script-technician.php"; ?></tbody>
-                                </table>
-                            </div>
+    <div id="layoutSidenav">
+        <?php require 'pp-layoutSidenav_nav.php'; ?>
+        <div id="layoutSidenav_content">
+            <main>
+                <header class="page-header page-header-dark pb-5">
+                    <div class="container-xl px-4">
+                        <div class="page-header-content pt-4"></div>
+                    </div>
+                </header>
+                <!-- Main page content-->
+                <div class="container-fluid px-4 mt-n10">
+                    <div class="card mb-4 w-100">
+                        <div class="card-header bg-red fw-bold text-white fs-4">Technicians List</div>
+                        <div class="card-body">
+                            <table id="datatablesSimple" class="table table-striped">
+                                <thead class="text-black" style="background-color: #ffea07"><?php require 'pp-staff-table-head.php' ?></thead>
+                                <tbody><?php require "pp-staff-list-staff-script-technician.php"; ?></tbody>
+                            </table>
                         </div>
                     </div>
-                </main>
-            </div>
+                </div>
+            </main>
         </div>
+    </div>
+
+    <!-- JavaScript สำหรับการ Highlight -->
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            // ดึงค่าพารามิเตอร์ role จาก URL
+            const urlParams = new URLSearchParams(window.location.search);
+            const selectedRole = urlParams.get('role');
+
+            if (selectedRole) {
+                // Highlight แถวที่มี role ตรงกัน
+                document.querySelectorAll(`tr[data-role="${selectedRole}"]`).forEach(row => {
+                    row.classList.add('highlight');
+                });
+
+                // ลบพารามิเตอร์ออกหลังจาก highlight
+                const newUrl = window.location.pathname;
+                window.history.replaceState({}, '', newUrl);
+            }
+        });
+    </script>
+
     <div class="modal fade" id="staff_modal" tabindex="-1" role="dialog" aria-labelledby="staff_modal_label" aria-hidden="true">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="staff_modal_label">Staff</h5>
+                    <h5 class="modal-title" id="staff_modal_label">Staff Edit</h5>
                     <button class="btn-close" type="button" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
@@ -75,7 +182,7 @@ require 'pp-session-start.php';
                     <table id="modal_table" class="table table-striped">
                         <tr>
                             <td>Staff ID</td>
-                            <td id="modal_staff_id"><input type="text" id="input_staff_id" name="input_staff_id" disabled></td>
+                            <td id="modal_staff_id"><input type="text" id="input_staff_id" name="input_staff_id" readonly></td>
                             <td></td>
                         </tr>
                         <tr>
@@ -147,9 +254,9 @@ require 'pp-session-start.php';
                     </table>
                 </div>
                 <div class="modal-footer justify-content-between">
-                    <button id="button_rfid" class="btn btn-primary mr-auto" type="button">Change</button>
-                    <button id="button_save_rfid" class="btn btn-primary mr-auto" type="button">Save</button>
-                    <button class="btn btn-primary" type="button" data-bs-dismiss="modal">Close</button>
+                    <button id="button_rfid" class="btn btn-confirm-modal mr-auto" type="button">Change</button>
+                    <button id="button_save_rfid" class="btn btn-confirm-modal mr-auto" type="button">Save</button>
+                    <button class="btn btn-close-modal" type="button" data-bs-dismiss="modal">Close</button>
                     <!--                    <button class="btn btn-primary" type="button">Save changes</button>-->
                 </div>
             </div>
@@ -173,20 +280,13 @@ require 'pp-session-start.php';
                         </table>
                     </div>
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                        <button type="button" id="modal_button_delete" class="btn btn-primary">Delete</button>
+                        <button type="button" class="btn btn-close-modal" data-bs-dismiss="modal">Close</button>
+                        <button type="button" id="modal_button_delete" class="btn btn-confirm-modal">Delete</button>
                     </div>
                 </div>
             </div>
         </div>
-        <script>
-            document.getElementById('button_rfid').addEventListener('click', function() {
-                const roleSelect = document.getElementById('role');
-                roleSelect.disabled = false; // Enable the dropdown
-            });
-            document.addEventListener('click', () => checkSession());
-            document.addEventListener('input', () => checkSession());
-        </script>
+
         <script src="js/bootstrap@5.0.1/dist/js/bootstrap.bundle.min.js"></script>
         <script src="js/scripts.js"></script>
         <script src="js/simple-datatables@latest" type="text/javascript"></script>

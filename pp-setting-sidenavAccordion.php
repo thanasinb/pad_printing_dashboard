@@ -52,6 +52,36 @@ if (isset($_SESSION['username'])) {
 }
 $conn->close(); // ปิดการเชื่อมต่อฐานข้อมูล
 ?>
+<style>
+
+    .btn {
+        transition: all 0.3s ease;
+    }
+
+    .btn:hover {
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        transform: translateY(-2px);
+        color: white !important;
+    }
+
+    .qr-thumbnail {
+        transition: all 0.2s ease-in-out;
+    }
+
+    /* เมื่อเมาส์ไปชี้ที่ QR Code */
+    .qr-thumbnail:hover {
+        transform: scale(1.1); /* ขยายขึ้นเล็กน้อย */
+        opacity: 0.9;
+        box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2); /* เพิ่มเงา */
+    }
+
+    /* เอฟเฟกต์ตอนกด QR Code */
+    .qr-thumbnail:active {
+        transform: scale(0.95); /* หดลงเล็กน้อย */
+        box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.15); /* ลดเงา */
+    }
+</style>
+
 <link rel="stylesheet" href="css/pp-sidenav.css">
 
 <nav class="topnav navbar navbar-expand shadow justify-content-between justify-content-sm-start navbar-light bg-white" id="sidenavAccordion">
@@ -84,7 +114,7 @@ $conn->close(); // ปิดการเชื่อมต่อฐานข้�
 
     <!-- Navbar Items-->
     <ul class="navbar-nav align-items-center ms-auto">
-        <li class="nav-item ms-3">
+        <li class="nav-item me-1">
             <p class="nav-link mb-0">
                 <span id="currentDateTime"></span>
             </p>
@@ -93,30 +123,89 @@ $conn->close(); // ปิดการเชื่อมต่อฐานข้�
         <script>
             function updateDateTime() {
                 var now = new Date();
-                var dateTimeString = now.toLocaleString('en-US', {
+                var dateOptions = {
                     weekday: 'long',
                     year: 'numeric',
                     month: 'long',
                     day: 'numeric',
-                    hour: 'numeric',
-                    minute: 'numeric',
-                    second: 'numeric',
-                    hour12: true
-                });
+                };
+                var timeOptions = {
+                    hour: '2-digit',
+                    minute: '2-digit',
+                    second: '2-digit',
+                    hourCycle: 'h23' // ใช้ระบบเวลา 24 ชั่วโมง
+                };
 
-                document.getElementById('currentDateTime').textContent = dateTimeString;
+                var dateString = now.toLocaleDateString('en-US', dateOptions);
+                var timeString = now.toLocaleTimeString('en-US', timeOptions);
+
+                document.getElementById('currentDateTime').textContent = dateString + ' ' + timeString;
             }
 
             updateDateTime();
             setInterval(updateDateTime, 1000);
         </script>
 
+        <li class="nav-item">
+            <a class="btn btn-icon btn-transparent-dark dropdown-toggle" id="calendarDropdown" href="javascript:void(0);" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                <i data-feather="calendar"></i>
+            </a>
+            <div class="dropdown-menu dropdown-menu-end border-0 shadow animated--fade-in-up p-3" aria-labelledby="calendarDropdown" style="min-width: 300px;">
+                <!-- Inline Calendar Display -->
+                <div id="inlineCalendar" class="keep-open"></div>
+            </div>
+        </li>
+
+        <!-- Include flatpickr CSS and JS -->
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+        <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+
+        <script>
+            document.addEventListener("DOMContentLoaded", function () {
+                flatpickr("#inlineCalendar", {
+                    inline: true,
+                    dateFormat: "F j, Y",
+                    defaultDate: new Date(),
+                    onDayCreate: function (dObj, dStr, fp, dayElem) {
+                        // Check if the current day is today's date
+                        const today = new Date();
+                        if (
+                            dayElem.dateObj.getDate() === today.getDate() &&
+                            dayElem.dateObj.getMonth() === today.getMonth() &&
+                            dayElem.dateObj.getFullYear() === today.getFullYear()
+                        ) {
+                            dayElem.classList.add("today-mark"); // Highlight today's date
+                        }
+                    }
+                });
+
+                // Prevent dropdown from closing when interacting with the calendar
+                document.querySelectorAll('.dropdown-menu').forEach((dropdown) => {
+                    dropdown.addEventListener('click', function (e) {
+                        e.stopPropagation(); // Prevent Bootstrap from closing the dropdown
+                    });
+                });
+
+                feather.replace(); // Initialize feather icons
+            });
+        </script>
+
+        <style>
+            /* Highlight today's date with a custom background and bold text */
+            .today-mark {
+                background-color: #ffcccc !important;
+                color: #000 !important;
+                font-weight: bold;
+                border-radius: 50%;
+            }
+        </style>
+
         <!-- Alerts Dropdown-->
-        <li class="nav-item dropdown no-caret d-none d-sm-block me-3 dropdown-notifications">
+        <li class="nav-item dropdown no-caret d-none d-sm-block me-1 dropdown-notifications">
             <a class="btn btn-icon btn-transparent-dark dropdown-toggle" id="navbarDropdownAlerts" href="javascript:void(0);" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i data-feather="bell"></i></a>
             <div class="dropdown-menu dropdown-menu-end border-0 shadow animated--fade-in-up" aria-labelledby="navbarDropdownAlerts">
                 <h6 class="dropdown-header dropdown-notifications-header">
-                    <i class="me-2" data-feather="bell"></i>
+                    <i class="me-1" data-feather="bell"></i>
                     Alerts Center
                 </h6>
                 <!-- Display Alerts from the database -->
@@ -134,7 +223,7 @@ $conn->close(); // ปิดการเชื่อมต่อฐานข้�
         </li>
 
         <!-- Dark Mode Toggle -->
-        <li class="nav-item ms-3">
+        <li class="nav-item me-1">
             <button id="darkModeToggle" class="btn btn-icon">
                 <i id="darkModeIcon" class="fas fa-moon"></i> <!-- Default icon -->
             </button>
@@ -176,33 +265,7 @@ $conn->close(); // ปิดการเชื่อมต่อฐานข้�
                 });
             });
         </script>
-        <!-- Messages Dropdown-->
-        <li class="nav-item dropdown no-caret d-none d-sm-block me-3 dropdown-notifications">
-            <a class="btn btn-icon btn-transparent-dark dropdown-toggle" id="navbarDropdownMessages" href="javascript:void(0);" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i data-feather="mail"></i></a>
-            <div class="dropdown-menu dropdown-menu-end border-0 shadow animated--fade-in-up" aria-labelledby="navbarDropdownMessages">
-                <h6 class="dropdown-header dropdown-notifications-header">
-                    <i class="me-2" data-feather="mail"></i>
-                    Message Center
-                </h6>
-                <!-- Example Message 1  -->
-                <a class="dropdown-item dropdown-notifications-item" href="#!">
-                    <img class="dropdown-notifications-item-img" src="assets/img/illustrations/profiles/profile-2.png" />
-                    <div class="dropdown-notifications-item-content">
-                        <div class="dropdown-notifications-item-content-text">Lorem ipsum dolor sit amet, consectetur adipisicing elit.</div>
-                        <div class="dropdown-notifications-item-content-details">Thomas Wilcox · 58m</div>
-                    </div>
-                </a>
-                <!-- Example Message 2-->
-                <a class="dropdown-item dropdown-notifications-item" href="#!">
-                    <img class="dropdown-notifications-item-img" src="assets/img/illustrations/profiles/profile-3.png" />
-                    <div class="dropdown-notifications-item-content">
-                        <div class="dropdown-notifications-item-content-text">Lorem ipsum dolor sit amet.</div>
-                        <div class="dropdown-notifications-item-content-details">Emily Fowler · 2d</div>
-                    </div>
-                </a>
-                <a class="dropdown-item dropdown-notifications-footer" href="#!">Read All Messages</a>
-            </div>
-        </li>
+
         <style>
             .dropdown-user-details-role {
                 font-size: 12px;
@@ -213,6 +276,7 @@ $conn->close(); // ปิดการเชื่อมต่อฐานข้�
                 color: black;
             }
         </style>
+
         <li class="nav-item dropdown no-caret dropdown-user me-3 me-lg-4">
             <a class="btn btn-icon btn-transparent-dark dropdown-toggle" id="navbarDropdownUserImage" href="javascript:void(0);" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                 <img id="sidenavUserImage" class="img-fluid" src="<?php echo $profileImagePath; ?>" alt="User Image" />
@@ -230,6 +294,7 @@ $conn->close(); // ปิดการเชื่อมต่อฐานข้�
                         <div class="dropdown-user-details-role1">
                             Role: <?php echo $role; ?>
                         </div>
+                        
                     </div>
                 </h6>
                 <div class="dropdown-divider"></div>

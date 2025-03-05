@@ -55,12 +55,22 @@ if ($result_downtime->num_rows > 0) {
         $downtimeDurations[] = isset($machineDowntime[$machine]) ? $machineDowntime[$machine] : 0;
     }
 }
+$query_planning = "SELECT a.id_machine, SUM(p.qty_comp) as total_qty FROM activity a JOIN planning p ON a.id_task = p.id_task GROUP BY a.id_machine";
+$result_planning = $conn->query($query_planning);
+
+$totalQuantities = [];
+if ($result_planning->num_rows > 0) {
+    while ($row = $result_planning->fetch_assoc()) {
+        $totalQuantities[$row['id_machine']] = $row['total_qty'];
+    }
+}
 
 $machines_json = json_encode($machines);
 $jobCounts_json = json_encode($jobCounts);
 $taskDetails_json = json_encode($taskDetails);
 $downtimeDurations_json = json_encode($downtimeDurations);
 $downtimeDetails_json = json_encode($downtimeDetails);
+$totalQuantities_json = json_encode($totalQuantities);
 
 echo "<script>";
 echo "const machines = " . $machines_json . ";";
@@ -68,6 +78,7 @@ echo "const jobCounts = " . $jobCounts_json . ";";
 echo "const taskDetails = " . $taskDetails_json . ";";
 echo "const downtimeDurations = " . $downtimeDurations_json . ";";
 echo "const downtimeDetails = " . $downtimeDetails_json . ";";
+echo "const totalQuantities = .$totalQuantities_json";
 echo "</script>";
 
 $conn->close();

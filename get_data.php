@@ -56,6 +56,10 @@ if (isset($start_date) && isset($end_date) && !empty($start_date) && !empty($end
             $jobCounts[] = $row['job_count'];
             $taskDetails[] = explode(',', $row['tasks']);
         }
+    }else {
+        error_log("No data found for date range: {$start_date} - {$end_date}");
+        echo json_encode(['error' => 'No data found']);
+        exit();
     }
 
     // ส่งข้อมูลกลับในรูปแบบ JSON

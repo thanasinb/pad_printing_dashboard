@@ -46,11 +46,6 @@ require 'pp-session-start.php'
                 <div class="card mb-4 w-100" id="table-machine">
                     <div class="card-header bg-red fw-bold text-white fs-4 d-flex justify-content-between">
                         <div>Operator Statistic</div>
-                        <div>
-                            <span id="hours"></span> :
-                            <span id="minutes"></span> :
-                            <span id="seconds"></span>
-                        </div>
                     </div>
                     <div class="card-body">
                         <table id="datatablesSimple" class="table table-striped" style="width: 100%; white-space: nowrap">
@@ -61,7 +56,10 @@ require 'pp-session-start.php'
                             ?>
                             </thead>
                             <tbody id="table_body">
+                            <?php
 
+                            require  'pp-op-statistic-script.php';
+                            ?>
 
                             </tbody>
 
@@ -69,19 +67,13 @@ require 'pp-session-start.php'
 
                 </div>
                 </div>
-                <!-- Modals and other elements -->
-                <!-- Modal Content here... -->
-                <script>
-                    document.addEventListener('click', () => checkSession());
-                    document.addEventListener('input', () => checkSession());
-                </script>
+
                 <script src="js/bootstrap@5.0.1/dist/js/bootstrap.bundle.min.js"></script>
                 <script src="js/scripts.js"></script>
                 <script src="js/simple-datatables@latest" type="text/javascript"></script>
                 <script src="js/datatables/datatables-staff.js"></script>
                 <script src="js/litepicker/dist/bundle.js"></script>
                 <script src="js/litepicker.js"></script>
-                <script  src="js/majorette/pp-time-stamp.js"></script>
                 <script type="text/javascript" src="js/majorette/pp-session.js"></script>
 
             </div>

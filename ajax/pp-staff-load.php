@@ -1,22 +1,37 @@
 <?php
 require '../update/establish.php';
 
-//SELECT staff.id_staff, staff.id_rfid, prefix.prefix, staff.name_first, staff.name_last, staff.site, role.role, staff.id_shif FROM staff INNER JOIN role ON staff.id_role=role.id_role INNER JOIN prefix ON staff.prefix=prefix.id_prefix WHERE id_staff='0009'
+if (isset($_GET['id_staff'])) {
+    $id_staff = $conn->real_escape_string($_GET['id_staff']);
 
-$sql = "SELECT staff.id_staff, staff.id_rfid, prefix.prefix, staff.name_first, staff.name_last, staff.site, role.role, role_group.role_group_name, staff.id_shif 
-    FROM staff 
-    INNER JOIN role ON staff.id_role=role.id_role
-    Inner Join role_group ON role.role_group=role_group.id_role_group
-    INNER JOIN prefix ON staff.prefix=prefix.id_prefix WHERE id_staff='" . $_GET['id_staff'] . "'";
+    $sql = "SELECT id_staff, id_rfid, prefix, name_first, name_last, site, id_role, id_shif 
+            FROM staff WHERE id_staff = ?";
 
-$result = $conn->query($sql);
-$db_staff = $result->fetch_assoc();
+    $stmt = $conn->prepare($sql);
+    $stmt->bind_param("s", $id_staff);
+    $stmt->execute();
+    $result = $stmt->get_result();
 
-echo json_encode($db_staff, JSON_UNESCAPED_UNICODE);
+    if ($row = $result->fetch_assoc()) {
+        echo json_encode([
+            "statusCode" => 200,
+            "id_staff" => $row['id_staff'],
+            "id_rfid" => $row['id_rfid'],
+            "prefix" => $row['prefix'],
+            "name_first" => $row['name_first'],
+            "name_last" => $row['name_last'],
+            "site" => $row['site'],
+            "id_role" => $row['id_role'],
+            "id_shif" => $row['id_shif']
+        ]);
+    } else {
+        echo json_encode(["statusCode" => 404, "message" => "Staff not found"]);
+    }
+
+    $stmt->close();
+} else {
+    echo json_encode(["statusCode" => 400, "message" => "Invalid request"]);
+}
 
 require '../update/terminate.php';
-
-//echo json_encode(array("id_staff"=>$_POST["id_staff"]));
-
 ?>
-

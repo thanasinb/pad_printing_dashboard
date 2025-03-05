@@ -3,7 +3,6 @@
 require 'pp-session-start.php'
 
 ?>
-<link rel="stylesheet" href="css/pp-sidenav.css">
 
 <!DOCTYPE html>
 <html lang="en">
@@ -24,6 +23,50 @@ require 'pp-session-start.php'
         <script src="js/jquery/jquery-ui.min.js"></script>
         <script src="js/majorette/pp-setting-dt-add.js"></script>
     </head>
+    <style>
+        /* เอฟเฟกต์ปุ่ม Confirm (สีน้ำเงิน) */
+        .btn-add-downtime {
+            transition: all 0.2s ease-in-out;
+            background-color: #007bff; /* สีน้ำเงิน */
+            color: white !important;
+            font-size: 16px;
+            font-weight: bold;
+            padding: 10px 20px;
+            border-radius: 8px;
+            border: none;
+            display: inline-block;
+            cursor: pointer;
+            text-align: center;
+        }
+
+        /* เมื่อเมาส์ไปชี้ที่ปุ่ม Confirm */
+        .btn-add-downtime:hover {
+            transform: scale(1.1);
+            opacity: 0.9;
+            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
+            background-color: #0069d9; /* สีน้ำเงินเข้มขึ้น */
+        }
+
+        /* เอฟเฟกต์ตอนกดปุ่ม Confirm */
+        .btn-add-downtime:active {
+            transform: scale(0.95);
+            box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.15);
+            background-color: #0056b3;
+        }
+
+
+        /* ปุ่มใน Dark Mode */
+        body.dark-mode .btn-add-downtime {
+            background-color: #375a7f !important; /* สีฟ้าหม่น */
+            color: #ffffff !important; /* สีข้อความขาว */
+            border: 1px solid #444444 !important; /* เส้นขอบเข้ม */
+        }
+        /* Hover ใน Dark Mode */
+        body.dark-mode .btn-add-downtime:hover {
+            background-color: #3b566a !important; /* สีฟ้าหม่นเข้มขึ้นเมื่อ hover */
+        }
+
+    </style>
     <body class="nav-fixed">
     <?php require 'pp-staff-sidenavAccordion.php'; ?>
         <div id="layoutSidenav">
@@ -36,64 +79,67 @@ require 'pp-session-start.php'
                             </div>
                         </div>
                     </header>
-                    <!-- Main page content-->
-                    <div class="container-xl d-flex justify-content-center align-items-center px-4 mt-n10">
+                    <div class="container-xl d-flex justify-content-center align-items-center px-2 mt-n15" style="height: 100vh;">
                         <div class="col-xl-6">
                             <div class="card mb-4">
-                                <div class="card-header">Add New Downtime</div>
+                                <div class="card-header bg-red text-white">Add New Downtime</div>
                                 <div class="card-body">
-                                    <form method="post" action="pp-setting-dt-add-action.php" enctype="multipart/form-data">
-                                        <!-- Form Group (username)-->
-                                        <div class="row gx-3 mb-3">
-                                            <div class="col-md-6">
-                                                <label class="small mb-1" for="box_code">Box code</label>
-                                                <input class="form-control" id="box_code" name="box_code" type="text" maxlength="3" required="required">
-                                            </div>
-                                            <div class="col-md-6">
-                                                <label class="small mb-1" for="downtime_code">Downtime code</label>
-                                                <input class="form-control" id="downtime_code" name="downtime_code" type="text" maxlength="8" required="required">
-                                            </div>
+                                    <form id="add_downtime_form" method="post" action="pp-setting-dt-add-action.php">
+                                        <div class="mb-3">
+                                            <label for="box_code" class="form-label">Box Code</label>
+                                            <input type="text" class="form-control" id="box_code" name="box_code" maxlength="3" required>
                                         </div>
-                                        <div class="row gx-3 mb-3">
-                                            <div class="col-md-12">
-                                                <label class="small mb-1" for="description_eng">Description English</label>
-                                                <input class="form-control" id="description_eng" name="description_eng" type="text" maxlength="50" required="required">
-                                            </div>
+                                        <div class="mb-3">
+                                            <label for="downtime_code" class="form-label">Downtime Code</label>
+                                            <input type="text" class="form-control" id="downtime_code" name="downtime_code" maxlength="8" required>
                                         </div>
-                                        <div class="row gx-3 mb-3">
-                                            <div class="col-md-12">
-                                                <label class="small mb-1" for="description_tha">Description Thai</label>
-                                                <input class="form-control" id="description_tha" name="description_tha" type="text" maxlength="50">
-                                            </div>
+                                        <div class="mb-3">
+                                            <label for="description_eng" class="form-label">Description (English)</label>
+                                            <input type="text" class="form-control" id="description_eng" name="description_eng" maxlength="50" required>
                                         </div>
-                                        <!-- Save changes button-->
-                                        <button id="submit_button" class="btn btn-blue" type="submit" disabled>Add</button>
-                                        <br><br>
-                                        <?php
-
-                                        ini_set('display_errors', 0);
-                                        error_reporting(E_ERROR | E_WARNING | E_PARSE);
-
-                                        if ($_GET['error_code']!=null){
-                                            if ($_GET['error_code'])
-                                                echo "Add downtime error! Code: " . $_GET['error_code'];
-                                            else
-                                                echo "Add downtime successfully! Code: " . $_GET['error_code'];
-                                        }
-                                        ?>
+                                        <div class="mb-3">
+                                            <label for="description_tha" class="form-label">Description (Thai)</label>
+                                            <input type="text" class="form-control" id="description_tha" name="description_tha" maxlength="50">
+                                        </div>
+                                        <button type="submit" class="btn btn-add-downtime" id="submit_button" disabled>Add Downtime</button>
                                     </form>
+                                    <br>
+                                    <?php
+                                    if (isset($_GET['error_code'])) {
+                                        if ($_GET['error_code'] == "success") {
+                                            echo '<div class="alert alert-success mt-3">Add downtime successfully!</div>';
+                                        } else {
+                                            echo '<div class="alert alert-danger mt-3">Add downtime error! Code: ' . htmlspecialchars($_GET['error_code']) . '</div>';
+                                        }
+                                    }
+                                    ?>
                                 </div>
                             </div>
                         </div>
                     </div>
+
+                    <script>
+                        document.addEventListener("DOMContentLoaded", function () {
+                            let inputs = document.querySelectorAll("#box_code, #downtime_code, #description_eng");
+                            let submitButton = document.getElementById("submit_button");
+
+                            function checkInputs() {
+                                let allFilled = Array.from(inputs).every(input => input.value.trim() !== "");
+                                submitButton.disabled = !allFilled;
+                            }
+
+                            inputs.forEach(input => {
+                                input.addEventListener("input", checkInputs);
+                            });
+                        });
+                    </script>
                 </main>
             </div>
         </div>
-        <script>
-            document.addEventListener('click', () => checkSession());
-            document.addEventListener('input', () => checkSession());
-        </script>
-        <script src="js/bootstrap@5.0.1/dist/js/bootstrap.bundle.min.js"></script>
+
+
+
+    <script src="js/bootstrap@5.0.1/dist/js/bootstrap.bundle.min.js"></script>
         <script src="js/scripts.js"></script>
         <script src="js/simple-datatables@latest" type="text/javascript"></script>
         <script src="js/datatables/datatables-simple-demo.js"></script>

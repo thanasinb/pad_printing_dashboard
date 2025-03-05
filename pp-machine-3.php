@@ -3,73 +3,289 @@ require 'pp-session-start.php';
 
 ini_set('display_errors', 0);
 error_reporting(E_ERROR | E_WARNING | E_PARSE);
+
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     require 'update/establish.php';
-    if ($_POST['selected_radio']==1){
-        $sql = "UPDATE machine_queue SET comp_date='0000-00-00', comp_time='00:00:00', id_task = (";
-        $sql = $sql . "SELECT id_task FROM planning WHERE id_job=" . $_POST['id_job'] . " AND ";
-        $sql = $sql . "operation=" . $_POST['operation_new'];
-        $sql = $sql . ") WHERE id_machine='" . $_POST['id_machine'] . "' AND queue_number=1";
-//            echo $sql;
-        $conn->query($sql);
-        $sql = "UPDATE machine_queue SET queue_number = queue_number - 1 WHERE id_machine='" . $_POST['id_mc'] . "' AND queue_number > 0";
-        $conn->query($sql);
-    }
-//        elseif ($_POST['selected_radio']==3) {
-//            $sql = "UPDATE planning SET task_complete=1 WHERE id_job=" . $_POST['id_job'] . " AND ";
-//            $sql = $sql . "operation=" . $_POST['operation'];
-//            $conn->query($sql);
-//        }
-    elseif ($_POST['selected_radio']==4) {
-        // FOR REMOVING TASK
-        $sql = "DELETE FROM machine_queue WHERE id_machine='" . $_POST['id_mc'] . "' AND queue_number=1";
-        $conn->query($sql);
-//            echo  $sql;
-    }elseif ($_POST['selected_radio']==5) {
-        $sql = "UPDATE machine_queue SET queue_number = queue_number - 1 WHERE id_machine='" . $_POST['id_mc'] . "' AND queue_number > 0";
-        $conn->query($sql);
-    }elseif ($_POST['selected_radio']==6) {
-        if ($_POST['is_current_task']==1){
-            // FOR ADDING A NEW TASK TO QUEUE 1
-            $sql = "INSERT INTO machine_queue (id_machine, queue_number, id_task) VALUES (";
-            $sql = $sql . "'" . $_POST['id_machine'] . "',";
-            $sql = $sql . "1,";
-            $sql = $sql . "(SELECT id_task FROM planning WHERE ";
-            $sql = $sql . "id_job=" . $_POST['id_job'] . " AND ";
-            $sql = $sql . "operation=" . $_POST['operation_new'] . ")";
-            $sql = $sql . ")";
-        }else{
-            // FOR ADDING A NEW TASK TO QUEUE 2
-            $sql = "INSERT INTO machine_queue (id_machine, queue_number, id_task) VALUES (";
-            $sql = $sql . "'" . $_POST['id_machine'] . "',";
-            $sql = $sql . "2,";
-            $sql = $sql . "(SELECT id_task FROM planning WHERE ";
-            $sql = $sql . "id_job=" . $_POST['id_job'] . " AND ";
-            $sql = $sql . "operation=" . $_POST['operation_new'] . ")";
-            $sql = $sql . ")";
-        }
-        $conn->query($sql);
-//            echo $sql;
-    }elseif (strcmp($_POST["id_mc"], "") != 0){
-        $sql = "SELECT id_mc FROM machine WHERE id_mc='" . $_POST["id_mc"] . "'";
-//            echo $sql;
-        $result = $conn->query($sql);
-        if($result->num_rows == 0) {
-            $sql = "INSERT INTO machine (";
-            $sql = $sql . "id_mc,";
-            $sql = $sql . "id_mc_type,";
-            $sql = $sql . "mc_des";
-            $sql = $sql . ") VALUES (";
-            $sql = $sql . "'" . $_POST["id_mc"] . "',";
-            $sql = $sql . "" . $_POST["id_mc_type"] . ",";
-            $sql = $sql . "'" . $_POST["mc_des"] . "')";
-//                echo $sql;
-            $conn->query($sql);
+
+    $username = isset($_SESSION['username']) ? $_SESSION['username'] : 'unknown_user';
+
+    $id_job = $_POST['id_job'] ?? null;
+    $id_machine = $_POST['id_machine'] ?? null;
+    $operation_new = $_POST['operation_new'] ?? null;
+    $selected_radio = $_POST['selected_radio'] ?? null;
+
+   if ($selected_radio == 1) {
+    // 🔹 ดึงข้อมูลเดิมของ Job ก่อนการแก้ไข
+    $sql_old = "SELECT id_job, work_order, item_no, machine, operation, op_color, op_side, qty_comp, qty_open, date_due 
+                FROM planning WHERE id_job = ? AND operation = ?";
+    $stmt_old = $conn->prepare($sql_old);
+    $stmt_old->bind_param("ss", $id_job, $operation_new);
+    $stmt_old->execute();
+    $result_old = $stmt_old->get_result();
+    $old_data = $result_old->fetch_assoc();
+    $stmt_old->close();
+
+    // 🔹 UPDATE JOB ON MACHINE
+    $sql_update = "UPDATE machine_queue SET comp_date='0000-00-00', comp_time='00:00:00', id_task = (
+                    SELECT id_task FROM planning WHERE id_job=? AND operation=?
+                ) WHERE id_machine=? AND queue_number=1";
+    $stmt = $conn->prepare($sql_update);
+    $stmt->bind_param("sss", $id_job, $operation_new, $id_machine);
+    $stmt->execute();
+
+    // 🔹 ดึงข้อมูลใหม่ของ Job หลังการแก้ไข
+    $sql_new = "SELECT id_job, work_order, item_no, machine, operation, op_color, op_side, qty_comp, qty_open, date_due 
+                FROM planning WHERE id_job = ? AND operation = ?";
+    $stmt_new = $conn->prepare($sql_new);
+    $stmt_new->bind_param("ss", $id_job, $operation_new);
+    $stmt_new->execute();
+    $result_new = $stmt_new->get_result();
+    $new_data = $result_new->fetch_assoc();
+    $stmt_new->close();
+
+    // 🔹 เปรียบเทียบค่าก่อนและหลัง
+    $changes = [];
+    if ($old_data && $new_data) {
+        foreach ($old_data as $key => $old_value) {
+            $new_value = $new_data[$key] ?? null;
+            if ($old_value != $new_value) {
+                $changes[] = "แก้ไข " . ucfirst(str_replace("_", " ", $key)) . ": " . $old_value . " → " . $new_value;
+            }
         }
     }
+
+    // 🔹 ดึงข้อมูล Job จาก planning (เหมือนเดิม)
+    $sql_planning = "SELECT id_job, work_order, item_no, machine, operation, op_color, op_side, qty_comp, qty_open, date_due 
+                    FROM planning WHERE id_job = ? AND operation = ?";
+    $stmt_planning = $conn->prepare($sql_planning);
+    $stmt_planning->bind_param("ss", $id_job, $operation_new);
+    $stmt_planning->execute();
+    $result_planning = $stmt_planning->get_result();
+    $job_details = $result_planning->fetch_assoc();
+    $stmt_planning->close();
+
+    if ($job_details) {
+        $details = json_encode([
+            "Job ID: " . $job_details['id_job'],
+            "Work Order: " . $job_details['work_order'],
+            "Item No.: " . $job_details['item_no'],
+            "Machine: " . $job_details['machine'],
+            "Operation: " . $job_details['operation'],
+            "Color: " . $job_details['op_color'],
+            "Side: " . $job_details['op_side'],
+            "Qty Comp.: " . $job_details['qty_comp'],
+            "Qty Open: " . $job_details['qty_open'],
+            "Due Date: " . $job_details['date_due']
+        ], JSON_UNESCAPED_UNICODE);
+    } else {
+        $details = json_encode(["Error: ไม่พบข้อมูลใน planning"], JSON_UNESCAPED_UNICODE);
+    }
+
+    // 🔹 รวมข้อมูลที่เปลี่ยนแปลงเข้าไปใน details
+    if (!empty($changes)) {
+        $details = json_encode($changes, JSON_UNESCAPED_UNICODE);
+    }
+
+    // 🔹 บันทึกลง history
+    logHistory($username, "แก้ไข job ID $id_job ที่ machine $id_machine.", $details, $conn);
+
+    } elseif ($selected_radio == 4) {
+        // REMOVE TASK
+        $sql = "DELETE FROM machine_queue WHERE id_machine=? AND queue_number=1";
+        $stmt = $conn->prepare($sql);
+        $stmt->bind_param("s", $_POST['id_mc']);
+        $stmt->execute();
+
+        // บันทึกประวัติ
+        logHistory($username, "เอา job ID $id_job ออกจาก machine $id_machine.", "", $conn);
+    } elseif ($selected_radio == 6) {
+        $is_current_task = $_POST['is_current_task'] ?? 0;
+        $queue_number = ($is_current_task == 1) ? 1 : 2;
+
+        // ADD NEW TASK TO QUEUE
+        $sql = "INSERT INTO machine_queue (id_machine, queue_number, id_task) VALUES (?, ?, 
+            (SELECT id_task FROM planning WHERE id_job=? AND operation=?))";
+        $stmt = $conn->prepare($sql);
+        $stmt->bind_param("ssss", $id_machine, $queue_number, $id_job, $operation_new);
+        $stmt->execute();
+
+        // ดึงข้อมูล Job จาก planning
+        $sql_planning = "SELECT id_job, work_order, item_no, machine, operation, op_color, op_side, qty_comp, qty_open, date_due 
+                     FROM planning WHERE id_job = ? AND operation = ?";
+        $stmt_planning = $conn->prepare($sql_planning);
+        $stmt_planning->bind_param("ss", $id_job, $operation_new);
+        $stmt_planning->execute();
+        $result_planning = $stmt_planning->get_result();
+        $job_details = $result_planning->fetch_assoc();
+        $stmt_planning->close();
+
+        if ($job_details) {
+            $details = json_encode([
+                "Job ID: " . $job_details['id_job'],
+                "Work Order: " . $job_details['work_order'],
+                "Item No.: " . $job_details['item_no'],
+                "Machine Type: " . $job_details['machine'],
+                "Operation: " . $job_details['operation'],
+                "Color: " . $job_details['op_color'],
+                "Side: " . $job_details['op_side'],
+                "Qty Comp.: " . $job_details['qty_comp'],
+                "Qty Open: " . $job_details['qty_open'],
+                "Due Date: " . $job_details['date_due']
+            ], JSON_UNESCAPED_UNICODE);
+        } else {
+            $details = json_encode(["Error: ไม่พบข้อมูลใน planning"], JSON_UNESCAPED_UNICODE);
+        }
+
+        // บันทึกลง history
+        logHistory($username, "เพิ่ม job ID $id_job ไปที่ machine $id_machine.", $details, $conn);
+
+    }
+    elseif ($selected_radio == 7) { // 7 = แก้ไข Job
+        $id_job = $_POST['id_job'];
+        $id_machine = $_POST['id_machine'];
+        $operation_new = $_POST['operation_new'];
+
+        // ดึงข้อมูล Job เดิมจาก machine_queue
+        $sql_old = "SELECT id_task FROM machine_queue WHERE id_machine=? AND id_task IN 
+                (SELECT id_task FROM planning WHERE id_job=? AND operation=?)";
+        $stmt_old = $conn->prepare($sql_old);
+        $stmt_old->bind_param("sss", $id_machine, $id_job, $operation_new);
+        $stmt_old->execute();
+        $result_old = $stmt_old->get_result();
+        $old_task = $result_old->fetch_assoc();
+        $stmt_old->close();
+
+        // ดึงข้อมูล Job ใหม่จาก planning
+        $sql_planning = "SELECT id_job, work_order, item_no, machine, operation, op_color, op_side, qty_comp, qty_open, date_due 
+                     FROM planning WHERE id_job=? AND operation=?";
+        $stmt_planning = $conn->prepare($sql_planning);
+        $stmt_planning->bind_param("ss", $id_job, $operation_new);
+        $stmt_planning->execute();
+        $result_planning = $stmt_planning->get_result();
+        $new_task = $result_planning->fetch_assoc();
+        $stmt_planning->close();
+
+        $changes = [];
+
+        if ($old_task['id_task'] !== $new_task['id_job']) {
+            $changes[] = "Job ID: " . $old_task['id_task'] . " → " . $new_task['id_job'];
+        }
+        if ($old_task['operation'] !== $new_task['operation']) {
+            $changes[] = "Operation: " . $old_task['operation'] . " → " . $new_task['operation'];
+        }
+
+        if (!empty($changes)) {
+            $details = json_encode($changes, JSON_UNESCAPED_UNICODE);
+            logHistory($username, "แก้ไข job ID $id_job บน machine $id_machine.", $details, $conn);
+
+            // อัปเดต machine_queue
+            $sql_update = "UPDATE machine_queue SET id_task = (SELECT id_task FROM planning WHERE id_job=? AND operation=?)
+                       WHERE id_machine=? AND id_task=?";
+            $stmt_update = $conn->prepare($sql_update);
+            $stmt_update->bind_param("ssss", $id_job, $operation_new, $id_machine, $old_task['id_task']);
+            $stmt_update->execute();
+        }
+    }
+    elseif (!empty($_POST["id_mc"])) {
+        $id_mc = $_POST["id_mc"];
+        $id_mc_type = $_POST["id_mc_type"];
+        $id_cam = $_POST["id_cam"];
+        $mc_des = $_POST["mc_des"];
+
+        // ตรวจสอบว่า Machine ID มีอยู่หรือไม่
+        $sql = "SELECT id_mc FROM machine WHERE id_mc=?";
+        $stmt = $conn->prepare($sql);
+        $stmt->bind_param("s", $id_mc);
+        $stmt->execute();
+        $result = $stmt->get_result();
+
+        if ($result->num_rows == 0) {
+            // ดึงชื่อ Machine Type
+            $sql_mc_type = "SELECT mc_type FROM machine_type WHERE id_mc_type=?";
+            $stmt_mc_type = $conn->prepare($sql_mc_type);
+            $stmt_mc_type->bind_param("s", $id_mc_type);
+            $stmt_mc_type->execute();
+            $result_mc_type = $stmt_mc_type->get_result();
+            $mc_type = ($result_mc_type->num_rows > 0) ? $result_mc_type->fetch_assoc()['mc_type'] : "Unknown Type";
+            $stmt_mc_type->close();
+
+            // เพิ่มเครื่องจักรใหม่
+            $sql = "INSERT INTO machine (id_mc, id_mc_type, id_cam, mc_des, time_contact) 
+                    VALUES (?, ?, ?, ?, NOW())";
+            $stmt = $conn->prepare($sql);
+            $stmt->bind_param("ssss", $id_mc, $id_mc_type, $id_cam, $mc_des);
+
+            if ($stmt->execute()) {
+                // ➜ บันทึก History
+                $action = "สร้าง Machine ID: " . $id_mc;
+                $details = json_encode([
+                    "Machine ID: " . $id_mc,
+                    "Machine Type: " . $mc_type,
+                    "Camera ID: " . $id_cam,
+                    "Description: " . $mc_des
+                ], JSON_UNESCAPED_UNICODE);
+                logHistory($username, $action, $details, $conn);
+
+
+            }
+        } else {
+            // ดึงข้อมูลเดิมของเครื่องจักร
+            $sql_old = "SELECT id_mc_type, id_cam, mc_des FROM machine WHERE id_mc=?";
+            $stmt_old = $conn->prepare($sql_old);
+            $stmt_old->bind_param("s", $id_mc);
+            $stmt_old->execute();
+            $result_old = $stmt_old->get_result();
+            $old_data = $result_old->fetch_assoc();
+
+            // ดึงชื่อ Machine Type
+            $sql_mc_type = "SELECT mc_type FROM machine_type WHERE id_mc_type=?";
+            $stmt_mc_type = $conn->prepare($sql_mc_type);
+            $stmt_mc_type->bind_param("s", $id_mc_type);
+            $stmt_mc_type->execute();
+            $result_mc_type = $stmt_mc_type->get_result();
+            $mc_type_new = ($result_mc_type->num_rows > 0) ? $result_mc_type->fetch_assoc()['mc_type'] : "Unknown Type";
+            $stmt_mc_type->close();
+
+            $changes = [];
+
+            if ($old_data['id_mc_type'] != $id_mc_type) {
+                $changes[] = "แก้ไข Machine Type: " . $old_data['id_mc_type'] . " → " . $mc_type_new;
+            }
+            if ($old_data['id_cam'] != $id_cam) {
+                $changes[] = "แก้ไข Camera ID: " . $old_data['id_cam'] . " → " . $id_cam;
+            }
+            if ($old_data['mc_des'] != $mc_des) {
+                $changes[] = "แก้ไข Machine Description: " . $old_data['mc_des'] . " → " . $mc_des;
+            }
+
+            if (!empty($changes)) {
+                $action = "แก้ไขเครื่องจักร ID: " . $id_mc;
+                $details = json_encode($changes, JSON_UNESCAPED_UNICODE);
+                logHistory($username, $action, $details, $conn);
+
+
+                // อัปเดตข้อมูลเครื่องจักร
+                $sql_update = "UPDATE machine SET id_mc_type=?, id_cam=?, mc_des=? WHERE id_mc=?";
+                $stmt_update = $conn->prepare($sql_update);
+                $stmt_update->bind_param("ssss", $id_mc_type, $id_cam, $mc_des, $id_mc);
+                $stmt_update->execute();
+            }
+        }
+    }
+
     require 'update/terminate.php';
 }
+
+// ฟังก์ชันบันทึกประวัติ
+function logHistory($username, $action, $details, $conn) {
+    $sql_log = "INSERT INTO history (username, action, details, date_time) VALUES (?, ?, ?, NOW())";
+    $stmt_log = $conn->prepare($sql_log);
+    $stmt_log->bind_param("sss", $username, $action, $details);
+    $stmt_log->execute();
+    $stmt_log->close();
+}
 ?>
+
 
 <!DOCTYPE html>
 <html lang="en">
@@ -108,8 +324,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     <script type="text/javascript" src="js/majorette/pp-machine-clock.js"></script>
 </head>
 <body class="nav-fixed">
-<?php require 'pp-machine-sidenavAccordion.php'; ?>
-<?php require 'pp-session.php'; ?>
+<?php require 'pp-staff-sidenavAccordion.php'; ?>
 <div id="layoutSidenav">
     <?php require 'pp-layoutSidenav_nav.php'; ?>
 
@@ -127,11 +342,11 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 <div class="card mb-4 w-100" id="table-machine">
                     <div class="card-header bg-red fw-bold text-white fs-4 d-flex justify-content-between">
                         <div>Job overview by Machine</div>
-                        <div>
-                            <span class="hours"></span> :
-                            <span class="min"></span> :
-                            <span class="sec"></span>
-                        </div>
+<!--                        <div>-->
+<!--                            <span class="hours"></span> :-->
+<!--                            <span class="min"></span> :-->
+<!--                            <span class="sec"></span>-->
+<!--                        </div>-->
                     </div>
                     <div class="card-body">
                         <div class="form-check">
@@ -394,10 +609,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         </div>
     </div>
 </div>
-<script>
-    document.addEventListener('click', () => checkSession());
-    document.addEventListener('input', () => checkSession());
-</script>
+
 <script src="js/bootstrap@5.0.1/dist/js/bootstrap.bundle.min.js"></script>
 <script src="js/scripts.js"></script>
 <!--        <script src="js/Chart.js/2.9.4/Chart.min.js"></script>-->
@@ -407,7 +619,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 <script src="js/datatables/datatables-simple-demo.js"></script>
 <script src="js/litepicker/dist/bundle.js"></script>
 <script src="js/litepicker.js"></script>
-<script type="text/javascript" src="js/majorette/pp-session.js"></script>
 
 </body>
 </html>

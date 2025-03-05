@@ -27,25 +27,114 @@ require 'pp-session-start.php';
 
         <!--        <script src="js/majorette/pp-machine-add.js"></script>-->
     </head>
+    <style>
+
+        /* เอฟเฟกต์ปุ่ม Confirm (สีน้ำเงิน) */
+        .btn-confirm-modal {
+            transition: all 0.2s ease-in-out;
+            background-color: #007bff; /* สีน้ำเงิน */
+            color: white !important;
+            font-size: 16px;
+            font-weight: bold;
+            padding: 10px 20px;
+            border-radius: 8px;
+            border: none;
+            display: inline-block;
+            cursor: pointer;
+            text-align: center;
+
+        }
+
+        /* เมื่อเมาส์ไปชี้ที่ปุ่ม Confirm */
+        .btn-confirm-modal:hover {
+            transform: scale(1.1);
+            opacity: 0.9;
+            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
+            background-color: #0069d9; /* สีน้ำเงินเข้มขึ้น */
+        }
+
+        /* เอฟเฟกต์ตอนกดปุ่ม Confirm */
+        .btn-confirm-modal:active {
+            transform: scale(0.95);
+            box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.15);
+            background-color: #0056b3;
+        }
+
+
+        /* ปุ่มใน Dark Mode */
+        body.dark-mode .btn-confirm-modal {
+            background-color: #375a7f !important; /* สีฟ้าหม่น */
+            color: #ffffff !important; /* สีข้อความขาว */
+            border: 1px solid #444444 !important; /* เส้นขอบเข้ม */
+        }
+
+        /* Hover ใน Dark Mode */
+        body.dark-mode .btn-confirm-modal:hover {
+            background-color: #3b566a !important; /* สีฟ้าหม่นเข้มขึ้นเมื่อ hover */
+        }
+
+        /* เอฟเฟกต์ปุ่ม Close (สีม่วง) */
+        .btn-close-modal {
+            transition: all 0.2s ease-in-out;
+            background-color:  #f44336; /* สีม่วง */
+            color: white !important;
+            font-size: 16px;
+            font-weight: bold;
+            padding: 10px 20px;
+            border-radius: 8px;
+            border: none;
+            display: inline-block;
+            cursor: pointer;
+            text-align: center;
+            margin-left: 5px;
+
+        }
+
+        /* เมื่อเมาส์ไปชี้ที่ปุ่ม Close */
+        .btn-close-modal:hover {
+            transform: scale(1.1);
+            opacity: 0.9;
+            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
+            background-color: #d32f2f;
+        }
+
+        /* เอฟเฟกต์ตอนกดปุ่ม Close */
+        .btn-close-modal:active {
+            transform: scale(0.95);
+            box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.15);
+            background-color: #a52020;
+        }
+        /* ปุ่มใน Dark Mode */
+        body.dark-mode .btn-close-modal {
+            background-color:#A52A2A !important; /* สีม่วงหม่น */
+            border-color: #A52A2A !important; /* สีเส้นขอบ */
+            color: white !important; /* สีตัวอักษร */
+        }
+
+        /* Hover ใน Dark Mode */
+        body.dark-mode .btn-close-modal:hover {
+            background-color: #8c2424 !important; /* สีม่วงหม่น */
+        }
+    </style>
     <body class="nav-fixed">
     <?php require 'pp-setting-sidenavAccordion.php'; ?>
     <div id="layoutSidenav">
         <?php require 'pp-layoutSidenav_nav.php'; ?>
         <div id="layoutSidenav_content">
                 <main>
-                    <header class="page-header page-header-dark pb-5">
+                    <header class="page-header page-header-dark pb-4">
                         <div class="container-xl px-4">
                             <div class="page-header-content pt-4">
                             </div>
                         </div>
                     </header>
                     <!-- Main page content-->
-                    <div class="container-xl d-flex justify-content-center align-items-center px-4 mt-n10">
+                    <div class="container-xl d-flex justify-content-center align-items-center px-2 mt-n5" >
                         <div class="col-xl-6">
                             <div class="card mb-4">
-                                <div class="card-header">Add New Machine</div>
+                                <div class="card-header bg-red text-white">Add New Machine</div>
                                 <div class="card-body">
-                                    <form method="post" action="pp-machine.php">
+                                    <form method="post" action="pp-machine-3.php">
                                         <!-- Form Group (username)-->
                                         <div class="row gx-3 mb-3">
                                             <div class="col-md-6">
@@ -61,6 +150,10 @@ require 'pp-session-start.php';
                                                     ?>
                                                 </select>
                                             </div>
+                                            <div class="col-md-6">
+                                                <label class="small mb-1" for="id_cam">Camera number</label>
+                                                <input class="form-control" id="id_cam" name="id_cam" type="text" >
+                                            </div>
                                         </div>
                                         <div class="row gx-3 mb-3">
                                             <div class="col-md-12">
@@ -69,8 +162,8 @@ require 'pp-session-start.php';
                                             </div>
                                         </div>
                                         <!-- Save changes button-->
-                                        <button class="btn btn-blue" id="submit_machine_add" type="submit">Add</button>
-                                        <a href="pp-machine.php" style="text-decoration: none"><button class="btn btn-red" type="button">Cancel</button></a>
+                                        <button class="btn btn-confirm-modal" id="submit_machine_add" type="submit">Add</button>
+                                        <a href="pp-machine-add.php" style="text-decoration: none"><button class="btn btn-close-modal" type="button">Cancel</button></a>
                                     </form>
                                 </div>
                             </div>
@@ -79,6 +172,7 @@ require 'pp-session-start.php';
                 </main>
             </div>
         </div>
+
         <script src="js/bootstrap@5.0.1/dist/js/bootstrap.bundle.min.js"></script>
         <script src="js/scripts.js"></script>
         <script src="js/Chart.js/2.9.4/Chart.min.js"></script>
@@ -88,17 +182,14 @@ require 'pp-session-start.php';
         <script src="js/datatables/datatables-simple-demo.js"></script>
         <script src="js/litepicker/dist/bundle.js"></script>
         <script src="js/litepicker.js"></script>
-    <script type="text/javascript" src="js/majorette/pp-session.js"></script>
-    <script>
-        document.addEventListener('click', () => checkSession());
-        document.addEventListener('input', () => checkSession());
-    </script>
     <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="js/majorette/chart-script.js"></script>
     <script src="js/majorette/chart-script-dt.js"></script>
     <script src="js/simple-datatables@latest" type="text/javascript"></script>
     <script src="js/datatables/datatables-staff.js"></script>
+    <script type="text/javascript" src="js/majorette/pp-session.js"></script>
+
 
     </body>
 </html>

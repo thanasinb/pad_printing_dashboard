@@ -1,51 +1,70 @@
 <?php
-// เชื่อมต่อกับฐานข้อมูล
+session_start();
 require 'update/establish.php';
-session_start(); // ใช้สำหรับดึงผู้ที่ทำการลบ
 
-// ตรวจสอบการรับค่า id_staff
-if (isset($_GET['id_staff']) && !empty($_GET['id_staff'])) {
-    $idStaff = $_GET['id_staff'];
+// 🔹 Debug ค่าเซสชัน
+file_put_contents("debug_log.txt", "Session Data: " . print_r($_SESSION, true) . "\n", FILE_APPEND);
 
-    // ดึง username, ชื่อ และ นามสกุล จาก id_staff
-    $stmtSelect = $conn->prepare("
-        SELECT login.username, staff.name_first, staff.name_last 
-        FROM login 
-        LEFT JOIN staff ON login.id_staff = staff.id_staff 
-        WHERE login.id_staff = ?
-    ");
-    $stmtSelect->bind_param("s", $idStaff);
-    $stmtSelect->execute();
-    $result = $stmtSelect->get_result();
-
-    if ($row = $result->fetch_assoc()) {
-        $usernameToDelete = $row['username'];
-        $fullName = $row['name_first'] . ' ' . $row['name_last'];
-
-        // ลบข้อมูลผู้ใช้จากตาราง login
-        $stmtDelete = $conn->prepare("DELETE FROM login WHERE id_staff = ?");
-        $stmtDelete->bind_param("s", $idStaff);
-
-        if ($stmtDelete->execute()) {
-            // บันทึกประวัติการลบใน history เป็น "ลบผู้ใช้: username ของ ชื่อ นามสกุล"
-            $action = "ลบผู้ใช้: " . $usernameToDelete . " ของ " . $fullName;
-            $adminUsername = $_SESSION['username'] ?? 'system'; // ผู้ที่ทำการลบ
-            $stmtHistory = $conn->prepare("INSERT INTO history (username, action, date_time) VALUES (?, ?, CURRENT_TIMESTAMP)");
-            $stmtHistory->bind_param("ss", $adminUsername, $action);
-            $stmtHistory->execute();
-
-            // ส่งสถานะ JSON กลับไป
-            echo json_encode(["statusCode" => 200, "message" => "ลบผู้ใช้เรียบร้อยแล้ว"]);
-        } else {
-            echo json_encode(["statusCode" => 500, "message" => "ไม่สามารถลบผู้ใช้ได้: " . $conn->error]);
-        }
-    } else {
-        echo json_encode(["statusCode" => 404, "message" => "ไม่พบผู้ใช้ที่ต้องการลบ"]);
-    }
-} else {
-    echo json_encode(["statusCode" => 400, "message" => "ไม่ได้รับข้อมูล id_staff"]);
+// ตรวจสอบว่าเซสชันมีค่า `username` หรือไม่
+if (!isset($_SESSION['username'])) {
+    echo json_encode(["statusCode" => 401, "message" => "ไม่ได้รับอนุญาต"]);
+    exit;
 }
 
-// ปิดการเชื่อมต่อ
+$currentUsername = $_SESSION['username']; // ดึงค่า username ของผู้ที่ล็อกอินอยู่
+file_put_contents("debug_log.txt", "Current Username: " . $currentUsername . "\n", FILE_APPEND);
+
+// รับค่า id_staff ที่ต้องการลบ และตรวจสอบว่าถูกต้องหรือไม่
+$idStaff = filter_input(INPUT_GET, 'id_staff', FILTER_VALIDATE_INT);
+if (!$idStaff) {
+    echo json_encode(["statusCode" => 400, "message" => "ID ไม่ถูกต้อง"]);
+    exit;
+}
+file_put_contents("debug_log.txt", "Target User ID to Delete: " . $idStaff . "\n", FILE_APPEND);
+
+// ดึง username ของบัญชีที่ต้องการลบ
+$stmtTargetUser = $conn->prepare("SELECT username FROM login WHERE id_staff = ?");
+$stmtTargetUser->bind_param("i", $idStaff);
+$stmtTargetUser->execute();
+$resultTargetUser = $stmtTargetUser->get_result();
+$targetUsername = ($row = $resultTargetUser->fetch_assoc()) ? $row['username'] : null;
+
+// ตรวจสอบว่ามีบัญชีที่ต้องการลบอยู่จริงหรือไม่
+if (!$targetUsername) {
+    echo json_encode(["statusCode" => 404, "message" => "ไม่พบบัญชีที่ต้องการลบ"]);
+    exit;
+}
+file_put_contents("debug_log.txt", "Target Username: " . $targetUsername . "\n", FILE_APPEND);
+
+// ป้องกันไม่ให้ลบบัญชีตัวเอง (ตรวจสอบ username)
+if ($targetUsername === $currentUsername) {
+    echo json_encode(["statusCode" => 403, "message" => "ไม่สามารถลบบัญชีของตนเองได้"]);
+    exit;
+}
+
+// 🔹 ฟังก์ชันสำหรับบันทึกประวัติการลบ
+function logHistory($username, $action, $conn) {
+    $sql_log = "INSERT INTO history (username, action, date_time) VALUES (?, ?, NOW())";
+    $stmt_log = $conn->prepare($sql_log);
+    $stmt_log->bind_param("ss", $username, $action);
+    $stmt_log->execute();
+    $stmt_log->close();
+}
+
+// ลบจากตาราง login
+$stmtDelete = $conn->prepare("DELETE FROM login WHERE id_staff = ?");
+$stmtDelete->bind_param("i", $idStaff);
+
+if ($stmtDelete->execute() && $stmtDelete->affected_rows > 0) {
+    // 🔹 บันทึกประวัติการลบบัญชี
+    $action = "ลบบัญชี: " . $targetUsername;
+    logHistory($currentUsername, $action, $conn);
+
+    echo json_encode(["statusCode" => 200, "message" => "ลบบัญชีผู้ใช้เรียบร้อยแล้ว"]);
+} else {
+    echo json_encode(["statusCode" => 500, "message" => "ไม่สามารถลบบัญชีได้"]);
+}
+
+// ปิดการเชื่อมต่อฐานข้อมูล
 $conn->close();
 ?>

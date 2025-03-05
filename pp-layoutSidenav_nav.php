@@ -39,16 +39,47 @@ require 'update/terminate.php';
                 </a>
 
                 <div class="sidenav-menu-heading">Menu</div>
+                <a class="nav-link collapsed" href="javascript:void(0);" data-bs-toggle="collapse" data-bs-target="#collapseDashboard" aria-expanded="false" aria-controls="collapseDashboard">
+                    <div class="nav-link-icon"><i class="fas fa-table"></i></div>
+                    Dashboard
+                    <div class="sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
+                </a>
+
+                <div class="collapse" id="collapseDashboard" data-bs-parent="#accordionSidenav">
+                    <nav class="sidenav-menu-nested nav accordion" id="accordionSidenavPages">
+                        <a class="nav-link" href="pp-machine-3.php"><i class="fas fa-table" style="opacity: 0.5; margin-right: 6px;"></i>Machine Dashboard</a>
+                        <a class="nav-link" href="pp-special-tray.php"><i class="fas fa-utensils" style="opacity: 0.5; margin-right: 6px;"></i>Tray Dashboard</a>
+
+                    </nav>
+                </div>
+
+                <a class="nav-link collapsed" href="javascript:void(0);" data-bs-toggle="collapse" data-bs-target="#collapseStatistics" aria-expanded="false" aria-controls="collapseStatistics">
+                    <div class="nav-link-icon"><i class="fas fa-chart-bar"></i></div>
+                    Statistics
+                    <div class="sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
+                </a>
+
+                <div class="collapse" id="collapseStatistics" data-bs-parent="#accordionSidenav">
+                    <nav class="sidenav-menu-nested nav accordion" id="accordionSidenavPages">
+                        <a class="nav-link" href="pp-machine-statistic.php"><i class="fas fa-chart-bar" style="opacity: 0.5; margin-right: 6px;"></i>Machine Statistic</a>
+<!--                        <a class="nav-link" href="pp-op-statistic.php"><i class="fas fa-chart-bar" style="opacity: 0.5; margin-right: 6px;"></i>Operator Statistic</a>-->
+                        <a class="nav-link" href="pp-op-statistic1.php"><i class="fas fa-chart-bar" style="opacity: 0.5; margin-right: 6px;"></i>Operator Statistic</a>
+
+
+                    </nav>
+                </div>
+
                 <a class="nav-link collapsed" href="javascript:void(0);" data-bs-toggle="collapse" data-bs-target="#collapseMachines" aria-expanded="false" aria-controls="collapseMachines">
-                    <div class="nav-link-icon"><i class="fas fa-stamp"></i></div>
+                    <div class="nav-link-icon"><i class="fas fa-robot"></i></div>
                     Machines
                     <div class="sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
                 </a>
+
                 <div class="collapse" id="collapseMachines" data-bs-parent="#accordionSidenav">
                     <nav class="sidenav-menu-nested nav accordion" id="accordionSidenavPages">
-                        <a class="nav-link" href="pp-machine-3.php"><i class="fas fa-list" style="opacity: 0.5; margin-right: 6px;"></i>Machine List</a>
-                        <a class="nav-link" href="pp-machine-statistic.php"><i class="fas fa-chart-bar" style="opacity: 0.5; margin-right: 6px;"></i>Machine Statistic</a>
                         <a class="nav-link" href="pp-machine-add.php"><i class="fas fa-plus" style="opacity: 0.5; margin-right: 6px;"></i>Add new Machine</a>
+                        <a class="nav-link" href="pp-machine-info.php"><i class="fas fa-list" style="opacity: 0.5; margin-right: 6px;"></i>Machines List Info</a>
+
                     </nav>
                 </div>
                 <a class="nav-link collapsed" href="javascript:void(0);" data-bs-toggle="collapse" data-bs-target="#collapseStaffs" aria-expanded="false" aria-controls="collapseStaffs">
@@ -58,9 +89,11 @@ require 'update/terminate.php';
                 </a>
                 <div class="collapse" id="collapseStaffs" data-bs-parent="#accordionSidenav">
                     <nav class="sidenav-menu-nested nav accordion" id="accordionSidenavPages">
-                        <a class="nav-link" href="pp-staff-operator.php"><i class="fas fa-list" style="opacity: 0.5; margin-right: 6px;"></i>Operator List</a>
-                        <a class="nav-link" href="pp-staff-technician.php"><i class="fas fa-list" style="opacity: 0.5; margin-right: 6px;"></i>Technician List</a>
-                        <a class="nav-link" href="pp-op-statistic.php"><i class="fas fa-chart-bar" style="opacity: 0.5; margin-right: 6px;"></i>Operator Statistic</a>
+                        <a class="nav-link" href="pp-staff-operator.php"><i class="fas fa-list" style="opacity: 0.5; margin-right: 6px;"></i>Operators List</a>
+                        <a class="nav-link" href="pp-staff-technician.php"><i class="fas fa-list" style="opacity: 0.5; margin-right: 6px;"></i>Technicians List</a>
+                        <a class="nav-link" href="pp-staff-foreman.php"><i class="fas fa-list" style="opacity: 0.5; margin-right: 6px;"></i>Foreman List</a>
+                        <a class="nav-link" href="pp-staff-admin.php"><i class="fas fa-list" style="opacity: 0.5; margin-right: 6px;"></i>Admins List</a>
+                        <a class="nav-link" href="pp-staff-summary.php"><i class="fas fa-users" style="opacity: 0.5; margin-right: 6px;"></i>Staffs</a>
                         <a class="nav-link" href="pp-staff-add.php"><i class="fas fa-plus" style="opacity: 0.5; margin-right: 6px;"></i>Add Staff</a>
                         <a class="nav-link" href="pp-staff-upload.php"><i class="fas fa-file-import" style="opacity: 0.5; margin-right: 6px;"></i>Import Excel</a>
                     </nav>
@@ -74,8 +107,10 @@ require 'update/terminate.php';
                     </a>
                     <div class="collapse" id="collapseAccount" data-bs-parent="#accordionSidenav">
                         <nav class="sidenav-menu-nested nav accordion" id="accordionSidenavPages">
+                            <a class="nav-link" href="pp-account-user-add-page.php"> <i class="fas fa-plus" style="opacity: 0.5; margin-right: 6px;"></i>  Add user  </a>
                             <a class="nav-link" href="pp-account-user.php"><i class="fas fa-list" style="opacity: 0.5; margin-right: 6px;"></i>User Account List</a>
                             <a class="nav-link" href="pp-account.php"> <i class="fas fa-edit" style="opacity: 0.5; margin-right: 6px;"></i>  Edit Account  </a>
+
 
                         </nav>
                     </div>
@@ -91,6 +126,7 @@ require 'update/terminate.php';
                         <a class="nav-link" href="pp-job-add.php"><i class="fas fa-plus" style="opacity: 0.5; margin-right: 6px;"></i>Add New Jobs</a>
                         <a class="nav-link" href="pp-upload.php"><i class="fas fa-upload" style="opacity: 0.5; margin-right: 6px;"></i>Upload Jobs</a>
                         <a class="nav-link" href="pp-export.php"><i class="fas fa-file-export" style="opacity: 0.5; margin-right: 6px;"></i>Export Jobs</a>
+                        <a class="nav-link" href="pp-machine-list-task.php"><i class="fas fa-list" style="opacity: 0.5; margin-right: 6px;"></i>Jobs Lists</a>
                     </nav>
                 </div>
                 <a class="nav-link collapsed" href="javascript:void(0);" data-bs-toggle="collapse" data-bs-target="#collapseDowntime" aria-expanded="false" aria-controls="collapseDowntime">
@@ -128,16 +164,16 @@ require 'update/terminate.php';
                         <a class="nav-link menu-link" href="pp-history.php"><i class="fas fa-history" style="opacity: 0.5; margin-right: 6px;"></i>  History List</a>
                     </nav>
                 </div>
-                <a class="nav-link collapsed" href="javascript:void(0);" data-bs-toggle="collapse" data-bs-target="#collapseTray" aria-expanded="false" aria-controls="collapseTray">
-                    <div class="nav-link-icon"><i class="fas fa-utensils"></i></div> <!-- เปลี่ยนไอคอนเป็น utensils -->
-                    Special Tray
-                    <div class="sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
-                </a>
-                <div class="collapse" id="collapseTray" data-bs-parent="#accordionSidenav">
-                    <nav class="sidenav-menu-nested nav accordion" id="accordionSidenavPages">
-                        <a class="nav-link" href="pp-special-tray.php">Special Tray List</a>
-                    </nav>
-                </div>
+<!--                <a class="nav-link collapsed" href="javascript:void(0);" data-bs-toggle="collapse" data-bs-target="#collapseTray" aria-expanded="false" aria-controls="collapseTray">-->
+<!--                    <div class="nav-link-icon"><i class="fas fa-utensils"></i></div> -->
+<!--                    Special Tray-->
+<!--                    <div class="sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>-->
+<!--                </a>-->
+<!--                <div class="collapse" id="collapseTray" data-bs-parent="#accordionSidenav">-->
+<!--                    <nav class="sidenav-menu-nested nav accordion" id="accordionSidenavPages">-->
+<!--                        <a class="nav-link" href="pp-special-tray.php">Special Tray List</a>-->
+<!--                    </nav>-->
+<!--                </div>-->
 
             </div>
         </div>

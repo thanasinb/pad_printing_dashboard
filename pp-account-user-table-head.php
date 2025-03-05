@@ -1,6 +1,6 @@
 
 <tr class="fw-bold first-row">
-    <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#add_user_modal">Add User</button>
+<!--    <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#add_user_modal">Add User</button>-->
     <th rowspan="2" class="text-center" scope="col" id="dash_machine">
         <i data-feather="user"></i> ID Staff
     </th>

@@ -1,22 +1,22 @@
 <?php
 session_start();
 require 'update/establish.php';
-
 if (isset($_POST['username']) && isset($_POST['password'])) {
     $username = htmlspecialchars($_POST['username'], ENT_QUOTES, 'UTF-8');
     $password = $_POST['password'];
 
-    // ตรวจสอบว่าผู้ใช้มี Session เดิมหรือไม่
+    // ตรวจสอบและทำลาย Session เดิมหากมีการ Login ซ้อน
     if (isset($_SESSION['username']) && $_SESSION['username'] === $username) {
-        // บันทึก Logout เดิม
         $stmt = $conn->prepare("INSERT INTO history (username, action, date_time) VALUES (?, 'Logout (automatic, new login)', NOW())");
         $stmt->bind_param("s", $_SESSION['username']);
         $stmt->execute();
         $stmt->close();
 
-        // ทำลาย Session เดิม
         session_unset();
         session_destroy();
+        if (isset($_COOKIE['session_token'])) {
+            setcookie("session_token", "", time() - 3600, "/");
+        }
     }
 
     // ดึงข้อมูลผู้ใช้จากฐานข้อมูล
@@ -35,26 +35,21 @@ if (isset($_POST['username']) && isset($_POST['password'])) {
         $row = $result->fetch_assoc();
         $hashed_password = $row['password'];
 
-        // ตรวจสอบรหัสผ่าน
         if (password_verify($password, $hashed_password)) {
-            // สร้าง Session และ Cookie
             $_SESSION['username'] = $username;
             $_SESSION['role_group'] = $row['role_group'];
             $_SESSION['role_group_name'] = $row['role_group_name'];
             $_SESSION['role'] = $row['role'];
             $_SESSION['last_activity'] = time();
 
-            // Generate Session Token
             $session_token = bin2hex(random_bytes(32));
             $_SESSION['session_token'] = $session_token;
             setcookie("session_token", $session_token, time() + (30 * 24 * 60 * 60), "/", "", true, true);
 
-            // บันทึกการ Login
             $stmt = $conn->prepare("INSERT INTO history (username, action, date_time) VALUES (?, 'Login', NOW())");
             $stmt->bind_param("s", $username);
             $stmt->execute();
 
-            // Redirect
             header("Location: pp-machine-3.php");
             exit();
         } else {

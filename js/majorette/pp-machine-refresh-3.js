@@ -240,34 +240,34 @@ $(document).ready(function(){
         $('#modal_qty_per_tray').prop('disabled', false);
         $('#modal_qty_shif').prop('disabled', false);
         $('#modal_button_change').hide();
-            $('#modal_button_save').show();
-        });
+        $('#modal_button_save').show();
+    });
 
     $('#modal_button_save').click(function (){
-            var qty_per_tray = $('#modal_qty_per_tray').val();
-            var qty_shif = $('#modal_qty_shif').val();
+        var qty_per_tray = $('#modal_qty_per_tray').val();
+        var qty_shif = $('#modal_qty_shif').val();
 
-            $.ajax({
-                url: "ajax/pp-machine-change-tray.php",
-                type: "GET",
-                data: {
-                    qty_per_tray: qty_per_tray,
-                    qty_shif: qty_shif,
-                    id_task: id_task
-                },
-                context: this,
-                cache: false,
-                success: function(dataResult){
-                    var dataResult = JSON.parse(dataResult);
-                    $('.id_machine:contains(' + id_machine + ')').parent().find('.qty_per_tray').text(qty_per_tray);
-                    $('#modal_qty_per_tray').prop('disabled', true);
-                    $('#modal_qty_shif').prop('disabled', true);
-                    $('#modal_button_save').hide();
-                    $('#modal_button_change').show();
-                    // console.log(dataResult.affected_rows);
-                }
-            });
+        $.ajax({
+            url: "ajax/pp-machine-change-tray.php",
+            type: "GET",
+            data: {
+                qty_per_tray: qty_per_tray,
+                qty_shif: qty_shif,
+                id_task: id_task
+            },
+            context: this,
+            cache: false,
+            success: function(dataResult){
+                var dataResult = JSON.parse(dataResult);
+                $('.id_machine:contains(' + id_machine + ')').parent().find('.qty_per_tray').text(qty_per_tray);
+                $('#modal_qty_per_tray').prop('disabled', true);
+                $('#modal_qty_shif').prop('disabled', true);
+                $('#modal_button_save').hide();
+                $('#modal_button_change').show();
+                // console.log(dataResult.affected_rows);
+            }
         });
+    });
 });
 
 // STARTS and Resets the loop
@@ -305,11 +305,11 @@ function loadData() {
             $("#table_body tr").remove();
             $.each(data, function(i, item) {
                 var html_btn_current_modal = "<button name=\"id_mc\" type=\"submit\" value=\"" + item.id_mc +
-                                                    "\" data-bs-toggle=\"modal\" data-bs-target=\"#currentTaskModal\"" +
-                                                    "class=\"btn btn-datatable btn-icon text-black me-2 \">&#9997;</button>";
+                    "\" data-bs-toggle=\"modal\" data-bs-target=\"#currentTaskModal\"" +
+                    "class=\"btn btn-datatable btn-icon text-black me-2 \">&#9997;</button>";
                 var html_btn_next_modal = "<button name=\"next_id_mc\" type=\"submit\" value=\"" + item.id_mc +
-                                                 "\" data-bs-toggle=\"modal\" data-bs-target=\"#nextTaskModal\"" +
-                                                 "class=\"btn btn-datatable btn-icon text-black me-2 btn-next-task\">&#9997;</button>";
+                    "\" data-bs-toggle=\"modal\" data-bs-target=\"#nextTaskModal\"" +
+                    "class=\"btn btn-datatable btn-icon text-black me-2 btn-next-task\">&#9997;</button>";
 
                 // IF THERE IS NO CURRENT TASK ASSIGNED
                 if(item.item_no==null){

@@ -25,6 +25,90 @@ require 'pp-session-start.php';
         <script src="js/jquery/jquery-ui.min.js"></script>
         <script type="text/javascript" src="js/majorette/pp-setting-dt.js"></script>
     </head>
+    <style>
+        /* เอฟเฟกต์ปุ่ม Confirm (สีน้ำเงิน) */
+        .form-button-submit {
+            transition: all 0.2s ease-in-out;
+            background-color: #007bff; /* สีน้ำเงิน */
+            color: white !important;
+            font-size: 16px;
+            font-weight: bold;
+            padding: 10px 20px;
+            border-radius: 8px;
+            border: none;
+            display: inline-block;
+            cursor: pointer;
+            text-align: center;
+        }
+
+        /* เมื่อเมาส์ไปชี้ที่ปุ่ม Confirm */
+        .form-button-submit:hover {
+            transform: scale(1.1);
+            opacity: 0.9;
+            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
+            background-color: #0069d9; /* สีน้ำเงินเข้มขึ้น */
+        }
+
+        /* เอฟเฟกต์ตอนกดปุ่ม Confirm */
+        .form-button-submit:active {
+            transform: scale(0.95);
+            box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.15);
+            background-color: #0056b3;
+        }
+
+
+        /* ปุ่มใน Dark Mode */
+        body.dark-mode .form-button-submit {
+            background-color: #375a7f !important; /* สีฟ้าหม่น */
+            color: #ffffff !important; /* สีข้อความขาว */
+            border: 1px solid #444444 !important; /* เส้นขอบเข้ม */
+        }
+        /* Hover ใน Dark Mode */
+        body.dark-mode .form-button-submit:hover {
+            background-color: #3b566a !important; /* สีฟ้าหม่นเข้มขึ้นเมื่อ hover */
+        }
+
+        /* เอฟเฟกต์ปุ่ม Close (สีม่วง) */
+        .form-button-reset {
+            transition: all 0.2s ease-in-out;
+            background-color:  #f44336; /* สีม่วง */
+            color: white !important;
+            font-size: 16px;
+            font-weight: bold;
+            padding: 10px 20px;
+            border-radius: 8px;
+            border: none;
+            display: inline-block;
+            cursor: pointer;
+            text-align: center;
+        }
+
+        /* เมื่อเมาส์ไปชี้ที่ปุ่ม Close */
+        .form-button-reset:hover {
+            transform: scale(1.1);
+            opacity: 0.9;
+            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
+            background-color: #d32f2f;
+        }
+
+        /* เอฟเฟกต์ตอนกดปุ่ม Close */
+        .form-button-reset:active {
+            transform: scale(0.95);
+            box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.15);
+            background-color: #a52020;
+        }
+        /* ปุ่มใน Dark Mode */
+        body.dark-mode .form-button-reset {
+            background-color:#A52A2A !important; /* สีม่วงหม่น */
+            border-color: #A52A2A !important; /* สีเส้นขอบ */
+            color: white !important; /* สีตัวอักษร */
+        }
+
+        /* Hover ใน Dark Mode */
+        body.dark-mode .form-button-reset:hover {
+            background-color: #8c2424 !important; /* สีม่วงหม่น */
+        }
+    </style>
     <body class="nav-fixed">
     <?php require 'pp-setting-sidenavAccordion.php'; ?>
         <div id="layoutSidenav">
@@ -85,7 +169,7 @@ require 'pp-session-start.php';
                             <td></td>
                         </tr>
                         <tr>
-                            <td>Description Tha: </td>
+                            <td>Description Thai: </td>
                             <td>
                                 <input type="text" id="modal_des_tha" name="modal_des_tha">
                             </td>
@@ -100,8 +184,8 @@ require 'pp-session-start.php';
                     </table>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                    <button type="button" id="modal_button_save" class="btn btn-primary">Save</button>
+                    <button type="button" class="btn form-button-reset" data-bs-dismiss="modal">Close</button>
+                    <button type="button" id="modal_button_save" class="btn form-button-submit">Confirm</button>
                 </div>
             </div>
         </div>
@@ -123,16 +207,13 @@ require 'pp-session-start.php';
                     </table>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                    <button type="button" id="modal_button_delete" class="btn btn-primary">Delete</button>
+                    <button type="button" class="btn form-button-reset" data-bs-dismiss="modal">Close</button>
+                    <button type="button" id="modal_button_delete" class="btn form-button-submit">Delete</button>
                 </div>
             </div>
         </div>
     </div>
-    <script>
-        document.addEventListener('click', () => checkSession());
-        document.addEventListener('input', () => checkSession());
-    </script>
+
     <script src="js/bootstrap@5.0.1/dist/js/bootstrap.bundle.min.js"></script>
         <script src="js/scripts.js"></script>
         <script src="js/simple-datatables@latest" type="text/javascript"></script>

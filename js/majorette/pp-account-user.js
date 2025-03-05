@@ -1,42 +1,51 @@
 $(document).ready(function() {
-    // Function to handle the opening of the edit modal
+    // Reset modal fields when opening
     $('#setting_dt_modal').on('show.bs.modal', function(event) {
-        var button = $(event.relatedTarget); // Button that triggered the modal
-        var selectedRow = button.closest('tr'); // Get the parent row of the button
+        var button = $(event.relatedTarget); // ปุ่มที่เรียก Modal
+        var selectedRow = button.closest('tr');
 
-        var idStaff = selectedRow.find('.id_staff').text();
-        var firstName = selectedRow.find('.name_first').text();
-        var lastName = selectedRow.find('.name_last').text();
-        var username = selectedRow.find('.username').text();
+        var idStaff = selectedRow.find('.id_staff').text().trim();
+        var firstName = selectedRow.find('.name_first').text().trim();
+        var lastName = selectedRow.find('.name_last').text().trim();
+        var username = selectedRow.find('.username').text().trim();
 
-        // Set the values in the edit modal
+        console.log("Modal Opened - ID:", idStaff, "Username:", username);
+
         $('#modal_id_staff').val(idStaff);
         $('#modal_first_name').text(firstName);
         $('#modal_last_name').text(lastName);
         $('#modal_username').val(username);
 
-        // Clear password field and show placeholder for entering new password
-        $('#modal_password').val(""); // Always set password as empty
-        $('#hidden_placeholder').show(); // Show placeholder if exists
+        // Reset password field and eye icon
+        $('#modal_password').val('');
+        $('#modal_password').attr('type', 'password');
+        $('#togglePassword i').removeClass('fa-eye').addClass('fa-eye-slash');
+    });
 
-        // Hide placeholder when input starts
-        $('#modal_password').on('input', function() {
-            if ($(this).val().length > 0) {
-                $('#hidden_placeholder').hide();
+    // Toggle password visibility
+    $(document).ready(function() {
+        $('#togglePassword').click(function() {
+            var passwordField = $('#modal_password');
+            var icon = $(this).find('i'); // ดึงไอคอนที่อยู่ภายในปุ่ม
+
+            if (passwordField.attr('type') === 'password') {
+                passwordField.attr('type', 'text'); // แสดงรหัสผ่าน
+                icon.removeClass('fa-eye-slash').addClass('fa-eye'); // เปลี่ยนไอคอนเป็นตาเปิด
             } else {
-                $('#hidden_placeholder').show();
+                passwordField.attr('type', 'password'); // ซ่อนรหัสผ่าน
+                icon.removeClass('fa-eye').addClass('fa-eye-slash'); // เปลี่ยนไอคอนเป็นตาปิด
             }
         });
     });
 
-    // Function to handle the confirm button click in the edit modal
-    $('#modal_button_confirm').click(function() {
-        var idStaff = $('#modal_id_staff').val();
-        var username = $('#modal_username').val();
-        var password = $('#modal_password').val();
 
-        // Ensure password is entered
-        if (password.trim() === "") {
+    // Confirm update button click
+    $('#modal_button_confirm').click(function() {
+        var idStaff = $('#modal_id_staff').val().trim();
+        var username = $('#modal_username').val().trim();
+        var password = $('#modal_password').val().trim();
+
+        if (password === "") {
             alert('Please enter a new password before confirming!');
             return;
         }
@@ -50,52 +59,67 @@ $(document).ready(function() {
                 password: password
             },
             success: function(response) {
-                var result = JSON.parse(response);
-                if (result.statusCode === 200) {
-                    alert('User updated successfully');
-                    location.reload();
-                } else {
-                    alert('Failed to update user: ' + result.message);
+                try {
+                    var result = JSON.parse(response);
+                    if (result.statusCode === 200) {
+                        alert('User updated successfully');
+                        location.reload();
+                    } else {
+                        alert('Failed to update user: ' + result.message);
+                    }
+                } catch (e) {
+                    console.error("JSON Parse Error:", response);
+                    alert('Unexpected response from server.');
                 }
             },
             error: function(err) {
                 alert('Failed to update user.');
+                console.error("AJAX Error:", err);
             }
         });
     });
 
-    // Function to handle the delete modal
-    var delete_user_modal = document.getElementById('delete_user_modal');
-    delete_user_modal.addEventListener('show.bs.modal', function (event) {
-        var selectedRow = $(event.relatedTarget).closest('tr');
-        var modalIdStaffText = selectedRow.find('.id_staff').text();
+    // Open delete user modal
+    $('#delete_user_modal').on('show.bs.modal', function(event) {
+        var button = $(event.relatedTarget);
+        var selectedRow = button.closest('tr');
+        var idStaff = selectedRow.find('.id_staff').text().trim();
 
-        $('#modal_delete_user').html(modalIdStaffText);
+        console.log("Delete Modal Opened - ID:", idStaff);
+
+        $('#modal_delete_user').text(idStaff);
     });
 
-    // Function to handle delete confirmation
-    $('#modal_button_delete').click(function (){
-        var idStaff = $('#modal_delete_user').html();
+    // Confirm delete button click
+    $('#modal_button_delete').click(function() {
+        var idStaff = $('#modal_delete_user').text().trim();
+
+        if (!idStaff || isNaN(idStaff)) {
+            alert('Invalid user ID');
+            return;
+        }
 
         $.ajax({
             url: "pp-account-user-delete.php",
             type: "GET",
-            data: {
-                id_staff: idStaff
-            },
-            context: this,
-            cache: false,
+            data: { id_staff: idStaff },
             success: function(response) {
-                var dataResult = JSON.parse(response);
-                if (dataResult.statusCode === 200) {
-                    alert('User deleted successfully');
-                    location.reload();
-                } else {
-                    alert('Failed to delete user: ' + dataResult.message);
+                try {
+                    var dataResult = JSON.parse(response);
+                    if (dataResult.statusCode === 200) {
+                        alert('User deleted successfully');
+                        location.reload();
+                    } else {
+                        alert('Failed to delete user: ' + dataResult.message);
+                    }
+                } catch (e) {
+                    console.error("JSON Parse Error:", response);
+                    alert('Unexpected response from server.');
                 }
             },
             error: function(err) {
                 alert('Failed to delete user.');
+                console.error("AJAX Error:", err);
             }
         });
     });

@@ -11,7 +11,7 @@
         <i data-feather="info"></i> Des. Eng.
     </th>
     <th class="text-center">
-        <i data-feather="info"></i> Des. Tha.
+        <i data-feather="info"></i> Des. Thai.
     </th>
     <th class="text-center">
         <i data-feather="power"></i> On

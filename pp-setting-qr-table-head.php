@@ -20,4 +20,7 @@
     <th rowspan="2" class="text-center" scope="col" id="dash_machine">
         <span data-feather="shield"></span> Role
     </th>
+    <th class="text-center">
+        <i data-feather="settings"></i> Operation
+    </th>
 </tr>

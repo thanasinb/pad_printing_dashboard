@@ -3,7 +3,7 @@
 ini_set('display_errors', 0);
 error_reporting(E_ERROR | E_WARNING | E_PARSE);
 require '../update/establish.php';
-require '../const-status.php';
+require_once '../const-status.php';
 require '../update/lib_get_qty_shif.php';
 require '../update/lib_get_qty_process_manual.php';
 require '../update/lib_flag_cycle_time.php';
@@ -122,10 +122,10 @@ foreach ($array_machine_queue as $mq){
         // ELSE THE MACHINE IS NOT OCCUPIED
         else{
             $array_dashboard[] = array_merge($mq, array('run_time_actual'=>0.00,
-                                                        'run_time_tray'=>0.00,
+                'run_time_tray'=>0.00,
 //                                                        'est_sec'=>-1,
-                                                        'status_work'=>0,
-                                                        'rework'=>$rework));
+                'status_work'=>0,
+                'rework'=>$rework));
         }
     }
     // ELSE THE MACHINE DOES NOT HAVE A TASK ASSIGNED

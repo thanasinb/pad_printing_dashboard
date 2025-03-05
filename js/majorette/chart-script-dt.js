@@ -1,10 +1,18 @@
 document.addEventListener('DOMContentLoaded', function () {
+
+    function formatDate(dateString) {
+        if (!dateString || dateString.trim() === "") return "N/A";
+        const [year, month, day] = dateString.split('-');
+        return `${day}/${month}/${year}`;
+    }
     const ctxDowntime = document.getElementById('downtimeChart').getContext('2d');
 
     const machines = JSON.parse(document.getElementById('machines').value);
-    const downtimeDurations = JSON.parse(document.getElementById('downtimeDurations').value);
+    let downtimeDurations = JSON.parse(document.getElementById('downtimeDurations').value);
     let downtimeDetails = JSON.parse(document.getElementById('downtimeDetails').value);
+    let currentDowntimeDurations = [...downtimeDurations]; // เก็บสถานะปัจจุบันของ downtimeDurations
 
+    // ฟังก์ชันสำหรับดึงสีที่เหมาะสมกับธีม
     function getThemeColors() {
         const isDarkMode = document.body.classList.contains('dark-mode');
         return {
@@ -13,7 +21,8 @@ document.addEventListener('DOMContentLoaded', function () {
         };
     }
 
-    function createDowntimeChart(machines, downtimeDurations) {
+    // ฟังก์ชันสร้างกราฟ
+    function createDowntimeChart(machines, durations) {
         const themeColors = getThemeColors();
         return new Chart(ctxDowntime, {
             type: 'bar',
@@ -21,34 +30,41 @@ document.addEventListener('DOMContentLoaded', function () {
                 labels: machines,
                 datasets: [{
                     label: 'Total Downtime (hours)',
-                    data: downtimeDurations,
+                    data: durations,
                     backgroundColor: 'rgba(255, 99, 132, 0.2)',
                     borderColor: 'rgba(255, 99, 132, 1)',
                     borderWidth: 1
                 }]
             },
             options: {
-                onClick: function (evt, elements) {
-                    if (elements.length > 0) {
-                        const element = elements[0];
-                        const index = element.index;
-                        const machine = machines[index];
+                onClick: (evt, activeElements) => {
+                    if (activeElements.length > 0) {
+                        const dataIndex = activeElements[0].index;
+                        const machine = machines[dataIndex];
                         const details = downtimeDetails[machine];
+                        const totalDowntimeForMachine = durations[dataIndex];
+
+                        selectedStartDate = document.getElementById('downtime_start_date').value;
+                        selectedEndDate = document.getElementById('downtime_end_date').value;
+
                         let detailsContent = '';
                         if (details) {
                             details.forEach(detail => {
-                                detailsContent += `<strong>Downtime Code:</strong> ${detail.id_code_downtime}, <strong>Duration:</strong> ${detail.downtime_duration.toFixed(2)} hours<br>`;
+                                detailsContent += `
+                                   
+                                    <strong>Downtime Code:</strong> ${detail.id_code_downtime}, 
+                                    <strong>Duration:</strong> ${detail.downtime_duration} hours<br>`;
                             });
                         } else {
                             detailsContent = 'No downtime details available.';
                         }
 
                         const modalContent = `
+                            <strong>Selected Date Range:</strong> ${formatDate(selectedStartDate)} to ${formatDate(selectedEndDate)}<br>
                             <strong>Machine:</strong> ${machine}<br>
-                            <strong>Total Downtime:</strong> ${downtimeDurations[index].toFixed(2)} hours<br>
-                            <strong>Downtime Details:</strong><br> ${detailsContent}
+                            <strong>Total Downtime:</strong> ${totalDowntimeForMachine.toFixed(2)} hours<br>
+                            <strong>Downtime Details:</strong><br>${detailsContent}
                         `;
-
                         document.getElementById('modalContent').innerHTML = modalContent;
                         $('#detailModal').modal('show');
                     }
@@ -76,10 +92,11 @@ document.addEventListener('DOMContentLoaded', function () {
                         },
                         ticks: {
                             color: themeColors.textColor,
-                            autoSkip: false,
-                            maxRotation: 90,
+                            autoSkip: false,  // ✅ ปิดการข้ามป้ายกำกับอัตโนมัติ
+                            maxRotation: 180,   // ✅ บังคับให้ตัวอักษรตรง
                             minRotation: 90
                         },
+
                         grid: {
                             color: themeColors.gridColor
                         }
@@ -96,22 +113,14 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     }
 
-    let downtimeChart = createDowntimeChart(machines, downtimeDurations);
+    let downtimeChart = createDowntimeChart(machines, currentDowntimeDurations);
 
-    // อัปเดตธีมเมื่อเปลี่ยนโหมด
-    const observer = new MutationObserver(() => {
-        downtimeChart.destroy();
-        downtimeChart = createDowntimeChart(machines, downtimeDurations);
-    });
-
-    observer.observe(document.body, { attributes: true, attributeFilter: ['class'] });
-
-    // ฟอร์มสำหรับดึงข้อมูลใหม่
+    // อัปเดตกราฟและข้อมูลเมื่อเปลี่ยนช่วงเวลา
     document.getElementById('downtimeDateForm').addEventListener('submit', function (event) {
         event.preventDefault();
         const startDate = document.getElementById('downtime_start_date').value;
         const endDate = document.getElementById('downtime_end_date').value;
-
+      
         fetch(`get_downtime_data.php?startDate=${startDate}&endDate=${endDate}`)
             .then(response => response.json())
             .then(data => {
@@ -119,12 +128,30 @@ document.addEventListener('DOMContentLoaded', function () {
                     alert(data.error);
                     return;
                 }
-                const newDowntimeDurations = data.downtimeDurations;
+
                 downtimeDetails = data.downtimeDetails;
 
-                downtimeChart.destroy();
-                downtimeChart = createDowntimeChart(machines, newDowntimeDurations);
+                currentDowntimeDurations = machines.map(machine => {
+                    const machineDetails = downtimeDetails[machine] || [];
+                    return machineDetails.reduce((sum, detail) => sum + parseFloat(detail.downtime_duration || 0), 0);
+                });
+
+                const totalDowntime = currentDowntimeDurations.reduce((sum, duration) => sum + duration, 0);
+                document.getElementById('totalDowntime').textContent = totalDowntime.toFixed(2);
+
+                if(downtimeChart){
+                    downtimeChart.destroy();
+                }
+                downtimeChart = createDowntimeChart(machines, currentDowntimeDurations);
             })
             .catch(error => console.error('Error fetching data:', error));
     });
+
+    // ฟังก์ชันอัปเดตธีมเมื่อเปลี่ยนโหมด
+    // const observer = new MutationObserver(() => {
+    //     downtimeChart.destroy();
+    //     downtimeChart = createDowntimeChart(machines, currentDowntimeDurations);
+    // });
+    //
+    // observer.observe(document.body, { attributes: true, attributeFilter: ['class'] });
 });

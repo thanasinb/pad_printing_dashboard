@@ -1,4 +1,8 @@
 <?php
+require 'pp-session-start.php';
+?>
+
+<?php
     ini_set('display_errors', 0);
     error_reporting(E_ERROR | E_WARNING | E_PARSE);
     if ($_SERVER['REQUEST_METHOD'] == 'POST') {
@@ -56,10 +60,12 @@
                 $sql = "INSERT INTO machine (";
                 $sql = $sql . "id_mc,";
                 $sql = $sql . "id_mc_type,";
+                $sql = $sql . "id_cam,";
                 $sql = $sql . "mc_des";
                 $sql = $sql . ") VALUES (";
                 $sql = $sql . "'" . $_POST["id_mc"] . "',";
                 $sql = $sql . "" . $_POST["id_mc_type"] . ",";
+                $sql = $sql . "" . $_POST["id_cam"] . ",";
                 $sql = $sql . "'" . $_POST["mc_des"] . "')";
 //                echo $sql;
                 $conn->query($sql);

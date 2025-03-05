@@ -42,8 +42,51 @@ require 'pp-session-start.php'
             });
         </script>
     </head>
+    <style>
+        /* เอฟเฟกต์ปุ่ม Confirm (สีน้ำเงิน) */
+        .form-button-submit {
+            transition: all 0.2s ease-in-out;
+            background-color: #007bff; /* สีน้ำเงิน */
+            color: white !important;
+            font-size: 16px;
+            font-weight: bold;
+            padding: 10px 20px;
+            border-radius: 8px;
+            border: none;
+            display: inline-block;
+            cursor: pointer;
+            text-align: center;
+        }
+
+        /* เมื่อเมาส์ไปชี้ที่ปุ่ม Confirm */
+        .form-button-submit:hover {
+            transform: scale(1.1);
+            opacity: 0.9;
+            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
+            background-color: #0069d9; /* สีน้ำเงินเข้มขึ้น */
+        }
+
+        /* เอฟเฟกต์ตอนกดปุ่ม Confirm */
+        .form-button-submit:active {
+            transform: scale(0.95);
+            box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.15);
+            background-color: #0056b3;
+        }
+
+
+        /* ปุ่มใน Dark Mode */
+        body.dark-mode .form-button-submit {
+            background-color: #375a7f !important; /* สีฟ้าหม่น */
+            color: #ffffff !important; /* สีข้อความขาว */
+            border: 1px solid #444444 !important; /* เส้นขอบเข้ม */
+        }
+        /* Hover ใน Dark Mode */
+        body.dark-mode .form-button-submit:hover {
+            background-color: #3b566a !important; /* สีฟ้าหม่นเข้มขึ้นเมื่อ hover */
+        }
+    </style>
     <body class="nav-fixed">
-    <?php require 'pp-machine-sidenavAccordion.php'; ?>
+    <?php require 'pp-setting-sidenavAccordion.php'; ?>
         <div id="layoutSidenav">
             <?php require 'pp-layoutSidenav_nav.php'; ?>
             <div id="layoutSidenav_content">
@@ -58,7 +101,7 @@ require 'pp-session-start.php'
                     <div class="container-fluid px-4 mt-n10">
                         <!-- Example DataTable for Dashboard Demo-->
                         <div class="card mb-4 w-25">
-                            <div class="card-header bg-dark fw-bold text-white">Select Shif</div>
+                            <div class="card-header bg-red fw-bold text-white">Select Shif</div>
                             <div class="card-body">
                                 <form>
                                     <div class="form-check mb-3">
@@ -116,7 +159,7 @@ require 'pp-session-start.php'
                                     </div>
                                     <br>
                                 </form>
-                                <input class="btn btn-primary" type="submit" value="Lists" id="button_list">
+                                <input class="btn form-button-submit" type="submit" value="Lists" id="button_list">
                                 <br><br>
                                 <div class="form-check">
                                     <input class="form-check-input" type="checkbox" value="" id="check_debug">
@@ -137,10 +180,7 @@ require 'pp-session-start.php'
                 </main>
             </div>
         </div>
-        <script>
-            document.addEventListener('click', () => checkSession());
-            document.addEventListener('input', () => checkSession());
-        </script>
+
         <script src="js/bootstrap@5.0.1/dist/js/bootstrap.bundle.min.js"></script>
         <script src="js/scripts.js"></script>
         <script src="js/simple-datatables@latest" type="text/javascript"></script>

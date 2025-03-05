@@ -154,6 +154,7 @@ async function downloadQRCode() {
     const pdf = new jsPDF(); // สร้างเอกสาร PDF ใหม่
 
     const qrcodeItems = document.querySelectorAll('.qrcode-item');
+    let downloadedCodes = [];
     let x = 10; // ตำแหน่งเริ่มต้นแกน X
     let y = 10; // ตำแหน่งเริ่มต้นแกน Y
     const qrSize = 50; // ขนาด QR Code ใน PDF
@@ -162,19 +163,20 @@ async function downloadQRCode() {
 
     qrcodeItems.forEach((item, index) => {
         const qrCodeValue = item.querySelector('.qr-code-value').textContent.replace('Code: ', '').trim();
-        const qrCodeCanvas = item.querySelector('canvas');
+        downloadedCodes.push(qrCodeValue); // เก็บรหัส QR ไว้สำหรับบันทึกประวัติ
 
+        const qrCodeCanvas = item.querySelector('canvas');
         if (qrCodeCanvas) {
             const imgData = qrCodeCanvas.toDataURL('image/png'); // แปลง Canvas เป็น PNG
 
             // วาดกรอบรอบ QR Code
-            pdf.rect(x - boxPadding, y - boxPadding, qrSize + boxPadding * 2, qrSize + boxPadding * 2 + 10); // +10 สำหรับข้อความ
-            pdf.addImage(imgData, 'PNG', x, y, qrSize, qrSize); // เพิ่มภาพ QR Code ลงใน PDF
-            pdf.text(`Code: ${qrCodeValue}`, x + qrSize / 2, y + qrSize + 10, { align: 'center' }); // เพิ่มข้อความใต้ QR Code
+            pdf.rect(x - boxPadding, y - boxPadding, qrSize + boxPadding * 2, qrSize + boxPadding * 2 + 10);
+            pdf.addImage(imgData, 'PNG', x, y, qrSize, qrSize);
+            pdf.text(`Code: ${qrCodeValue}`, x + qrSize / 2, y + qrSize + 10, { align: 'center' });
 
             // ปรับตำแหน่ง X และ Y สำหรับ QR Code ถัดไป
             x += qrSize + gap; // เลื่อนไปทางขวา
-            if (x + qrSize > pdf.internal.pageSize.width - 10) { // ตรวจสอบว่าข้ามขอบกระดาษหรือไม่
+            if (x + qrSize > pdf.internal.pageSize.width - 10) {
                 x = 10; // รีเซ็ตตำแหน่ง X
                 y += qrSize + gap + 10; // ย้ายลงมาในแนว Y
             }
@@ -188,64 +190,147 @@ async function downloadQRCode() {
         }
     });
 
-    // บันทึกไฟล์ PDF
-    pdf.save('QR_Codes.pdf');
+    // บันทึกประวัติการดาวน์โหลดลงในฐานข้อมูล
+    try {
+        const response = await fetch('save_qr_code.php', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+            body: `action=download&count=${downloadedCodes.length}&qr_codes=${JSON.stringify(downloadedCodes)}`
+        });
+
+        if (response.ok) {
+            console.log("QR Code download history saved successfully.");
+            pdf.save('QR_Codes.pdf'); // บันทึก PDF หลังจากบันทึกประวัติสำเร็จ
+            alert('QR Codes downloaded successfully!');
+        } else {
+            console.error('Failed to save download history.');
+            alert('Error saving QR Code download history.');
+        }
+    } catch (error) {
+        console.error('Error:', error);
+        alert('An error occurred while saving download history.');
+    }
 }
 function printQRCode() {
     const printContents = document.getElementById('qrcode').innerHTML;
-    const originalContents = document.body.innerHTML;
-    document.body.innerHTML = `<div id="printableArea">${printContents}</div>`;
-    window.print();
-    document.body.innerHTML = originalContents;
+    const printWindow = window.open('', '_blank');
+
+    printWindow.document.open();
+    printWindow.document.write(`
+        <html>
+        <head>
+            <title>Print QR Codes</title>
+            <style>
+                body {
+                    font-family: Arial, sans-serif;
+                    padding: 20px;
+                }
+                .qrcode-container {
+                    display: grid;
+                    grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
+                    gap: 15px;
+                    justify-items: center;
+                    align-items: center;
+                    padding: 10px;
+                }
+                .qrcode-item {
+                    border: 2px solid #000;
+                    padding: 10px;
+                    border-radius: 8px;
+                    display: flex;
+                    flex-direction: column;
+                    justify-content: center;
+                    align-items: center;
+                    width: 100px;
+                    height: 130px;
+                    text-align: center;
+                    page-break-inside: avoid;
+                }
+                .qrcode-item canvas {
+                    width: 60px;
+                    height: 60px;
+                }
+                .qr-code-value {
+                    font-size: 12px;
+                    color: #333;
+                    margin-top: 5px;
+                }
+                @media print {
+                    .qrcode-item {
+                        page-break-inside: avoid;
+                        break-inside: avoid;
+                    }
+                    body {
+                        margin: 0;
+                    }
+                }
+            </style>
+        </head>
+        <body>
+            <div class="qrcode-container">
+                ${printContents}
+            </div>
+            <script>
+                window.onload = function () {
+                    window.print();
+                    window.onafterprint = function () {
+                        window.close();
+                    };
+                };
+            </script>
+        </body>
+        </html>
+    `);
+    printWindow.document.close();
 }
 
 function showDownloadPrintButtons() {
     document.getElementById('downloadBtn').style.display = 'inline-block';
     document.getElementById('printBtn').style.display = 'inline-block';
 }
-async function checkSession() {
-    try {
-        const response = await fetch('pp-session-start.php', {
-            method: 'GET',
-            headers: { 'X-Requested-With': 'XMLHttpRequest' } // แจ้งว่าเป็น AJAX Request
-        });
-        const result = await response.json();
-        if (result.status === 'expired') {
-            alert('Session หมดอายุแล้ว กรุณาเข้าสู่ระบบอีกครั้ง');
-            window.location.href = 'pp-logout-session.php';
-        }
-    } catch (error) {
-        console.error('Error checking session:', error);
-    }
-}
-
-// เรียก checkSession ทุกครั้งที่ผู้ใช้กดคลิกหรือพิมพ์
-document.addEventListener('click', () => checkSession());
-document.addEventListener('input', () => checkSession());
-
-// ฟังก์ชัน Ping Session เพื่อเช็คสถานะ Session จากเซิร์ฟเวอร์
-async function pingSession() {
-    try {
-        const response = await fetch('pp-session-start.php', {
-            method: 'GET',
-            headers: { 'X-Requested-With': 'XMLHttpRequest' } // บอกว่าเป็น AJAX Request
-        });
-        const result = await response.json();
-        if (result.status === 'expired') {
-            alert(result.message); // แจ้งผู้ใช้ว่า Session หมดอายุ
-            window.location.href = 'pp-logout-session.php'; // Redirect ไปหน้า Login
-        }
-    } catch (error) {
-        console.error('Error pinging session:', error);
-    }
-}
-
-// เรียกฟังก์ชัน Ping Session ทุก 5 นาที (300,000 มิลลิวินาที)
-setInterval(pingSession, 300000);
-
-// ตรวจสอบทันทีเมื่อผู้ใช้กลับมาใช้งานหน้าเว็บ
-document.addEventListener('visibilitychange', () => {
-    if (document.visibilityState === 'visible') {
-        pingSession();
-    }
-});
+// async function checkSession() {
+//     try {
+//         const response = await fetch('pp-session-start.php', {
+//             method: 'GET',
+//             headers: { 'X-Requested-With': 'XMLHttpRequest' } // แจ้งว่าเป็น AJAX Request
+//         });
+//         const result = await response.json();
+//         if (result.status === 'expired') {
+//             alert('Session หมดอายุแล้ว กรุณาเข้าสู่ระบบอีกครั้ง');
+//             window.location.href = 'pp-logout-session.php';
+//         }
+//     } catch (error) {
+//         console.error('Error checking session:', error);
+//     }
+// }
+//
+// // เรียก checkSession ทุกครั้งที่ผู้ใช้กดคลิกหรือพิมพ์
+// document.addEventListener('click', () => checkSession());
+// document.addEventListener('input', () => checkSession());
+//
+// // ฟังก์ชัน Ping Session เพื่อเช็คสถานะ Session จากเซิร์ฟเวอร์
+// async function pingSession() {
+//     try {
+//         const response = await fetch('pp-session-start.php', {
+//             method: 'GET',
+//             headers: { 'X-Requested-With': 'XMLHttpRequest' } // บอกว่าเป็น AJAX Request
+//         });
+//         const result = await response.json();
+//         if (result.status === 'expired') {
+//             alert(result.message); // แจ้งผู้ใช้ว่า Session หมดอายุ
+//             window.location.href = 'pp-logout-session.php'; // Redirect ไปหน้า Login
+//         }
+//     } catch (error) {
+//         console.error('Error pinging session:', error);
+//     }
+// }
+//
+// // เรียกฟังก์ชัน Ping Session ทุก 5 นาที (300,000 มิลลิวินาที)
+// setInterval(pingSession, 300000);
+//
+// // ตรวจสอบทันทีเมื่อผู้ใช้กลับมาใช้งานหน้าเว็บ
+// document.addEventListener('visibilitychange', () => {
+//     if (document.visibilityState === 'visible') {
+//         pingSession();
+//     }
+// });

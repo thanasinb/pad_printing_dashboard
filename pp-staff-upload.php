@@ -30,6 +30,53 @@ require 'pp-session-start.php';
 <!--        <script type="text/javascript" src="js/majorette/pp-machine-assign-date.js"></script>-->
 <!--        <script type="text/javascript" src="js/majorette/pp-machine-currentTaskModal.js"></script>-->
     </head>
+    <style>
+
+        /* เอฟเฟกต์ปุ่ม Confirm (สีน้ำเงิน) */
+        .btn-confirm-modal {
+            transition: all 0.2s ease-in-out;
+            background-color: #007bff; /* สีน้ำเงิน */
+            color: white !important;
+            font-size: 16px;
+            font-weight: bold;
+            padding: 10px 20px;
+            border-radius: 8px;
+            border: none;
+            display: inline-block;
+            cursor: pointer;
+            text-align: center;
+        }
+
+        /* เมื่อเมาส์ไปชี้ที่ปุ่ม Confirm */
+        .btn-confirm-modal:hover {
+            transform: scale(1.1);
+            opacity: 0.9;
+            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
+            background-color: #0069d9; /* สีน้ำเงินเข้มขึ้น */
+        }
+
+        /* เอฟเฟกต์ตอนกดปุ่ม Confirm */
+        .btn-confirm-modal:active {
+            transform: scale(0.95);
+            box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.15);
+            background-color: #0056b3;
+        }
+
+
+        /* ปุ่มใน Dark Mode */
+        body.dark-mode .btn-confirm-modal {
+            background-color: #375a7f !important; /* สีฟ้าหม่น */
+            color: #ffffff !important; /* สีข้อความขาว */
+            border: 1px solid #444444 !important; /* เส้นขอบเข้ม */
+        }
+
+        /* Hover ใน Dark Mode */
+        body.dark-mode .btn-confirm-modal:hover {
+            background-color: #3b566a !important; /* สีฟ้าหม่นเข้มขึ้นเมื่อ hover */
+        }
+
+
+    </style>
     <body class="nav-fixed">
     <?php require 'pp-staff-sidenavAccordion.php'; ?>
         <div id="layoutSidenav">
@@ -46,14 +93,15 @@ require 'pp-session-start.php';
                     <div class="container-xl px-4 mt-n10">
                         <!-- Example DataTable for Dashboard Demo-->
                         <div class="card mb-4" id="table-machine">
-                            <div class="card-header bg-dark fw-bold text-white">Upload Staff File</div>
+                            <div class="card-header bg-red fw-bold text-white">Upload Staff File</div>
                             <div class="card-body">
-                                <form class="text-black" action="pp-staff-upload-action.php" method="post" enctype="multipart/form-data">
-                                    Select file to upload:
-                                    <input class="btn text-black" type="file" name="fileToUpload" id="fileToUpload">
+                                <form class="upload-form" action="pp-staff-upload-action.php" method="post" enctype="multipart/form-data">
+                                    <label for="fileToUpload" class="upload-label">Select file to upload:</label>
+                                    <input type="file" name="fileToUpload" id="fileToUpload" class="upload-input">
                                     <br>
-                                    <input class="btn btn-primary" type="submit" value="Upload!" name="submit">
+                                    <input class="btn btn-confirm-modal" type="submit" value="Uploads" id="button_list">
                                     <br><br>
+                            
                                     <?php
 
                                     ini_set('display_errors', 0);
@@ -74,9 +122,7 @@ require 'pp-session-start.php';
             </div>
         </div>
     <script>
-        document.addEventListener('click', () => checkSession());
-        document.addEventListener('input', () => checkSession());
-    </script>
+
         <script src="js/bootstrap@5.0.1/dist/js/bootstrap.bundle.min.js"></script>
         <script src="js/scripts.js"></script>
         <script src="js/Chart.js/2.9.4/Chart.min.js"></script>

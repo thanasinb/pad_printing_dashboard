@@ -18,15 +18,17 @@ require 'pp-session-start.php';
     <link href="css/litepicker/dist/css/litepicker.css" rel="stylesheet" />
     <link rel="icon" type="image/x-icon" href="assets/img/machine-learning.png" />
     <link href="css/styles.css" rel="stylesheet" />
-    <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-tooltip"></script>
+<!--    <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-tooltip"></script>-->
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
     <script data-search-pseudo-elements defer src="js/font-awesome/5.15.3/js/all.min.js"></script>
     <script src="js/feather-icons/4.28.0/feather.min.js"></script>
     <link rel="stylesheet" href="css/reorder-columns/dragtable.css">
     <link rel="stylesheet" href="css/reorder-columns/bootstrap-table.min.css">
     <link rel="stylesheet" href="css/majorette.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="js/jquery/jquery.min.js"></script>
     <script src="js/jquery/jquery-ui.min.js"></script>
+
 
     <style>
         .chart-container {
@@ -90,6 +92,54 @@ require 'pp-session-start.php';
         }
     </style>
 </head>
+<style>
+
+    /* เอฟเฟกต์ปุ่ม Confirm (สีน้ำเงิน) */
+    .btn-confirm-modal {
+        transition: all 0.2s ease-in-out;
+        background-color: #007bff; /* สีน้ำเงิน */
+        color: white !important;
+        font-size: 16px;
+        font-weight: bold;
+        padding: 6px 20px;
+        border-radius: 6px;
+        border: none;
+        display: inline-block;
+        cursor: pointer;
+        text-align: center;
+        margin-left: 10px;
+    }
+
+    /* เมื่อเมาส์ไปชี้ที่ปุ่ม Confirm */
+    .btn-confirm-modal:hover {
+        transform: scale(1.1);
+        opacity: 0.9;
+        box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
+        background-color: #0069d9; /* สีน้ำเงินเข้มขึ้น */
+    }
+
+    /* เอฟเฟกต์ตอนกดปุ่ม Confirm */
+    .btn-confirm-modal:active {
+        transform: scale(0.95);
+        box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.15);
+        background-color: #0056b3;
+    }
+
+
+    /* ปุ่มใน Dark Mode */
+    body.dark-mode .btn-confirm-modal {
+        background-color: #375a7f !important; /* สีฟ้าหม่น */
+        color: #ffffff !important; /* สีข้อความขาว */
+        border: 1px solid #444444 !important; /* เส้นขอบเข้ม */
+    }
+
+    /* Hover ใน Dark Mode */
+    body.dark-mode .btn-confirm-modal:hover {
+        background-color: #3b566a !important; /* สีฟ้าหม่นเข้มขึ้นเมื่อ hover */
+    }
+
+
+</style>
 <body class="nav-fixed">
 <?php require 'pp-machine-sidenavAccordion.php'; ?>
 <div id="layoutSidenav">
@@ -112,22 +162,30 @@ require 'pp-session-start.php';
 <!--                                <div>Machine Statistic</div>-->
                                 <ul class="nav nav-tabs card-header-tabs" id="dashboardNav" role="tablist">
                                     <li class="nav-item me-1">
-                                        <a class="nav-link active" id="overview-pill" href="#overview" data-bs-toggle="tab" role="tab" aria-controls="overview" aria-selected="true">Machine Chart Overview</a>
+                                        <a class="nav-link active" id="overview-pill" href="#overview" data-bs-toggle="tab" role="tab" aria-controls="overview" aria-selected="true">  Machine Overview  </a>
                                     </li>
-                                    <li class="nav-item">
-                                        <a class="nav-link" id="activities-pill" href="#activities" data-bs-toggle="tab" role="tab" aria-controls="activities" aria-selected="false">Activities DT</a>
+                                    <li class="nav-item me-1">
+                                        <a class="nav-link" id="itemoverall-pill" href="#itemoverall" data-bs-toggle="tab" role="tab" aria-controls="itemoverall" aria-selected="false">  Item Overall  </a>
+                                    </li>
+                                    <li class="nav-item me-1">
+                                        <a class="nav-link" id="activities-pill" href="#activities" data-bs-toggle="tab" role="tab" aria-controls="activities" aria-selected="false">  Activities DT  </a>
+                                    </li>
+                                    <li class="nav-item me-1">
+                                        <a class="nav-link" id="mcovertime-pill" href="#mcovertime" data-bs-toggle="tab" role="tab" aria-controls="mcovertime" aria-selected="false">  Machine Overtime  </a>
                                     </li>
                                 </ul>
-                                <div>
-                                    <span id="hours"></span> :
-                                    <span id="minutes"></span> :
-                                    <span id="seconds"></span>
-                                </div>
+<!--                                <div>-->
+<!--                                    <span id="hours"></span> :-->
+<!--                                    <span id="minutes"></span> :-->
+<!--                                    <span id="seconds"></span>-->
+<!--                                </div>-->
 
                             </div>
                             <div class="card-body">
                                 <div class="tab-content" id="dashboardNavContent">
-                                    <!-- Dashboard Tab Pane 1-->
+<!--                                    ข้อมูลกราฟก่อนระบุช่วงวัน-->
+                                    <?php require  'pp-mc-get-to-chart.php'; ?>
+                                    <!-- งานที่ทำทั้งหมด -->
                                     <div class="tab-pane fade show active" id="overview" role="tabpanel" aria-labelledby="overview-pill">
                                         <div class="form-container">
                                             <form method="post" id="dateForm">
@@ -135,14 +193,44 @@ require 'pp-session-start.php';
                                                 <input type="date" id="start_date" name="start_date" required>
                                                 <label for="end_date">End Date:</label>
                                                 <input type="date" id="end_date" name="end_date" required>
-                                                <button type="submit">Update</button>
+                                                <button type="submit" class=" upload-button btn-confirm-modal">Update</button>
                                             </form>
+                                            <script>
+                                                // ตั้งค่า max date ใน input[type="date"] เป็นวันปัจจุบัน
+                                                const today = new Date().toISOString().split('T')[0];
+                                                document.getElementById('start_date').setAttribute('max', today);
+                                                document.getElementById('end_date').setAttribute('max', today);
+                                            </script>
                                         </div>
                                         <div class="chart-container">
                                             <canvas id="machineChart"></canvas>
-                                            <?php require  'pp-mc-get-to-chart.php'; ?>
                                         </div>
                                     </div>
+<!--                                    //กราฟจำนวนงาน//-->
+                                    <div class="tab-pane fade" id="itemoverall" role="tabpanel" aria-labelledby="itemoverall-pill">
+                                        <div class="form-container">
+                                            <form id="itemoverallDateForm">
+                                                <label for="itemoverall_start_date">Start Date:</label>
+                                                <input type="date" id="itemoverall_start_date" name="start_date">
+                                                <label for="itemoverall_end_date">End Date:</label>
+                                                <input type="date" id="itemoverall_end_date" name="end_date">
+                                                <button type="submit" class=" upload-button btn-confirm-modal">Update</button>
+                                            </form>
+                                            <script>
+                                                // ตั้งค่า max date ใน input[type="date"] เป็นวันปัจจุบัน
+                                                document.addEventListener("DOMContentLoaded", function () {
+                                                    const today = new Date().toISOString().split('T')[0];
+                                                    document.getElementById('itemoverall_start_date').setAttribute('max', today);
+                                                    document.getElementById('itemoverall_end_date').setAttribute('max', today);
+                                                });
+                                            </script>
+                                        </div>
+                                        <div class="chart-container">
+                                            <canvas id="itemoverallChart"></canvas>
+                                        </div>
+                                    </div>
+
+<!--                                    //กราฟจำนวนครั้งที่ downtime//-->
                                     <div class="tab-pane fade" id="activities" role="tabpanel" aria-labelledby="activities-pill">
                                         <div class="form-container">
                                             <form id="downtimeDateForm">
@@ -150,22 +238,56 @@ require 'pp-session-start.php';
                                                 <input type="date" id="downtime_start_date" name="start_date">
                                                 <label for="downtime_end_date">End Date:</label>
                                                 <input type="date" id="downtime_end_date" name="end_date">
-                                                <button type="submit">Update</button>
+                                                <button type="submit" class=" upload-button btn-confirm-modal">Update</button>
                                             </form>
                                         </div>
+                                        <script>
+                                            // ตั้งค่า max date ใน input[type="date"] เป็นวันปัจจุบัน
+                                            document.addEventListener("DOMContentLoaded", function () {
+                                                const today = new Date().toISOString().split('T')[0];
+                                                document.getElementById('downtime_start_date').setAttribute('max', today);
+                                                document.getElementById('downtime_end_date').setAttribute('max', today);
+                                            });
+                                        </script>
                                         <div class="chart-container">
                                             <canvas id="downtimeChart"></canvas>
                                         </div>
                                     </div>
+
+                                    <div class="tab-pane fade" id="mcovertime" role="tabpanel" aria-labelledby="mcovertime-pill">
+                                        <div class="form-container">
+                                            <form id="mcovertimeDateForm">
+                                                <label for="mcovertime_start_date">Start Date:</label>
+                                                <input type="date" id="mcovertime_start_date" name="start_date">
+                                                <label for="mcovertime_end_date">End Date:</label>
+                                                <input type="date" id="mcovertime_end_date" name="end_date">
+                                                <button type="submit" class=" upload-button btn-confirm-modal">Update</button>
+                                            </form>
+                                            <script>
+                                                // ตั้งค่า max date ใน input[type="date"] เป็นวันปัจจุบัน
+                                                document.addEventListener("DOMContentLoaded", function () {
+                                                    const today = new Date().toISOString().split('T')[0];
+                                                    document.getElementById('mcovertime_start_date').setAttribute('max', today);
+                                                    document.getElementById('mcovertime_end_date').setAttribute('max', today);
+                                                });
+                                            </script>
+                                        </div>
+                                        <div class="chart-container">
+                                            <canvas id="mcovertimeChart"></canvas>
+                                        </div>
+                                    </div>
+
+
+
+
                                 </div>
                             </div>
-                            <div class="modal fade" id="detailModal" tabindex="-1" role="dialog" aria-labelledby="detailModalLabel" aria-hidden="true">
-                                <div class="modal-dialog" role="document">
+                            <div class="modal fade" id="detailModal" tabindex="-1" aria-labelledby="detailModalLabel" aria-hidden="true">
+                                <div class="modal-dialog modal-dialog-centered modal-sm"> <!-- ✅ ขนาดปรับตามเนื้อหา -->
                                     <div class="modal-content">
                                         <div class="modal-header">
-                                            <h5 class="modal-title " id="detailModalLabel">Details</h5>
-                                            <button class="btn-close" type="button" data-bs-dismiss="modal" aria-label="Close"></button>
-                                            <!--                                                <span aria-hidden="true">&times;</span>-->
+                                            <h5 class="modal-title" id="detailModalLabel">Details</h5>
+                                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                         </div>
                                         <div class="modal-body">
                                             <p id="modalContent"></p>
@@ -176,34 +298,41 @@ require 'pp-session-start.php';
                                     </div>
                                 </div>
                             </div>
+
                         </div>
                     </div>
                 </div>
+
             </div>
         </main>
     </div>
 </div>
+<p>Total Downtime: <span id="totalDowntime">0</span> hours</p>
+
 <input type="hidden" id="machines" value='<?php echo $machines_json; ?>'>
+<input type="hidden" id="totalQuantities" value='<?php echo $totalQuantities_json; ?>'>
+
 <input type="hidden" id="machineDowntime" value='<?php echo $machineDowntime_json; ?>'>
 <input type="hidden" id="jobCounts" value='<?php echo $jobCounts_json; ?>'>
 <input type="hidden" id="taskDetails" value='<?php echo $taskDetails_json; ?>'>
 <input type="hidden" id="downtimeDurations" value='<?php echo json_encode($downtimeDurations); ?>'>
 <input type="hidden" id="downtimeDetails" value='<?php echo json_encode($downtimeDetails); ?>'>
 <input type="hidden" id="totalDowntime" value='<?php echo json_encode(round($totalDowntime, 2)); ?>'>
-<script>
-    document.addEventListener('click', () => checkSession());
-    document.addEventListener('input', () => checkSession());
-</script>
+
 <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<!--<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>-->
 <script src="js/bootstrap@5.0.1/dist/js/bootstrap.bundle.min.js"></script>
 <script src="js/scripts.js"></script>
 <script src="js/majorette/chart-script.js"></script>
+<script src="js/majorette/chart-script-itemoverall.js"></script>
 <script src="js/majorette/chart-script-dt.js"></script>
+<script src="js/majorette/chart-script-mcovertime.js"></script>
 <script src="js/simple-datatables@latest" type="text/javascript"></script>
 <script src="js/datatables/datatables-staff.js"></script>
 <script src="js/litepicker/dist/bundle.js"></script>
 <script src="js/litepicker.js"></script>
-<script src="js/majorette/pp-time-stamp.js"></script>
+<!--<script src="js/majorette/pp-time-stamp.js"></script>-->
+<script type="text/javascript" src="js/majorette/pp-session.js"></script>
+
 </body>
 </html>

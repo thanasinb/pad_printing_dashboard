@@ -1,0 +1,316 @@
+GET DATA: Array
+(
+    [id_staff] => 3
+    [_] => 1741102260291
+)
+
+GET DATA: Array
+(
+    [id_staff] => 1532
+    [_] => 1741102255436
+)
+
+GET DATA: Array
+(
+    [id_staff] => 1532
+    [_] => 1741102495565
+)
+
+GET DATA: Array
+(
+    [id_staff] => 1532
+    [_] => 1741102613950
+)
+
+GET DATA: Array
+(
+    [id_staff] => 3
+    [_] => 1741104234410
+)
+
+GET DATA: Array
+(
+    [id_staff] => 3
+    [_] => 1741104234411
+)
+
+Session Data: Array
+(
+    [username] => wachi
+    [role_group] => 3
+    [role_group_name] => Admin
+    [role] => Manager
+    [last_activity] => 1741104477
+    [session_token] => e4d25381f2a8097efae74ad7640fb7e90258b7cdb1babb350d0d0bae474874ae
+)
+
+Session Data: Array
+(
+    [username] => wachi
+    [role_group] => 3
+    [role_group_name] => Admin
+    [role] => Manager
+    [last_activity] => 1741104493
+    [session_token] => e4d25381f2a8097efae74ad7640fb7e90258b7cdb1babb350d0d0bae474874ae
+)
+
+Session Data: Array
+(
+    [username] => wachi
+    [role_group] => 3
+    [role_group_name] => Admin
+    [role] => Manager
+    [last_activity] => 1741104511
+    [session_token] => e4d25381f2a8097efae74ad7640fb7e90258b7cdb1babb350d0d0bae474874ae
+)
+
+Session Data: Array
+(
+    [username] => wachi
+    [role_group] => 3
+    [role_group_name] => Admin
+    [role] => Manager
+    [last_activity] => 1741104563
+    [session_token] => e4d25381f2a8097efae74ad7640fb7e90258b7cdb1babb350d0d0bae474874ae
+)
+
+Session Data: Array
+(
+    [username] => wachi
+    [role_group] => 3
+    [role_group_name] => Admin
+    [role] => Manager
+    [last_activity] => 1741104770
+    [session_token] => e4d25381f2a8097efae74ad7640fb7e90258b7cdb1babb350d0d0bae474874ae
+    [id_staff] => 
+)
+
+Session Data: Array
+(
+    [username] => wachi
+    [role_group] => 3
+    [role_group_name] => Admin
+    [role] => Manager
+    [last_activity] => 1741104771
+    [session_token] => e4d25381f2a8097efae74ad7640fb7e90258b7cdb1babb350d0d0bae474874ae
+    [id_staff] => 
+)
+
+Session Data: Array
+(
+    [username] => wachi
+    [role_group] => 3
+    [role_group_name] => Admin
+    [role] => Manager
+    [last_activity] => 1741104774
+    [session_token] => e4d25381f2a8097efae74ad7640fb7e90258b7cdb1babb350d0d0bae474874ae
+    [id_staff] => 
+)
+
+Session Data: Array
+(
+    [username] => wachi
+    [role_group] => 3
+    [role_group_name] => Admin
+    [role] => Manager
+    [last_activity] => 1741104803
+    [session_token] => e4d25381f2a8097efae74ad7640fb7e90258b7cdb1babb350d0d0bae474874ae
+    [id_staff] => 
+)
+
+Session Data: Array
+(
+    [username] => wachi
+    [role_group] => 3
+    [role_group_name] => Admin
+    [role] => Manager
+    [last_activity] => 1741104808
+    [session_token] => e4d25381f2a8097efae74ad7640fb7e90258b7cdb1babb350d0d0bae474874ae
+    [id_staff] => 
+)
+
+Session Data: Array
+(
+    [id_staff] => 
+    [username] => wachi
+    [role_group] => 3
+    [role_group_name] => Admin
+    [role] => Manager
+    [last_activity] => 1741104953
+    [session_token] => 95534bc76cf5b6be5185b85a9ac0cb96f28fad3c2ad6f1960dfb067effe6ea3b
+)
+
+Session Data: Array
+(
+    [id_staff] => 
+    [username] => wachi
+    [role_group] => 3
+    [role_group_name] => Admin
+    [role] => Manager
+    [last_activity] => 1741104987
+    [session_token] => 95534bc76cf5b6be5185b85a9ac0cb96f28fad3c2ad6f1960dfb067effe6ea3b
+)
+
+Session Data: Array
+(
+    [id_staff] => 
+    [username] => wachi
+    [role_group] => 3
+    [role_group_name] => Admin
+    [role] => Manager
+    [last_activity] => 1741105254
+    [session_token] => 95534bc76cf5b6be5185b85a9ac0cb96f28fad3c2ad6f1960dfb067effe6ea3b
+)
+
+Session Data: Array
+(
+    [id_staff] => 
+    [username] => wachi
+    [role_group] => 3
+    [role_group_name] => Admin
+    [role] => Manager
+    [last_activity] => 1741105258
+    [session_token] => 95534bc76cf5b6be5185b85a9ac0cb96f28fad3c2ad6f1960dfb067effe6ea3b
+)
+
+Session Data: Array
+(
+    [id_staff] => 
+    [username] => wachi
+    [role_group] => 3
+    [role_group_name] => Admin
+    [role] => Manager
+    [last_activity] => 1741105280
+    [session_token] => 95534bc76cf5b6be5185b85a9ac0cb96f28fad3c2ad6f1960dfb067effe6ea3b
+)
+
+Session Data: Array
+(
+    [id_staff] => 
+    [username] => wachi
+    [role_group] => 3
+    [role_group_name] => Admin
+    [role] => Manager
+    [last_activity] => 1741105336
+    [session_token] => 95534bc76cf5b6be5185b85a9ac0cb96f28fad3c2ad6f1960dfb067effe6ea3b
+)
+
+Session Data: Array
+(
+    [id_staff] => 
+    [username] => wachi
+    [role_group] => 3
+    [role_group_name] => Admin
+    [role] => Manager
+    [last_activity] => 1741105368
+    [session_token] => 95534bc76cf5b6be5185b85a9ac0cb96f28fad3c2ad6f1960dfb067effe6ea3b
+)
+
+Session Data: Array
+(
+    [username] => 3
+    [role_group] => 3
+    [role_group_name] => Admin
+    [role] => Manager
+    [last_activity] => 1741105402
+    [session_token] => d65ac97d7c444973c7630f11e2658c4399ca762f88a5131740a642ec1a83115c
+)
+
+Session Data: Array
+(
+    [username] => wachii
+    [role_group] => 3
+    [role_group_name] => Admin
+    [role] => Manager
+    [last_activity] => 1741106321
+    [session_token] => a77a5fe329d10b6d555d8c6777a8d014908a8618a06ee22c08363a0ed3b4ca0b
+)
+
+Session Data: Array
+(
+    [username] => wachii
+    [role_group] => 3
+    [role_group_name] => Admin
+    [role] => Manager
+    [last_activity] => 1741106328
+    [session_token] => a77a5fe329d10b6d555d8c6777a8d014908a8618a06ee22c08363a0ed3b4ca0b
+)
+
+Session Data: Array
+(
+    [username] => wachii
+    [role_group] => 3
+    [role_group_name] => Admin
+    [role] => Manager
+    [last_activity] => 1741106585
+    [session_token] => a77a5fe329d10b6d555d8c6777a8d014908a8618a06ee22c08363a0ed3b4ca0b
+)
+
+Current Username: wachii
+Target User ID to Delete: 2
+Target Username: 23
+Session Data: Array
+(
+    [username] => 2
+    [role_group] => 3
+    [role_group_name] => Admin
+    [role] => Manager
+    [last_activity] => 1741106612
+    [session_token] => 6a34ffcbe4a3d9ddf5f0575d7c10e3d8a259ac9d651694a9208ce90aea123f19
+)
+
+Current Username: 2
+Target User ID to Delete: 2
+Target Username: 2
+Session Data: Array
+(
+    [username] => wachii
+    [role_group] => 3
+    [role_group_name] => Admin
+    [role] => Manager
+    [last_activity] => 1741106695
+    [session_token] => a19896e7e044e747691a0d182486ebc184534ce2be95692509a9bc12d36884c4
+)
+
+Current Username: wachii
+Target User ID to Delete: 2
+Target Username: 3
+Session Data: Array
+(
+    [username] => 2
+    [role_group] => 3
+    [role_group_name] => Admin
+    [role] => Manager
+    [last_activity] => 1741107278
+    [session_token] => ab33ccef07c416b2d63079bba26f7d4a2048e64b04d7aea4334ce833bc2996a3
+)
+
+Current Username: 2
+Target User ID to Delete: 2
+Target Username: 2
+Session Data: Array
+(
+    [username] => 2
+    [role_group] => 3
+    [role_group_name] => Admin
+    [role] => Manager
+    [last_activity] => 1741107305
+    [session_token] => ab33ccef07c416b2d63079bba26f7d4a2048e64b04d7aea4334ce833bc2996a3
+)
+
+Current Username: 2
+Target User ID to Delete: 3
+Target Username: 3
+Session Data: Array
+(
+    [username] => wachii
+    [role_group] => 3
+    [role_group_name] => Admin
+    [role] => Manager
+    [last_activity] => 1741117727
+    [session_token] => f5886efc75947a403690f7656c9a45c5d90c0a6abffcbb1a2c023592dcecb2a6
+)
+
+Current Username: wachii
+Target User ID to Delete: 909090
+Target Username: wachii

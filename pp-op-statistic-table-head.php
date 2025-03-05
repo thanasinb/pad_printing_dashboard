@@ -3,7 +3,13 @@
         <i data-feather="list"></i> ลำดับ
     </th>
     <th class="text-center">
-        <i data-feather="user"></i> ชื่อ
+        <i data-feather="user"></i> id_staff
+    </th>
+    <th class="text-center">
+        <i data-feather="user"></i> id_task
+    </th>
+    <th class="text-center">
+        <i data-feather="user"></i> Name
     </th>
     <th class="text-center">
         <i data-feather="inbox"></i> จำนวนถาด

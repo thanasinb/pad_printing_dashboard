@@ -12,7 +12,121 @@ body.dark-mode input[type="date"]::-webkit-calendar-picker-indicator {
     filter: invert(1); /* เปลี่ยนสีของไอคอนปฏิทินเป็นสีขาว */
 }
 
+.dark-mode .dropdown-user-details-name {
+    color: #ffffff !important; /* ทำให้ตัวอักษรสีขาว */
+    font-weight: bold; /* ตัวหนาเพื่อให้อ่านง่ายขึ้น */
+}
 
+/*----------pp-staff-admin.php ----------------*/
+/* ปุ่มและ Navbar Icon */
+.highlight .btn-icon {
+    color: #ffffff !important; /* สีข้อความ/ไอคอน */
+    border: 1px solid #444444 !important; /* เส้นขอบ */
+}
+body.dark-mode .form-button-reset {
+    background-color: #a5292a;
+    color: white;
+}
+
+.highlight {
+    background-color: #5883a8 !important; /* ฟ้าจางๆ */
+    color: #ffffff !important;
+}
+
+.highlight td {
+    background-color: #5883a8!important; /* ฟ้าจางๆ */
+    color: #ffffff !important;
+}
+body.dark-mode .highlight {
+    background-color: #184370  !important; /* ฟ้าจางๆ */
+    color: #ffffff !important;
+}
+
+body.dark-mode .highlight td {
+    background-color: #184370 !important; /* ฟ้าจางๆ */
+    color: #ffffff !important;
+}
+
+
+body.dark-mode .table td {
+    background-color: #242424;
+    color: #e0e0e0;
+}
+/*----------------------*/
+/*accountuser */
+#id_staff_suggestions {
+    background-color: #333; /* พื้นหลังเข้มในดาร์คโหมด */
+    color: white; /* ตัวอักษรสีขาวเพื่อความชัดเจน */
+    border: 1px solid #555;
+}
+
+.suggestion-item {
+    padding: 8px;
+    cursor: pointer;
+}
+
+.suggestion-item:hover {
+    background-color: #555;
+    color: white;
+}
+
+
+/*header ของ รายละเอียดการแก้ไขข้อมูลพนักงานในหน้า pp-history.php*/
+
+     /* กรอบและการจัดวางของส่วนการ Filter */
+/* กรอบและการจัดวาง */
+
+/*ส่วนของการ Filter*/
+
+
+/* เปลี่ยนสีพื้นที่ในดาร์คโหมด */
+/* สีพื้นหลังสำหรับโหมดปกติ *//* โหมดปกติ */
+/* โหมดปกติ */
+.modal-header {
+    background-color: #e81600 !important;  /* พื้นหลังสีน้ำตาลแดง */
+    color: white !important;  /* ตัวอักษรสีขาว */
+    /*font-weight: bold;*/
+}
+.modal-title {
+    color: white !important;  /* ตัวอักษรสีขาว */
+    /*font-weight: bold;*/
+}
+/* โหมดดาร์ค */
+body.dark-mode .modal-header {
+    background-color: #A52A2A !important;  /* พื้นหลังสีน้ำตาลแดง */
+    color: white !important;  /* ตัวอักษรสีขาว */
+    /*font-weight: bold;*/
+}
+
+/* ปุ่มปิดโมดอลในโหมดปกติ */
+.modal-header .btn-close {
+    background-color: rgba(0, 0, 0, 0.1) !important;
+    border-radius: 5px;
+}
+
+/* ปุ่มปิดโมดอลในโหมดดาร์ค */
+body.dark-mode .modal-header .btn-close {
+    background-color: rgba(255, 255, 255, 0.3) !important;
+    border-radius: 5px;
+}
+/*-------------------------------/*
+
+/*!* โหมดดาร์ค *!*/
+/*body.dark-mode .page-header {*/
+/*    background-color: #A52A2A !important;  !* พื้นหลังสีน้ำตาลแดง *!*/
+/*    color: white !important;  !* ตัวอักษรสีขาว *!*/
+/*    font-weight: bold;*/
+/*}*/
+/*body.dark-mode .page-header-title {*/
+/*    background-color: #A52A2A !important;  !* พื้นหลังสีน้ำตาลแดง *!*/
+/*    color: white !important;  !* ตัวอักษรสีขาว *!*/
+/*    font-weight: bold;*/
+/*}*/
+/*body.dark-mode .page-header-icon {*/
+/*    background-color: #A52A2A !important;  !* พื้นหลังสีน้ำตาลแดง *!*/
+/*    color: white !important;  !* ตัวอักษรสีขาว *!*/
+/*    !*font-weight: bold;*!*/
+/*}*/
 
 /* Dark mode specific styles */
 body.dark-mode .btn-gen {
@@ -68,28 +182,7 @@ body.dark-mode #togglePasswordAdd  {
         background-color: #121212;
         color: white;
     }
-/* ปุ่มใน Light Mode (ค่าเริ่มต้น) */
-.btn-primary {
-    background-color: #007bff; /* สีฟ้าสด */
-    color: #ffffff; /* สีข้อความขาว */
-    border: none;
-    border-radius: 5px;
-    padding: 14px 20px;
-    text-align: center;
-    font-size: 16px;
-    cursor: pointer;
-    transition: background-color 0.3s ease, color 0.3s ease;
-}
-    body.dark-mode .btn-secondary {
-        background-color: #6a5acd !important; /* สีม่วงหม่น */
-        border-color: #6a5acd !important; /* สีเส้นขอบ */
-        color: white !important; /* สีตัวอักษร */
-    }
 
-    body.dark-mode .btn-secondary:hover {
-        background-color: #836fff !important; /* สีม่วงหม่นที่สว่างขึ้นเมื่อ hover */
-        border-color: #836fff !important;
-    }
     body.dark-mode .btn-blue{
         background-color: #0070c9 !important; /* สีม่วงหม่น */
         border-color: #0070c9 !important; /* สีเส้นขอบ */
@@ -103,22 +196,6 @@ body.dark-mode #togglePasswordAdd  {
 
     }
 
-/* Hover ใน Light Mode */
-.btn-primary:hover {
-    background-color: #0056b3; /* สีฟ้าเข้มขึ้นเมื่อ hover */
-}
-
-/* ปุ่มใน Dark Mode */
-body.dark-mode .btn-primary {
-    background-color: #375a7f !important; /* สีฟ้าหม่น */
-    color: #ffffff !important; /* สีข้อความขาว */
-    border: 1px solid #444444 !important; /* เส้นขอบเข้ม */
-}
-
-/* Hover ใน Dark Mode */
-body.dark-mode .btn-primary:hover {
-    background-color: #2c3e50 !important; /* สีฟ้าหม่นเข้มขึ้นเมื่อ hover */
-}
 
 
 /* ปุ่มใน Light Mode (ค่าเริ่มต้น) */
@@ -265,9 +342,10 @@ body.dark-mode #qrValue {
 
 /* กล่อง QR Code */
 body.dark-mode .qrcode-container {
-    background-color: #1e1e1e; /* พื้นหลังกล่อง QR Code */
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3); /* เงา */
+    background-color: #252525 !important; /* สีดำที่สว่างขึ้นสำหรับดาร์คโหมด */
+    box-shadow: 0 4px 10px rgba(255, 255, 255, 0.08);
 }
+
 
 /* ข้อความเพิ่มเติม */
 body.dark-mode .text-gray {
@@ -332,12 +410,83 @@ body.dark-mode .card {
     color: #e0e0e0;
 }
 
+/* ทำให้พื้นหลังของ card-header ชัดขึ้นในดาร์คโหมด */
 body.dark-mode .card-header {
-    background-color: #333333;
-    color: #ffffff;
+    background-color: #A52A2A !important; /* สีเทาเข้มขึ้นเพื่อแยกจากพื้นหลัง */
+    color: #ffffff !important; /* ทำให้ตัวหนังสือสีขาวเพื่อให้อ่านง่าย */
 }
 
-/* ตารางข้อมูล */
+/* ปรับสีข้อความและพื้นหลังของ form */
+body.dark-mode .card-body {
+    background-color: #2a2a2a !important; /* พื้นหลังสีเทาเข้มขึ้น */
+    color: #e0e0e0 !important; /* ตัวหนังสือสีขาว */
+}
+body.nav-link{
+    color: white !important;  /* ตัวอักษรสีขาว */
+
+}
+/* ปรับสีข้อความของ label ในดาร์คโหมด */
+body.dark-mode label {
+    color: #ffffff !important; /* เปลี่ยนเป็นสีขาวเพื่อให้อ่านง่ายขึ้น */
+}
+
+/* ปรับสีข้อความของ label ในดาร์คโหมด */
+body.dark-mode label,
+body.dark-mode .form-label {
+    color: #ffffff !important; /* เปลี่ยนเป็นสีขาวเพื่อให้อ่านง่ายขึ้น */
+}
+
+/* ปรับสีของข้อความใน input file */
+body.dark-mode input[type="file"] {
+    color: #ffffff !important; /* เปลี่ยนสีตัวอักษรเป็นสีขาว */
+    background-color: #333 !important; /* ทำให้พื้นหลังมืดขึ้น */
+    border: 1px solid #555 !important; /* เส้นขอบให้ชัดขึ้น */
+}
+
+/* ปรับแต่ง input file ให้ดูชัดเจนในดาร์คโหมด */
+body.dark-mode ::file-selector-button {
+    background-color: #4a4a4a !important; /* เปลี่ยนปุ่มเลือกไฟล์ให้เข้ากับดาร์คโหมด */
+    color: #ffffff !important; /* สีตัวอักษรปุ่ม */
+    border: 1px solid #666 !important;
+}
+
+body.dark-mode ::file-selector-button:hover {
+    background-color: #555 !important; /* ปรับสีปุ่มเมื่อ hover */
+}
+/* ปรับสีข้อความและอินพุตปกติ */
+.upload-form {
+    color: black;
+}
+
+.upload-label {
+    font-size: 16px;
+    color: black;
+}
+
+/* เปลี่ยนสีเมื่อเป็นดาร์คโหมด */
+body.dark-mode .upload-label,
+body.dark-mode .upload-input {
+    color: white !important; /* เปลี่ยนเป็นสีขาว */
+}
+
+/* ปรับแต่ง input file ให้เหมาะกับดาร์คโหมด */
+body.dark-mode .upload-input {
+    background-color: #333 !important;
+    color: white !important;
+    border: 1px solid #555 !important;
+}
+
+/* ปรับสีปุ่มอัปโหลด */
+body.dark-mode .upload-button {
+    background-color: #4a4a4a !important;
+    color: white !important;
+    border: 1px solid #666 !important;
+}
+
+body.dark-mode .upload-button:hover {
+    background-color: #555 !important;
+}
+    /* ตารางข้อมูล */
 body.dark-mode .table {
     background-color: #202020;
     color: #e0e0e0;
@@ -348,10 +497,7 @@ body.dark-mode .table th {
     color: #ffffff;
 }
 
-body.dark-mode .table td {
-    background-color: #242424;
-    color: #e0e0e0;
-}
+
 
 /* ปุ่ม */
 body.dark-mode .btn {
@@ -424,6 +570,8 @@ body.dark-mode #darkModeToggle {
 body.dark-mode #darkModeToggle:hover {
     background-color: #444444; /* เปลี่ยนสีปุ่มเมื่อ hover */
 }
+
+/*--------*/
 
 /* Dropdown Menu */
 body.dark-mode .dropdown-menu {

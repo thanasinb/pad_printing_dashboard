@@ -1,0 +1,56 @@
+.preview-container {
+    display: flex;
+    justify-content: center; /* จัดให้อยู่ตรงกลางแนวนอน */
+    align-items: center;     /* จัดให้อยู่ตรงกลางแนวตั้ง */
+    margin-bottom: 20px;     /* ระยะห่างจากปุ่ม */
+    min-height: 150px;       /* ความสูงขั้นต่ำสำหรับพื้นที่แสดงภาพ */
+    position: relative;
+}
+
+.button-container {
+    display: flex;
+    justify-content: center; /* จัดปุ่มให้อยู่ตรงกลาง */
+    gap: 10px; /* ระยะห่างระหว่างปุ่ม */
+}
+
+.btn-custom {
+    background-color: #4CAF50; /* สีพื้นหลัง */
+    color: white; /* สีตัวอักษร */
+    padding: 10px 20px; /* ระยะห่างภายใน */
+    text-align: center; /* จัดกึ่งกลางข้อความ */
+    text-decoration: none; /* ไม่ต้องมีเส้นใต้ */
+    display: inline-block; /* จัดเป็นบล็อกอินไลน์ */
+    font-size: 16px; /* ขนาดตัวอักษร */
+    font-weight: bold; /* ตัวหนา */
+    border-radius: 10px; /* มุมโค้งมน */
+    border: none; /* ไม่มีขอบ */
+    cursor: pointer; /* รูปเคอร์เซอร์เป็นมือตอนชี้ */
+    transition: background-color 0.3s, transform 0.3s; /* การเปลี่ยนแปลงเมื่อ Hover */
+    width: 150px; /* กำหนดความกว้างเท่ากัน */
+}
+
+.btn-custom:hover {
+    background-color: #45a049; /* สีพื้นหลังเมื่อ hover */
+    transform: scale(1.05); /* ขยายเล็กน้อยเมื่อ hover */
+}
+
+/* กำหนดขนาดปุ่มสำหรับหน้าจอเล็ก */
+@media (max-width: 768px) {
+    .btn-custom {
+        width: 100%; /* ปรับขนาดปุ่มให้เต็มความกว้างในหน้าจอเล็ก */
+    }
+}
+
+/* ทำให้ภาพเป็นวงกลม */
+#preview {
+    width: 150px;          /* กำหนดความกว้าง */
+    height: 150px;         /* กำหนดความสูง */
+    border-radius: 50%;    /* ทำให้เป็นวงกลม */
+    object-fit: cover;     /* ปรับภาพให้เต็มพื้นที่ */
+    margin-bottom: 20px;
+}
+.cropper-crop-box {
+    border-radius: 50% !important; /* ทำให้ crop box เป็นวงกลม */
+    border: 2px solid white !important; /* เพิ่มขอบขาวรอบๆ */
+}
+
