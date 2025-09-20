@@ -6,7 +6,7 @@ $result_activity = $conn->query($sql);
 $data_activity = $result_activity->fetch_assoc();
 
 if(!empty($data_activity)){
-    $sql="SELECT id_rfid FROM staff WHERE id_staff='" . $data_activity['id_staff'] . "'";
+    $sql="SELECT id_rfid FROM staff WHERE id_staff='" . $data_activity['id_staff'] . "' AND active=1";
     $result_staff = $conn->query($sql);
     $data_staff = $result_staff->fetch_assoc();
 
@@ -32,7 +32,7 @@ $result_downtime = $conn->query($sql);
 $data_downtime = $result_downtime->fetch_assoc();
 
 if(!empty($data_downtime)){
-    $sql="SELECT id_rfid FROM staff WHERE id_staff='" . $data_downtime['id_staff'] . "'";
+    $sql="SELECT id_rfid FROM staff WHERE id_staff='" . $data_downtime['id_staff'] . "' AND active=1";
     $result_staff = $conn->query($sql);
     $data_staff = $result_staff->fetch_assoc();
 
@@ -59,7 +59,7 @@ $result_activity_rework = $conn->query($sql);
 $data_activity_rework = $result_activity_rework->fetch_assoc();
 
 if(!empty($data_activity_rework)){
-    $sql="SELECT id_rfid FROM staff WHERE id_staff='" . $data_activity_rework['id_staff'] . "'";
+    $sql="SELECT id_rfid FROM staff WHERE id_staff='" . $data_activity_rework['id_staff'] . "' AND active=1";
     $result_staff = $conn->query($sql);
     $data_staff = $result_staff->fetch_assoc();
 
@@ -91,7 +91,7 @@ require 'terminate.php';
 $data_json = json_encode(array("code"=>"OK", "message"=>"OK"), JSON_UNESCAPED_UNICODE);
 print_r($data_json);
 
-if(strcmp($_GET['dashboard'],'1')==0){
-    header("Location: ../pp-machine-3.php");
-    die();
-}
+//if(strcmp($_GET['dashboard'],'1')==0){
+//    header("Location: ../pp-machine-3.php");
+//    die();
+//}

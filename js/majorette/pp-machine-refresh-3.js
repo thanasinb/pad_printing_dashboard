@@ -7,9 +7,10 @@ $(document).ready(function(){
     loadData();
     startLoop();
 
-    var id_machine, item_no, id_job, operation, id_task;
+    var id_machine, item_no, id_job, operation, id_task, next_item_no, next_operation;
 
     $('#modal_button_save').hide();
+    $('#modal_next_button_save').hide();
     $('#modal_qty_per_tray').prop('disabled', true);
     $('.radioCurrentTask').click(function (){
         $('#modal_button_go').attr('disabled', false);
@@ -17,7 +18,6 @@ $(document).ready(function(){
     $('.radioNextTask').click(function (){
         $('#modal_next_button_go').attr('disabled', false);
     });
-
     $('#dash_machine').click(function () {
         sort_key='id_mc';
         sort_dir=1;
@@ -85,6 +85,7 @@ $(document).ready(function(){
     $('#modal_next_button_go').click(function (){
         var radio_checked = $("input[name='radioNextTask']:checked").val();
         $('#next_selected_radio').val(radio_checked);
+        $('#next_hidden_id_machine').val(id_machine);
 
         if (radio_checked==1){
             $('#form_modal_next_task').attr('action', 'pp-machine-list-task.php');
@@ -144,7 +145,8 @@ $(document).ready(function(){
                 url: "ajax/pp-modal-get.php",
                 type: "GET",
                 data: {
-                    id_mc: id_machine
+                    id_mc: id_machine,
+                    queue_number: 1
                 },
                 context: this,
                 cache: false,
@@ -175,6 +177,82 @@ $(document).ready(function(){
             $('#modal_button_go').attr('disabled', true);
         }
     });
+
+    var nextTaskModal = document.getElementById('nextTaskModal');
+
+    nextTaskModal.addEventListener('hide.bs.modal', function (event) {
+        $('input[name=radioNextTask]:checked').prop('checked', false);
+        $('#modal_next_button_save').hide();
+        $('#modal_next_button_change').show();
+        $('#modal_next_qty_per_tray').attr('disabled', true);
+        $('#modal_next_qty_shif').attr('disabled', true);
+        $('#modal_next_id_machine').text('');
+        $('#modal_next_item_no').text('');
+        $('#modal_next_operation').text('');
+        $('#modal_next_date_due').text('');
+        $('#modal_next_qty_per_tray').val(null);
+        $('#modal_next_qty_shif').val(null);
+        $('#modal_next_qty_order').text('');
+        $('#modal_next_id_task').text('');
+        $('#modal_next_id_job').text('');
+        $('#modal_next_last_update').text('');
+    });
+
+    nextTaskModal.addEventListener('show.bs.modal', function (event) {
+        id_machine = $(event.relatedTarget).parent().parent().find('.id_machine').text();
+        next_item_no = $(event.relatedTarget).parent().parent().find('.next_item_no').text();
+        next_operation = $(event.relatedTarget).parent().parent().find('.next_operation').text();
+        var modal_next_id_machine = nextTaskModal.querySelector('#modal_next_id_machine');
+        var modal_next_item_no = nextTaskModal.querySelector('#modal_next_item_no');
+        var modal_next_operation = nextTaskModal.querySelector('#modal_next_operation');
+        var modal_next_title = nextTaskModal.querySelector('.modal-title');
+        modal_next_title.textContent = 'Next task for machine: ' + id_machine;
+        modal_next_id_machine.textContent = id_machine;
+        modal_next_item_no.textContent = next_item_no.replace('✍','');
+        modal_next_operation.textContent = next_operation;
+
+        if (modal_next_item_no.textContent!='') {
+            $('#radioNextChangeOp').attr('disabled', false);
+            $('#radioNextRemove').attr('disabled', false);
+            $('#radioNextNewTask').attr('disabled', true);
+            $('#modal_next_button_go').attr('disabled', true);
+            $('#modal_next_button_save').attr('disabled', true);
+            $('#modal_next_button_change').attr('disabled', false);
+
+            $.ajax({
+                url: "ajax/pp-modal-get.php",
+                type: "GET",
+                data: {
+                    id_mc: id_machine,
+                    queue_number: 2
+                },
+                context: this,
+                cache: false,
+                success: function(dataResult){
+                    var data = JSON.parse(dataResult);
+                    id_job = data.id_job;
+                    operation = data.operation;
+                    id_task = data.id_task;
+                    $('#modal_next_operation').text(data.operation);
+                    $('#modal_next_date_due').text(data.date_due);
+                    $('#modal_next_qty_per_tray').val(data.qty_per_tray);
+                    $('#modal_next_qty_shif').val(data.qty_shif);
+                    $('#modal_next_qty_order').text(data.qty_order);
+                    $('#modal_next_id_task').text(data.id_task);
+                    $('#modal_next_id_job').text(data.id_job);
+                    $('#modal_next_last_update').text(data.last_update);
+                }
+            });
+        }
+        else{
+            $('#modal_next_button_change').attr('disabled', true);
+            $('#modal_next_button_go').attr('disabled', true);
+            $('#radioNextChangeOp').attr('disabled', true);
+            $('#radioNextRemove').attr('disabled', true);
+            $('#radioNextNewTask').attr('disabled', false);
+        }
+    });
+
 
     $('#modal_button_change').click(function (){
         $('#modal_qty_per_tray').prop('disabled', false);
@@ -246,13 +324,33 @@ function loadData() {
             $.each(data, function(i, item) {
                 var html_btn_current_modal = "<button name=\"id_mc\" type=\"submit\" value=\"" + item.id_mc +
                                                     "\" data-bs-toggle=\"modal\" data-bs-target=\"#currentTaskModal\"" +
-                                                    "class=\"btn btn-datatable btn-icon text-black me-2 btn-current-task\">&#9997;</button>"
+                                                    "class=\"btn btn-datatable btn-icon text-black me-2 \">&#9997;</button>";
+                var html_btn_next_modal = "<button name=\"next_id_mc\" type=\"submit\" value=\"" + item.id_mc +
+                                                 "\" data-bs-toggle=\"modal\" data-bs-target=\"#nextTaskModal\"" +
+                                                 "class=\"btn btn-datatable btn-icon text-black me-2 btn-next-task\">&#9997;</button>";
+
+                // IF THERE IS NO CURRENT TASK ASSIGNED
                 if(item.item_no==null){
-                    if(!$('#checkbox_hide_unassigned_machines').is(":checked")){
-                        var row = "<tr class=\"text-black fw-bold\"><td></td>" +
-                            "<td class='id_machine'>" + item.id_mc + "</td>" +
-                            "<td>" + html_btn_current_modal + "</td>" +
-                            "<td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td>&#9997;</td><td></td></tr>";
+                    // IF BOTH CURRENT AND NEXT TASKS DOES NOT EXIST
+                    if(item.next_item_no==null) {
+                        if (!$('#checkbox_hide_unassigned_machines').is(":checked")) {
+                            var row = "<tr class=\"text-black fw-bold\"><td></td>" +
+                                "<td class='id_machine'>" + item.id_mc + "</td>" +
+                                "<td>" + html_btn_current_modal + "</td>" +
+                                "<td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td>" +
+                                "<td class=\"text-nowrap next_item_no\">" + html_btn_next_modal + "</td>" +
+                                "<td class=\"next_operation\"></td></tr>";
+                        }
+                        //IF THERE IS ONLY NEXT TASK ASSIGNED
+                    }else{
+                        if (!$('#checkbox_hide_unassigned_machines').is(":checked")) {
+                            var row = "<tr class=\"text-black fw-bold\"><td></td>" +
+                                "<td class='id_machine'>" + item.id_mc + "</td>" +
+                                "<td>" + html_btn_current_modal + "</td>" +
+                                "<td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td>" +
+                                "<td class=\"text-nowrap next_item_no\">" + html_btn_next_modal + item.next_item_no + "</td>" +
+                                "<td class=\"next_operation\">" + item.next_operation + "</td></tr>";
+                        }
                     }
                 }
                 else {
@@ -309,7 +407,12 @@ function loadData() {
                     }
                     row = row + item.run_time_std + "</td><td>" + item.run_time_open + "</td>";
                     // row = row + "<td>" + item.est_time + "</td>";
-                    row = row + "<td>&#9997;</td><td></td></tr>";
+                    if (item.next_item_no==null){
+                        row = row + "<td>" + html_btn_next_modal + "</td><td></td></tr>";
+                    }else {
+                        row = row + "<td class=\"text-nowrap next_item_no\">" + html_btn_next_modal + item.next_item_no + "</td>" +
+                            "<td class=\"next_operation\">" + item.next_operation + "</td></tr>";
+                    }
                 }
                 $('#table_body').append(row);
             });

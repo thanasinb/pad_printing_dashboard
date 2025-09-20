@@ -8,7 +8,7 @@ require '../update/lib_get_qty_shif.php';
 require '../update/lib_get_qty_process_manual.php';
 require '../update/lib_flag_cycle_time.php';
 
-
+// FETCH CURRENT (FIRST) TASKS
 $sql = "SELECT 
             machine.id_mc, 
             machine_queue.id_task, 
@@ -37,6 +37,24 @@ $array_machine_queue = [];
 while ($row = $result->fetch_assoc()) {
     $array_machine_queue[] = $row;
 }
+
+// FETCH NEXT TASKS
+$sql = "SELECT 
+            machine.id_mc, 
+            machine_queue.id_task AS next_id_task, 
+            planning.item_no AS next_item_no, 
+            planning.operation AS next_operation 
+        FROM machine 
+        LEFT JOIN machine_queue ON machine.id_mc=machine_queue.id_machine
+        LEFT JOIN planning ON machine_queue.id_task=planning.id_task 
+        WHERE machine_queue.queue_number=2 ORDER BY id_mc";
+
+$array_machine_queue_next = $conn->query($sql)->fetch_all(MYSQLI_ASSOC);
+
+$array_dashboard=array();
+date_default_timezone_set('Asia/Bangkok');
+$date = new DateTime();
+$date_in_sec = $date->getTimestamp();
 
 foreach ($array_machine_queue as $mq){
     $rework='n';
@@ -124,6 +142,15 @@ foreach ($array_machine_queue as $mq){
     }
 }
 
-echo json_encode($array_dashboard);
+foreach ($array_dashboard as &$item1) {
+    foreach ($array_machine_queue_next as $key => $item2) {
+        if ($item1['id_mc'] === $item2['id_mc']) {
+            $item1 = array_merge($item1, $item2);
+            unset($array_machine_queue_next[$key]);
+        }
+    }
+}
+
+echo json_encode(array_merge($array_dashboard, $array_machine_queue_next));
 
 require '../update/terminate.php';

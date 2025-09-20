@@ -28,7 +28,7 @@ $sql = "SELECT
         LEFT JOIN activity ON machine_queue.id_task=activity.id_task AND activity.status_work<" . STATUS_CLOSED . " 
         LEFT JOIN activity_rework ON machine_queue.id_task=activity_rework.id_task AND activity_rework.status_work<" . STATUS_CLOSED . " 
         LEFT JOIN activity_downtime ON machine_queue.id_task=activity_downtime.id_task AND activity_downtime.status_downtime<" . STATUS_CLOSED . " 
-        WHERE machine_queue.queue_number=1 AND machine_queue.id_machine='" . $_GET['id_mc'] . "'";
+        WHERE machine_queue.queue_number=" . $_GET['queue_number'] . " AND machine_queue.id_machine='" . $_GET['id_mc'] . "'";
 
 $data = $conn->query($sql)->fetch_assoc();
 
