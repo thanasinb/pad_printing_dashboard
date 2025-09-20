@@ -26,9 +26,17 @@ $sql = "SELECT
         FROM machine 
         LEFT JOIN machine_queue ON machine.id_mc=machine_queue.id_machine
         LEFT JOIN planning ON machine_queue.id_task=planning.id_task 
-        WHERE machine_queue.queue_number=1 OR machine_queue.queue_number IS NULL ORDER BY id_mc";
+        WHERE machine_queue.queue_number=1 OR machine_queue.queue_number IS NULL ORDER BY machine.id_mc";
 
-$array_machine_queue = $conn->query($sql)->fetch_all(MYSQLI_ASSOC);
+$result = $conn->query($sql);
+if (!$result) {
+    die("Query error: " . $conn->error);
+}
+
+$array_machine_queue = [];
+while ($row = $result->fetch_assoc()) {
+    $array_machine_queue[] = $row;
+}
 
 // FETCH NEXT TASKS
 $sql = "SELECT 
@@ -74,7 +82,7 @@ foreach ($array_machine_queue as $mq){
             $days = floor($mq['est_sec']/86400);
             $mq['run_time_open'] = $days . ":" . $mq['run_time_open'];
         }
-        $mq['est_time'] = date('d-m-y H:i:s', $date_in_sec + $mq['est_sec']);
+//        $mq['est_time'] = date('d-m-y H:i:s', $date_in_sec + $mq['est_sec']);
         $mq['date_due'] = date("d-m-y", strtotime($mq['date_due']));
 
         // GET QTY FROM THE CURRENT SHIF, TASK, AND MACHINE
