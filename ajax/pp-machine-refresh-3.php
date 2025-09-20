@@ -49,7 +49,17 @@ $sql = "SELECT
         LEFT JOIN planning ON machine_queue.id_task=planning.id_task 
         WHERE machine_queue.queue_number=2 ORDER BY id_mc";
 
-$array_machine_queue_next = $conn->query($sql)->fetch_all(MYSQLI_ASSOC);
+$result = $conn->query($sql);
+$array_machine_queue_next = [];
+
+if ($result) {
+    while ($row = $result->fetch_assoc()) {
+        $array_machine_queue_next[] = $row;
+    }
+} else {
+    // Optional: log or handle the error
+    die("Query error: " . $conn->error);
+}
 
 $array_dashboard=array();
 date_default_timezone_set('Asia/Bangkok');
