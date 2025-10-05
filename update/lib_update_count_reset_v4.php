@@ -30,7 +30,6 @@ function update_count_reset($conn, $is_quit, $table, $str_status, $str_activity,
     $sql = $sql . "run_time_actual=" . $run_time_actual;
     $sql = $sql . " WHERE " . $str_activity . "=" . $data_activity[$str_activity];
 
-    echo $sql . "<br>";
     $result = $conn->query($sql);
 
     $data_json = json_encode(array(

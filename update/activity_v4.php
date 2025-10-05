@@ -74,6 +74,7 @@ $data_staff = get_staff_by_id($conn, $_GET['id_staff']);
 list($shif, $date_eff) = get_shif($conn, $_GET['id_staff'], $data_staff['team']);
 $data_planning = get_planning($conn, $data_machine_queue['id_task']);
 
+list($table, $str_activity, $str_status) = get_info_from_activity_type($_GET['activity_type']);
 if ($_GET['activity_type']==3){
     $data_json = add_activity_downtime(
         $conn,
@@ -85,7 +86,8 @@ if ($_GET['activity_type']==3){
         $date_eff,
         $_GET['code_downtime'],
         $data_planning['multiplier']);
-}else{
+}
+else{
     $data_json = add_activity(
         $conn,
         $table,
@@ -98,42 +100,6 @@ if ($_GET['activity_type']==3){
 }
 
 end_activity_idle($conn, $_GET['id_mc']);
-
-//}elseif ($_GET['activity_type']==2){
-//    $table = 'activity_rework';
-//    $data_staff = get_staff_by_id($conn, $_GET['id_staff']);
-//    list($shif, $date_eff) = get_shif($conn, $_GET['id_staff'], $data_staff['team']);
-//    $data_planning = get_planning($conn, $data_machine_queue['id_task']);
-//    $data_json = add_activity(
-//        $conn,
-//        $table,
-//        $data_machine_queue['id_task'],
-//        $_GET['id_mc'],
-//        $_GET['id_staff'],
-//        $shif,
-//        $date_eff,
-//        $data_planning['multiplier']);
-//
-//    end_activity_idle($conn, $_GET['id_mc']);
-//
-//}elseif ($_GET['activity_type']==3){
-//    $table = 'activity_downtime';
-//    $data_staff = get_staff_by_id($conn, $_GET['id_staff']);
-//    list($shif, $date_eff) = get_shif($conn, $_GET['id_staff'], $data_staff['team']);
-//    $data_planning = get_planning($conn, $data_machine_queue['id_task']);
-//    $data_json = add_activity_downtime(
-//        $conn,
-//        $table,
-//        $data_machine_queue['id_task'],
-//        $_GET['id_mc'],
-//        $_GET['id_staff'],
-//        $shif,
-//        $date_eff,
-//        $_GET['code_downtime'],
-//        $data_planning['multiplier']);
-//
-//    end_activity_idle($conn, $_GET['id_mc']);
-//}
 
 print_r($data_json);
 
