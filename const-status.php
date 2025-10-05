@@ -10,7 +10,4 @@ const ACTIVITY_BACKFLUSH=1;
 const ACTIVITY_REWORK=2;
 const ACTIVITY_DOWNTIME=3;
 
-const TABLE_BACKFLUSH='activity';
-const TABLE_REWORK='activity_rework';
-const TABLE_DOWNTIME='activity_downtime';
 ?>
