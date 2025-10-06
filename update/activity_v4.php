@@ -66,6 +66,20 @@ if(!empty($data_activity)) {
         $data_activity);
 }
 
+list($table, $str_activity, $str_status) = get_info_from_activity_type(ACTIVITY_CALLTECH);
+$data_activity = get_active_activity_by_machine($conn, $table, $str_status, $_GET["id_mc"]);
+
+if(!empty($data_activity)) {
+    $data_planning = get_planning($conn, $data_activity['id_task']);
+    $data_json = update_count_reset(
+        $conn,
+        true,
+        $table,
+        $str_status,
+        $str_activity,
+        $data_activity);
+}
+
 $sql = "UPDATE machine_queue SET id_staff='' WHERE id_machine='" . $_GET['id_mc'] . "' AND queue_number=1";
 $result = $conn->query($sql);
 
