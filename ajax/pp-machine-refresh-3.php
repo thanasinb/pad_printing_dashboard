@@ -135,6 +135,9 @@ foreach ($array_machine_queue as $mq) {
                 WHERE status_work<" . STATUS_CLOSED . " AND id_task=" . $mq['id_task'] . " AND id_machine='" . $mq["id_mc"] . "'";
                 $data_calltech_time = $conn->query($sql)->fetch_assoc();
 
+                $data_activity_time = $data_rework_time;
+                $data_activity_time['status_work'] = -2;
+                $mq['flag_cycle_time'] = flag_cycle_time($data_activity_time['run_time_tray'], $data_activity_time['run_time_actual'], $mq['run_time_std']);
             }
 
             if ($data_activity_time['run_time_actual'] == null) {
