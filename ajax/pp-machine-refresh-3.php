@@ -13,6 +13,7 @@ $sql = "SELECT
             machine.id_mc, 
             machine_queue.id_task, 
             machine_queue.id_staff,
+            machine_queue.activity_type,
             planning.item_no, 
             planning.operation, 
             planning.op_color, 
@@ -66,12 +67,12 @@ date_default_timezone_set('Asia/Bangkok');
 $date = new DateTime();
 $date_in_sec = $date->getTimestamp();
 
-foreach ($array_machine_queue as $mq){
-    $rework='n';
-    $mq['flag_cycle_time']=0;
+foreach ($array_machine_queue as $mq) {
+    $rework = 'n';
+    $mq['flag_cycle_time'] = 0;
     // IF THE MACHINE HAS A TASK ASSIGNED
-    if ($mq['id_task']!=null){
-        $mq['run_time_std'] = number_format((floatval($mq['run_time_std'])*3600), 2);
+    if ($mq['id_task'] != null) {
+        $mq['run_time_std'] = number_format((floatval($mq['run_time_std']) * 3600), 2);
 
         // GET QTY FROM EVERY SHIF FROM THE SPECIFIC TASK, FOR CALCULATING PERCENTAGE
         list($qty_process, $qty_manual) = get_qty_process_manual($conn, $mq['id_task']);
@@ -79,17 +80,17 @@ foreach ($array_machine_queue as $mq){
         $mq['qty_comp'] = intval($mq['qty_comp']);
         $mq['qty_open'] = intval($mq['qty_open']);
         $mq['qty_order'] = intval($mq['qty_order']);
-        $mq['qty_accum']= $qty_process + $qty_manual + $mq['qty_comp'];
-        $mq['percent']=round(($mq['qty_accum']/$mq['qty_order'])*100,0);
-        if ($mq['qty_accum']>$mq['qty_order']){
-            $mq['est_sec']=-$mq['percent'];
+        $mq['qty_accum'] = $qty_process + $qty_manual + $mq['qty_comp'];
+        $mq['percent'] = round(($mq['qty_accum'] / $mq['qty_order']) * 100, 0);
+        if ($mq['qty_accum'] > $mq['qty_order']) {
+            $mq['est_sec'] = -$mq['percent'];
             $mq['run_time_open'] = "00:00:00";
-        }else{
-            $mq['est_sec']=($mq['qty_order']-$mq['qty_accum'])*$mq['run_time_std'];
+        } else {
+            $mq['est_sec'] = ($mq['qty_order'] - $mq['qty_accum']) * $mq['run_time_std'];
             $mq['run_time_open'] = gmdate("H:i:s", $mq['est_sec']);
         }
-        if ($mq['est_sec']>86400){
-            $days = floor($mq['est_sec']/86400);
+        if ($mq['est_sec'] > 86400) {
+            $days = floor($mq['est_sec'] / 86400);
             $mq['run_time_open'] = $days . ":" . $mq['run_time_open'];
         }
 //        $mq['est_time'] = date('d-m-y H:i:s', $date_in_sec + $mq['est_sec']);
@@ -98,59 +99,117 @@ foreach ($array_machine_queue as $mq){
         // GET QTY FROM THE CURRENT SHIF, TASK, AND MACHINE
         $mq['qty_shif'] = get_qty_shif($conn, $mq['id_task'], $mq['id_mc']);
 
-        // IF THE MACHINE IS OCCUPIED
-        if($mq['id_staff']!=null){
-            $sql = "SELECT id_staff, status_work, total_work, run_time_actual, run_time_tray FROM activity
-            WHERE status_work<" . STATUS_CLOSED . " AND id_task=" . $mq['id_task'] . " AND id_machine='" . $mq["id_mc"] . "'";
-            $data_activity_time = $conn->query($sql)->fetch_assoc();
-            if ($data_activity_time['status_work']==null)
-            {
+        if ($mq['id_staff'] != null) {
+            if ($mq['activity_type'] == 1) { // BACKFLUSH
+                $sql = "SELECT id_staff, status_work, total_work, run_time_actual, run_time_tray FROM activity
+                WHERE status_work<" . STATUS_CLOSED . " AND id_task=" . $mq['id_task'] . " AND id_machine='" . $mq["id_mc"] . "'";
+                $data_activity_time = $conn->query($sql)->fetch_assoc();
+
+                $mq['flag_cycle_time'] = flag_cycle_time($data_activity_time['run_time_tray'], $data_activity_time['run_time_actual'], $mq['run_time_std']);
+
+            } elseif ($mq['activity_type'] == 2) { // REWORK
                 $sql = "SELECT id_staff, status_work, total_work, run_time_actual, run_time_tray FROM activity_rework
                 WHERE status_work<" . STATUS_CLOSED . " AND id_task=" . $mq['id_task'] . " AND id_machine='" . $mq["id_mc"] . "'";
                 $data_rework_time = $conn->query($sql)->fetch_assoc();
 
-                // NOT BACKFLUSH NOR REWORK -> DOWNTIME
-                if($data_rework_time['status_work']==null){
-                    $sql = "SELECT activity_downtime.id_staff, status_downtime, code_downtime.code_downtime FROM activity_downtime
+                $data_activity_time = $data_rework_time;
+                $rework = 'y';
+                $mq['flag_cycle_time'] = flag_cycle_time($data_activity_time['run_time_tray'], $data_activity_time['run_time_actual'], $mq['run_time_std']);
+
+            } elseif ($mq['activity_type'] == 3) { // DOWNTIME
+                $sql = "SELECT activity_downtime.id_staff, status_downtime, code_downtime.code_downtime FROM activity_downtime
                     INNER JOIN code_downtime ON activity_downtime.id_downtime=code_downtime.id_downtime
                     WHERE status_downtime<" . STATUS_CLOSED . " AND id_task=" . $mq['id_task'] . " AND id_machine='" . $mq["id_mc"] . "'";
-                    $data_activity_downtime = $conn->query($sql)->fetch_assoc();
-                    if (strcmp($data_activity_downtime['status_downtime'], '2') != 0){
-                        $data_activity_time['status_work'] = -1;
-                    }else{
-                        $data_activity_time['status_work'] = 2;
-                    }
-                    $data_activity_time['id_staff'] = $data_activity_downtime['id_staff'];
-                    $data_activity_time['code_downtime'] = $data_activity_downtime['code_downtime'];
-                }else{
-                    // REWORK
-                    $data_activity_time=$data_rework_time;
-                    $rework='y';
-                    $mq['flag_cycle_time']=flag_cycle_time($data_activity_time['run_time_tray'], $data_activity_time['run_time_actual'], $mq['run_time_std']);
+                $data_downtime_time = $conn->query($sql)->fetch_assoc();
+
+                if (strcmp($data_downtime_time['status_downtime'], '2') != 0) {
+                    $data_activity_time['status_work'] = -1;
+                } else {
+                    $data_activity_time['status_work'] = 2;
                 }
-            }else{
-                $mq['flag_cycle_time']=flag_cycle_time($data_activity_time['run_time_tray'], $data_activity_time['run_time_actual'], $mq['run_time_std']);
+                $data_activity_time['id_staff'] = $data_downtime_time['id_staff'];
+                $data_activity_time['code_downtime'] = $data_downtime_time['code_downtime'];
+
+            } elseif ($mq['activity_type'] == 4) { // CALLTECH
+                $sql = "SELECT id_staff, status_work, total_work, run_time_actual, run_time_tray FROM activity_calltech
+                WHERE status_work<" . STATUS_CLOSED . " AND id_task=" . $mq['id_task'] . " AND id_machine='" . $mq["id_mc"] . "'";
+                $data_calltech_time = $conn->query($sql)->fetch_assoc();
+
             }
-            if ($data_activity_time['run_time_actual']==null) {
+
+            if ($data_activity_time['run_time_actual'] == null) {
                 $data_activity_time['run_time_actual'] = '0.00';
                 $data_activity_time['run_time_tray'] = '0.00';
             }
-            $array_dashboard[] = array_merge($mq, $data_activity_time, array('rework'=>$rework));
+            $array_dashboard[] = array_merge($mq, $data_activity_time, array('rework' => $rework));
+        } else { // ELSE THE MACHINE IS NOT OCCUPIED
+            $array_dashboard[] = array_merge($mq, array(
+                'run_time_actual' => 0.00,
+                'run_time_tray' => 0.00,
+//                'est_sec'=>-1,
+                'status_work' => 0,
+                'rework' => $rework));
         }
-        // ELSE THE MACHINE IS NOT OCCUPIED
-        else{
-            $array_dashboard[] = array_merge($mq, array('run_time_actual'=>0.00,
-                                                        'run_time_tray'=>0.00,
-//                                                        'est_sec'=>-1,
-                                                        'status_work'=>0,
-                                                        'rework'=>$rework));
-        }
-    }
-    // ELSE THE MACHINE DOES NOT HAVE A TASK ASSIGNED
-    else{
-        $array_dashboard[] = array_merge($mq, array('percent'=>-2, 'est_sec'=>-2, 'status_work'=>0, 'rework'=>$rework));
+    } else { // ELSE THE MACHINE DOES NOT HAVE A TASK ASSIGNED
+        $array_dashboard[] = array_merge($mq, array('percent' => -2, 'est_sec' => -2, 'status_work' => 0, 'rework' => $rework));
     }
 }
+
+//        // IF THE MACHINE IS OCCUPIED
+//        if($mq['id_staff']!=null){
+//            $sql = "SELECT id_staff, status_work, total_work, run_time_actual, run_time_tray FROM activity
+//            WHERE status_work<" . STATUS_CLOSED . " AND id_task=" . $mq['id_task'] . " AND id_machine='" . $mq["id_mc"] . "'";
+//            $data_activity_time = $conn->query($sql)->fetch_assoc();
+//            if ($data_activity_time['status_work']==null)
+//            {
+//                $sql = "SELECT id_staff, status_work, total_work, run_time_actual, run_time_tray FROM activity_rework
+//                WHERE status_work<" . STATUS_CLOSED . " AND id_task=" . $mq['id_task'] . " AND id_machine='" . $mq["id_mc"] . "'";
+//                $data_rework_time = $conn->query($sql)->fetch_assoc();
+//
+//                // NOT BACKFLUSH NOR REWORK -> DOWNTIME
+//                if($data_rework_time['status_work']==null)
+//                {
+//                    $sql = "SELECT activity_downtime.id_staff, status_downtime, code_downtime.code_downtime FROM activity_downtime
+//                    INNER JOIN code_downtime ON activity_downtime.id_downtime=code_downtime.id_downtime
+//                    WHERE status_downtime<" . STATUS_CLOSED . " AND id_task=" . $mq['id_task'] . " AND id_machine='" . $mq["id_mc"] . "'";
+//                    $data_activity_downtime = $conn->query($sql)->fetch_assoc();
+//                    if (strcmp($data_activity_downtime['status_downtime'], '2') != 0){
+//                        $data_activity_time['status_work'] = -1;
+//                    }else{
+//                        $data_activity_time['status_work'] = 2;
+//                    }
+//                    $data_activity_time['id_staff'] = $data_activity_downtime['id_staff'];
+//                    $data_activity_time['code_downtime'] = $data_activity_downtime['code_downtime'];
+//                }else{
+//                    // REWORK
+//                    $data_activity_time=$data_rework_time;
+//                    $rework='y';
+//                    $mq['flag_cycle_time']=flag_cycle_time($data_activity_time['run_time_tray'], $data_activity_time['run_time_actual'], $mq['run_time_std']);
+//                }
+//            }
+//            else {
+//                $mq['flag_cycle_time']=flag_cycle_time($data_activity_time['run_time_tray'], $data_activity_time['run_time_actual'], $mq['run_time_std']);
+//            }
+//            if ($data_activity_time['run_time_actual']==null) {
+//                $data_activity_time['run_time_actual'] = '0.00';
+//                $data_activity_time['run_time_tray'] = '0.00';
+//            }
+//            $array_dashboard[] = array_merge($mq, $data_activity_time, array('rework'=>$rework));
+//        }
+//        // ELSE THE MACHINE IS NOT OCCUPIED
+//        else{
+//            $array_dashboard[] = array_merge($mq, array('run_time_actual'=>0.00,
+//                                                        'run_time_tray'=>0.00,
+////                                                        'est_sec'=>-1,
+//                                                        'status_work'=>0,
+//                                                        'rework'=>$rework));
+//        }
+//    }
+//    // ELSE THE MACHINE DOES NOT HAVE A TASK ASSIGNED
+//    else{
+//        $array_dashboard[] = array_merge($mq, array('percent'=>-2, 'est_sec'=>-2, 'status_work'=>0, 'rework'=>$rework));
+//    }
+//}
 
 foreach ($array_dashboard as &$item1) {
     foreach ($array_machine_queue_next as $key => $item2) {
