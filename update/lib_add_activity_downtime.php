@@ -39,7 +39,7 @@ function add_activity_downtime($conn, $table, $id_task, $id_machine, $id_staff, 
         $data_activity = $result->fetch_assoc();
         $data_json = json_encode(($data_activity), JSON_UNESCAPED_UNICODE);
 
-        $sql = "UPDATE machine_queue SET id_staff='" . $id_staff . "' WHERE id_machine='" . $id_machine . "' AND queue_number=1";
+        $sql = "UPDATE machine_queue SET id_staff='" . $id_staff . "', activity_type=3 WHERE id_machine='" . $id_machine . "' AND queue_number=1";
         $result = $conn->query($sql);
     }
 

@@ -80,7 +80,7 @@ if(!empty($data_activity)) {
         $data_activity);
 }
 
-$sql = "UPDATE machine_queue SET id_staff='' WHERE id_machine='" . $_GET['id_mc'] . "' AND queue_number=1";
+$sql = "UPDATE machine_queue SET id_staff='', activity_type=0 WHERE id_machine='" . $_GET['id_mc'] . "' AND queue_number=1";
 $result = $conn->query($sql);
 
 $data_machine_queue = get_staff_from_machine_queue($conn, $_GET['id_mc']);
@@ -110,7 +110,8 @@ else{
         $_GET['id_staff'],
         $shif,
         $date_eff,
-        $data_planning['multiplier']);
+        $data_planning['multiplier'],
+        $_GET['activity_type']);
 }
 
 end_activity_idle($conn, $_GET['id_mc']);
