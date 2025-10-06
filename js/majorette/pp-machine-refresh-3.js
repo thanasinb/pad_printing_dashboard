@@ -368,6 +368,8 @@ function loadData() {
                         row = row + "<td style=\"color: white\"  class=\"bg-yellow\">" + item.id_staff + "</td>";
                     }else if(item.status_work==-1){
                         row = row + "<td style=\"color: white\"  class=\"bg-red\">" + item.id_staff + "<br>" + item.code_downtime + "</td>";
+                    }else if(item.status_work==-2){
+                        row = row + "<td style=\"color: white\"  class=\"bg-red blink_me\">" + "</td>";
                     }
                     row = row + "<td class='id_machine'>" + item.id_mc + "</td>" +
                         "<td class=\"text-nowrap item_no\">" + html_btn_current_modal + item.item_no + "</td>" +
